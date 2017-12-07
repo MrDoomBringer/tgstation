@@ -1,0 +1,23 @@
+<script>
+  component.exports = {
+    computed: {
+      tabs () {
+        return Object.keys(this.get('data.supplies'))
+      }
+    }
+  }
+</script>
+
+<ui-display title='Express Cargo Console' button>
+<ui-tabs tabs='{{tabs}}'>
+  {{#each data.supplies}}
+    <tab name='{{name}}'>
+      {{#each packs}}
+        <ui-section label='{{name}}' candystripe right>
+          <ui-button action='add' params='{"id": "{{id}}"}'>{{cost}} Credits</ui-button>
+        </ui-section>
+      {{/each}}
+    </tab>
+  {{/each}}
+</ui-tabs>
+</ui-display>
