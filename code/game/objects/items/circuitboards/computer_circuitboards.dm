@@ -203,6 +203,9 @@
 	else
 		return ..()
 
+/obj/item/circuitboard/computer/cargo/express
+	name = "Express Supply Console (Computer Board)"
+	build_path = /obj/machinery/computer/cargo/express
 
 /obj/item/circuitboard/computer/cargo/request
 	name = "Supply Request Console (Computer Board)"
