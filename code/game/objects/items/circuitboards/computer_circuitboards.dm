@@ -188,21 +188,18 @@
 	build_path = /obj/machinery/computer/cargo
 	var/contraband = FALSE
 
-/obj/item/circuitboard/computer/cargo/attackby(obj/item/I, mob/user, params)
-	if(istype(I, /obj/item/device/multitool))
-		if(!emagged)
-			contraband = !contraband
-			to_chat(user, "<span class='notice'>Receiver spectrum set to [contraband ? "Broad" : "Standard"].</span>")
-		else
-			to_chat(user, "<span class='notice'>The spectrum chip is unresponsive.</span>")
-	else if(istype(I, /obj/item/card/emag))
-		if(!emagged)
-			contraband = TRUE
-			emagged = TRUE
-			to_chat(user, "<span class='notice'>You adjust [src]'s routing and receiver spectrum, unlocking special supplies and contraband.</span>")
+/obj/item/circuitboard/computer/cargo/multitool_act(mob/living/user)
+	if(!emagged)
+		contraband = !contraband
+		to_chat(user, "<span class='notice'>Receiver spectrum set to [contraband ? "Broad" : "Standard"].</span>")
 	else
-		return ..()
+		to_chat(user, "<span class='notice'>The spectrum chip is unresponsive.</span>")
 
+/obj/item/circuitboard/computer/cargo/emag_act(mob/living/user)
+	if(!emagged)
+		contraband = TRUE
+		emagged = TRUE
+		to_chat(user, "<span class='notice'>You adjust [src]'s routing and receiver spectrum, unlocking special supplies and contraband.</span>")
 
 /obj/item/circuitboard/computer/cargo/request
 	name = "Supply Request Console (Computer Board)"
