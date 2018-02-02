@@ -100,7 +100,7 @@
 
 /obj/item/projectile/meteor/Collide(atom/A)
 	if(A == firer)
-		forceMove(A.loc)
+		loc = A.loc
 		return
 	A.ex_act(EXPLODE_HEAVY)
 	playsound(src.loc, 'sound/effects/meteorimpact.ogg', 40, 1)
@@ -184,9 +184,6 @@
 	var/pressure_decrease_active = FALSE
 	var/pressure_decrease = 0.25
 	var/mine_range = 3 //mines this many additional tiles of rock
-	tracer_type = /obj/effect/projectile/tracer/plasma_cutter
-	muzzle_type = /obj/effect/projectile/muzzle/plasma_cutter
-	impact_type = /obj/effect/projectile/impact/plasma_cutter
 
 /obj/item/projectile/plasma/Initialize()
 	. = ..()
@@ -542,7 +539,7 @@
 	hal_target.stuttering += 20
 	if(hal_target.dna && hal_target.dna.check_mutation(HULK))
 		hal_target.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-	else if((hal_target.status_flags & CANKNOCKDOWN) && !hal_target.has_trait(TRAIT_STUNIMMUNE))
+	else if(hal_target.status_flags & CANKNOCKDOWN)
 		addtimer(CALLBACK(hal_target, /mob/living/carbon.proc/do_jitter_animation, 20), 5)
 
 /obj/item/projectile/hallucination/disabler
@@ -615,3 +612,4 @@
 		knockdown = 0
 		nodamage = TRUE
 	return ..()
+

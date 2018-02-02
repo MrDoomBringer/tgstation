@@ -49,7 +49,7 @@
 	anchored = TRUE
 	for(var/obj/item/I in loc)
 		if(istype(I, /obj/item/book))
-			I.forceMove(src)
+			I.loc = src
 	update_icon()
 
 
@@ -123,7 +123,7 @@
 				if(!user.get_active_held_item())
 					user.put_in_hands(choice)
 			else
-				choice.forceMove(drop_location())
+				choice.loc = get_turf(src)
 			update_icon()
 
 
@@ -289,7 +289,7 @@
 				user.put_in_hands(B)
 				return
 			else
-				B.forceMove(drop_location())
+				B.loc = src.loc
 				qdel(src)
 				return
 		return

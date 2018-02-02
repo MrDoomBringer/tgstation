@@ -59,6 +59,9 @@
 "al" = (
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/whiteship/box)
+"am" = (
+/turf/closed/wall/mineral/titanium/interior,
+/area/ruin/space/has_grav/whiteship/box)
 "an" = (
 /obj/structure/rack,
 /obj/item/clothing/suit/space/hardsuit/medical,
@@ -66,7 +69,7 @@
 /turf/open/floor/mineral/titanium,
 /area/ruin/space/has_grav/whiteship/box)
 "ao" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/whiteship/box)
 "ap" = (
@@ -178,7 +181,7 @@
 /turf/open/floor/mineral/titanium,
 /area/ruin/space/has_grav/whiteship/box)
 "aH" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/mineral/titanium,
 /area/ruin/space/has_grav/whiteship/box)
 "aI" = (
@@ -317,6 +320,7 @@ aa
 aa
 aa
 aa
+aa
 "}
 (2,1,1) = {"
 aa
@@ -328,10 +332,11 @@ aa
 aa
 aa
 ab
-aj
+am
 ae
-aj
+am
 ab
+aa
 aa
 aa
 aa
@@ -363,6 +368,7 @@ aa
 aa
 aa
 aa
+aa
 "}
 (4,1,1) = {"
 aa
@@ -378,6 +384,7 @@ ae
 ae
 ae
 ab
+aa
 aa
 aa
 aa
@@ -409,6 +416,7 @@ aa
 aa
 aa
 aa
+aa
 "}
 (6,1,1) = {"
 aa
@@ -424,6 +432,7 @@ ae
 ae
 aA
 ab
+aa
 aa
 aa
 aa
@@ -455,6 +464,7 @@ aa
 aa
 aa
 aa
+aa
 "}
 (8,1,1) = {"
 aa
@@ -470,6 +480,7 @@ ae
 ae
 ae
 ab
+aa
 aa
 aa
 aa
@@ -501,6 +512,7 @@ aa
 aa
 aa
 aa
+aa
 "}
 (10,1,1) = {"
 aa
@@ -512,10 +524,11 @@ aa
 aa
 aa
 ab
-aj
+am
 ae
-aj
+am
 ab
+aa
 aa
 aa
 aa
@@ -547,6 +560,7 @@ aa
 aa
 aa
 aa
+aa
 "}
 (12,1,1) = {"
 aa
@@ -561,6 +575,7 @@ aa
 ab
 ae
 ab
+aa
 aa
 aa
 aa
@@ -593,6 +608,7 @@ aa
 aa
 aa
 aa
+aa
 "}
 (14,1,1) = {"
 aa
@@ -604,11 +620,12 @@ aa
 aa
 ab
 ab
-aj
+am
 ae
-aj
+am
 ab
 ab
+aa
 aa
 aa
 aa
@@ -626,11 +643,11 @@ ah
 ar
 aa
 ab
-aj
+am
 ae
 ae
 ae
-aj
+am
 ab
 aa
 ad
@@ -639,6 +656,7 @@ ah
 ah
 ar
 ab
+aa
 "}
 (16,1,1) = {"
 ab
@@ -662,6 +680,7 @@ ai
 ai
 ab
 ab
+aa
 "}
 (17,1,1) = {"
 aa
@@ -671,19 +690,20 @@ al
 al
 aj
 ab
-aj
+am
 ae
 ae
 ae
 ae
 ae
-aj
+am
 ab
 aj
 al
 al
 aj
 ab
+aa
 aa
 "}
 (18,1,1) = {"
@@ -708,6 +728,7 @@ aj
 ab
 aa
 aa
+aa
 "}
 (19,1,1) = {"
 aa
@@ -728,6 +749,7 @@ ab
 at
 ab
 ab
+aa
 aa
 aa
 aa
@@ -754,13 +776,14 @@ ab
 aa
 aa
 aa
+aa
 "}
 (21,1,1) = {"
 aa
 aa
 ab
 ab
-aj
+am
 au
 ae
 ae
@@ -777,12 +800,13 @@ ab
 ab
 aa
 aa
+aa
 "}
 (22,1,1) = {"
 aa
 ab
 ab
-aj
+am
 ae
 ae
 ae
@@ -799,6 +823,7 @@ ab
 ab
 ab
 ab
+aa
 aa
 "}
 (23,1,1) = {"
@@ -808,7 +833,7 @@ ab
 ab
 ab
 ab
-aj
+am
 ae
 ab
 aD
@@ -820,8 +845,9 @@ ae
 ae
 ac
 ae
-aj
+am
 ab
+aa
 aa
 "}
 (24,1,1) = {"
@@ -830,7 +856,7 @@ ae
 ae
 an
 an
-aj
+am
 ab
 aA
 ab
@@ -846,6 +872,7 @@ ae
 aY
 ab
 ab
+aa
 "}
 (25,1,1) = {"
 ab
@@ -867,8 +894,9 @@ ae
 ab
 ae
 ae
-aj
+am
 ab
+aa
 "}
 (26,1,1) = {"
 ab
@@ -892,6 +920,7 @@ aX
 ae
 ae
 ab
+aa
 "}
 (27,1,1) = {"
 ab
@@ -915,6 +944,7 @@ ae
 ae
 ba
 ab
+aa
 "}
 (28,1,1) = {"
 ab
@@ -924,7 +954,7 @@ ae
 ae
 ae
 ab
-aj
+am
 ae
 ae
 ae
@@ -938,6 +968,7 @@ ae
 ae
 ae
 ab
+aa
 "}
 (29,1,1) = {"
 ab
@@ -945,7 +976,7 @@ ae
 ae
 ae
 ae
-aj
+am
 ab
 ab
 ab
@@ -961,15 +992,16 @@ ae
 ae
 ae
 ab
+aa
 "}
 (30,1,1) = {"
 ab
 ae
 ae
 ae
-aj
+am
 ab
-aj
+am
 ae
 ae
 ae
@@ -982,8 +1014,9 @@ aF
 ab
 ae
 ae
-aj
+am
 ab
+aa
 "}
 (31,1,1) = {"
 ac
@@ -991,7 +1024,7 @@ ae
 ak
 ae
 ab
-aj
+am
 ae
 ae
 ae
@@ -1002,10 +1035,11 @@ ae
 ae
 ae
 ae
-aj
-aj
+am
+am
 aZ
 ab
+aa
 aa
 "}
 (32,1,1) = {"
@@ -1030,6 +1064,7 @@ ab
 ab
 ab
 aa
+aa
 "}
 (33,1,1) = {"
 aa
@@ -1048,9 +1083,10 @@ ae
 ae
 ae
 ae
-aj
+am
 ab
 ab
+aa
 aa
 aa
 "}
@@ -1060,7 +1096,7 @@ aa
 ab
 aq
 ab
-aj
+am
 az
 ae
 ae
@@ -1070,9 +1106,10 @@ aF
 ae
 ae
 ae
-aj
+am
 ab
 ab
+aa
 aa
 aa
 aa
@@ -1095,6 +1132,7 @@ aB
 ab
 ab
 ab
+aa
 aa
 aa
 aa

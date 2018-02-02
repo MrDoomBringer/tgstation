@@ -39,11 +39,6 @@
 	if(H)
 		H.endTailWag()
 
-/datum/species/lizard/spec_stun(mob/living/carbon/human/H,amount)
-	if(H)
-		H.endTailWag()
-	. = ..()
-
 /*
  Lizard subspecies: ASHWALKERS
 */

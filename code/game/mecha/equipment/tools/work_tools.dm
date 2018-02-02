@@ -39,7 +39,7 @@
 				O.anchored = TRUE
 				if(do_after_cooldown(target))
 					cargo_holder.cargo += O
-					O.forceMove(chassis)
+					O.loc = chassis
 					O.anchored = FALSE
 					occupant_message("<span class='notice'>[target] successfully loaded.</span>")
 					log_message("Loaded [O]. Cargo compartment capacity: [cargo_holder.cargo_capacity - cargo_holder.cargo.len]")
@@ -91,7 +91,7 @@
 				O.anchored = TRUE
 				if(do_after_cooldown(target))
 					cargo_holder.cargo += O
-					O.forceMove(chassis)
+					O.loc = chassis
 					O.anchored = FALSE
 					occupant_message("<span class='notice'>[target] successfully loaded.</span>")
 					log_message("Loaded [O]. Cargo compartment capacity: [cargo_holder.cargo_capacity - cargo_holder.cargo.len]")
@@ -127,10 +127,11 @@
 	energy_drain = 0
 	range = MELEE|RANGED
 
-/obj/item/mecha_parts/mecha_equipment/extinguisher/Initialize()
-	. = ..()
+/obj/item/mecha_parts/mecha_equipment/extinguisher/New()
 	create_reagents(1000)
 	reagents.add_reagent("water", 1000)
+	..()
+	return
 
 /obj/item/mecha_parts/mecha_equipment/extinguisher/action(atom/target) //copypasted from extinguisher. TODO: Rewrite from scratch.
 	if(!action_checks(target) || get_dist(chassis, target)>3)
@@ -196,9 +197,9 @@
 	flags_2 = NO_MAT_REDEMPTION_2
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 
-/obj/item/mecha_parts/mecha_equipment/rcd/Initialize()
-	. = ..()
+/obj/item/mecha_parts/mecha_equipment/rcd/New()
 	GLOB.rcd_list += src
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/rcd/Destroy()
  	GLOB.rcd_list -= src
@@ -221,14 +222,14 @@
 				occupant_message("Deconstructing [W]...")
 				if(do_after_cooldown(W))
 					chassis.spark_system.start()
-					W.ScrapeAway()
+					W.ChangeTurf(/turf/open/floor/plating)
 					playsound(W, 'sound/items/deconstruct.ogg', 50, 1)
 			else if(isfloorturf(target))
 				var/turf/open/floor/F = target
 				occupant_message("Deconstructing [F]...")
 				if(do_after_cooldown(target))
 					chassis.spark_system.start()
-					F.ScrapeAway()
+					F.ChangeTurf(F.baseturf)
 					playsound(F, 'sound/items/deconstruct.ogg', 50, 1)
 			else if (istype(target, /obj/machinery/door/airlock))
 				occupant_message("Deconstructing [target]...")
@@ -241,14 +242,14 @@
 				var/turf/open/space/S = target
 				occupant_message("Building Floor...")
 				if(do_after_cooldown(S))
-					S.PlaceOnTop(/turf/open/floor/plating)
+					S.ChangeTurf(/turf/open/floor/plating)
 					playsound(S, 'sound/items/deconstruct.ogg', 50, 1)
 					chassis.spark_system.start()
 			else if(isfloorturf(target))
 				var/turf/open/floor/F = target
 				occupant_message("Building Wall...")
 				if(do_after_cooldown(F))
-					F.PlaceOnTop(/turf/closed/wall)
+					F.ChangeTurf(/turf/closed/wall)
 					playsound(F, 'sound/items/deconstruct.ogg', 50, 1)
 					chassis.spark_system.start()
 		if(2)
@@ -298,10 +299,10 @@
 	var/obj/item/stack/cable_coil/cable
 	var/max_cable = 1000
 
-/obj/item/mecha_parts/mecha_equipment/cable_layer/Initialize()
-	. = ..()
+/obj/item/mecha_parts/mecha_equipment/cable_layer/New()
 	cable = new(src)
 	cable.amount = 0
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/cable_layer/can_attach(obj/mecha/working/M)
 	if(..())

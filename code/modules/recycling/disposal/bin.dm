@@ -6,6 +6,7 @@
 	icon = 'icons/obj/atmospherics/pipes/disposal.dmi'
 	anchored = TRUE
 	density = TRUE
+	on_blueprints = TRUE
 	armor = list(melee = 25, bullet = 10, laser = 10, energy = 100, bomb = 0, bio = 100, rad = 100, fire = 90, acid = 30)
 	max_integrity = 200
 	resistance_flags = FIRE_PROOF
@@ -28,11 +29,11 @@
 
 	if(make_from)
 		setDir(make_from.dir)
-		make_from.moveToNullspace()
+		make_from.loc = null
 		stored = make_from
 		pressure_charging = FALSE // newly built disposal bins start with pump off
 	else
-		stored = new /obj/structure/disposalconstruct(null, null , SOUTH , FALSE , src)
+		stored = new /obj/structure/disposalconstruct(null, make_from = src)
 
 	trunk_check()
 
@@ -189,7 +190,7 @@
 	sleep(5)
 	if(QDELETED(src))
 		return
-	var/obj/structure/disposalholder/H = new(src)
+	var/obj/structure/disposalholder/H = new()
 	newHolderDestination(H)
 	H.init(src)
 	air_contents = new()
@@ -296,7 +297,7 @@
 	data["full_pressure"] = full_pressure
 	data["pressure_charging"] = pressure_charging
 	data["panel_open"] = panel_open
-	var/per = CLAMP(100* air_contents.return_pressure() / (SEND_PRESSURE), 0, 100)
+	var/per = Clamp(100* air_contents.return_pressure() / (SEND_PRESSURE), 0, 100)
 	data["per"] = round(per, 1)
 	data["isai"] = isAI(user)
 	return data
@@ -470,7 +471,7 @@
 
 	if(isobj(AM))
 		var/obj/O = AM
-		O.forceMove(src)
+		O.loc = src
 	else if(ismob(AM))
 		var/mob/M = AM
 		if(prob(2)) // to prevent mobs being stuck in infinite loops

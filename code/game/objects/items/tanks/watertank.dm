@@ -49,7 +49,7 @@
 			on = FALSE
 			to_chat(user, "<span class='warning'>You need a free hand to hold the mister!</span>")
 			return
-		noz.forceMove(user)
+		noz.loc = user
 	else
 		//Remove from their hands and put back "into" the tank
 		remove_noz()
@@ -114,7 +114,7 @@
 	possible_transfer_amounts = list(25,50,100)
 	volume = 500
 	flags_1 = NOBLUDGEON_1
-	container_type = OPENCONTAINER
+	container_type = OPENCONTAINER_1
 	slot_flags = 0
 
 	var/obj/item/watertank/tank
@@ -124,14 +124,14 @@
 	if(check_tank_exists(parent_tank, src))
 		tank = parent_tank
 		reagents = tank.reagents	//This mister is really just a proxy for the tank's reagents
-		forceMove(tank)
+		loc = tank
 	return
 
 /obj/item/reagent_containers/spray/mister/dropped(mob/user)
 	..()
 	to_chat(user, "<span class='notice'>The mister snaps back onto the watertank.</span>")
 	tank.on = 0
-	forceMove(tank)
+	loc = tank
 
 /obj/item/reagent_containers/spray/mister/attack_self()
 	return
@@ -146,7 +146,7 @@
 /obj/item/reagent_containers/spray/mister/Move()
 	..()
 	if(loc != tank.loc)
-		forceMove(tank.loc)
+		loc = tank.loc
 
 /obj/item/reagent_containers/spray/mister/afterattack(obj/target, mob/user, proximity)
 	if(target.loc == loc) //Safety check so you don't fill your mister with mutagen or something and then blast yourself in the face with it
@@ -236,13 +236,13 @@
 		tank = parent_tank
 		reagents = tank.reagents
 		max_water = tank.volume
-		forceMove(tank)
+		loc = tank
 
 
 /obj/item/extinguisher/mini/nozzle/Move()
 	..()
 	if(loc != tank.loc)
-		forceMove(tank)
+		loc = tank
 	return
 
 /obj/item/extinguisher/mini/nozzle/attack_self(mob/user)
@@ -268,7 +268,7 @@
 	..()
 	to_chat(user, "<span class='notice'>The nozzle snaps back onto the tank!</span>")
 	tank.on = 0
-	forceMove(tank)
+	loc = tank
 
 /obj/item/extinguisher/mini/nozzle/afterattack(atom/target, mob/user)
 	if(nozzle_mode == EXTINGUISHER)
@@ -290,7 +290,7 @@
 		resin_cooldown = TRUE
 		R.remove_any(100)
 		var/obj/effect/resin_container/A = new (get_turf(src))
-		log_game("[key_name(user)] used Resin Launcher at [get_area(user)] [COORD(user)].")
+		log_game("[key_name_admin(user)] used Resin Launcher at [get_area(user)] [COORD(user)].")
 		playsound(src,'sound/items/syringeproj.ogg',40,1)
 		for(var/a=0, a<5, a++)
 			step_towards(A, target)
@@ -351,7 +351,7 @@
 	var/usage_ratio = 5 //5 unit added per 1 removed
 	var/injection_amount = 1
 	amount_per_transfer_from_this = 5
-	container_type = OPENCONTAINER
+	container_type = OPENCONTAINER_1
 	spillable = FALSE
 	possible_transfer_amounts = list(5,10,15)
 

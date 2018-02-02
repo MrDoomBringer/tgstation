@@ -44,7 +44,7 @@
 /obj/item/gun/ballistic/shotgun/blow_up(mob/user)
 	. = 0
 	if(chambered && chambered.BB)
-		process_fire(user, user, FALSE)
+		process_fire(user, user,0)
 		. = 1
 
 /obj/item/gun/ballistic/shotgun/proc/pump(mob/M)
@@ -56,8 +56,8 @@
 
 /obj/item/gun/ballistic/shotgun/proc/pump_unload(mob/M)
 	if(chambered)//We have a shell in the chamber
-		chambered.forceMove(drop_location())//Eject casing
-		chambered.bounce_away()
+		chambered.loc = get_turf(src)//Eject casing
+		chambered.SpinAnimation(5, 1)
 		chambered = null
 
 /obj/item/gun/ballistic/shotgun/proc/pump_reload(mob/M)

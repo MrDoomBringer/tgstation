@@ -67,24 +67,11 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	valid_territory = FALSE
 	ambientsounds = MINING
 
-/area/asteroid/nearstation
-	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
-	ambientsounds = RUINS
-	always_unpowered = FALSE
-	requires_power = TRUE
-	blob_allowed = TRUE
-
-/area/asteroid/nearstation/bomb_site
-	name = "Bomb Testing Asteroid"
-
 /area/asteroid/cave
 	name = "Asteroid - Underground"
 	icon_state = "cave"
 	requires_power = FALSE
 	outdoors = TRUE
-
-/area/asteroid/cave/space
-	name = "Asteroid - Space"
 
 /area/asteroid/artifactroom
 	name = "Asteroid - Artifact"
@@ -184,7 +171,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/maintenance/department/science/xenobiology
 	name = "Xenobiology Maintenance"
 	icon_state = "xenomaint"
-	xenobiology_compatible = TRUE
 
 
 //Maintenance - Generic
@@ -673,9 +659,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/chapel/asteroid
 	name = "Chapel Asteroid"
 	icon_state = "explored"
-
-/area/chapel/asteroid/monastery
-	name = "Monastery Asteroid"
 
 /area/chapel/dock
 	name = "Chapel Dock"
@@ -1255,10 +1238,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/science/research
 	name = "Research Division"
 	icon_state = "medresearch"
-
-/area/science/circuit
-	name = "Circuitry Lab"
-	icon_state = "cir_lab"
 
 /area/science/research/lobby
 	name = "Research Division Lobby"

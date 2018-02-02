@@ -48,14 +48,14 @@
 	if(severity != 1 && shielded && target != src)
 		return
 	if(target == src)
-		ScrapeAway()
+		src.ChangeTurf(src.baseturf)
 		return
 	switch(severity)
 		if(1)
 			if(prob(80))
 				ReplaceWithLattice()
 			else if(prob(50))
-				ScrapeAway()
+				ChangeTurf(src.baseturf)
 			else
 				make_plating(1)
 		if(2)
@@ -109,30 +109,27 @@
 
 /turf/open/floor/engine/cult
 	name = "engraved floor"
-	desc = "The air hangs heavy over this sinister flooring."
 	icon_state = "plating"
-	CanAtmosPass = ATMOS_PASS_NO
-	var/obj/effect/clockwork/overlay/floor/bloodcult/realappearance
-
+	var/obj/effect/clockwork/overlay/floor/bloodcult/realappearence
 
 /turf/open/floor/engine/cult/Initialize()
 	. = ..()
 	new /obj/effect/temp_visual/cult/turf/floor(src)
-	realappearance = new /obj/effect/clockwork/overlay/floor/bloodcult(src)
-	realappearance.linked = src
+	realappearence = new /obj/effect/clockwork/overlay/floor/bloodcult(src)
+	realappearence.linked = src
 
 /turf/open/floor/engine/cult/Destroy()
 	be_removed()
 	return ..()
 
-/turf/open/floor/engine/cult/ChangeTurf(path, new_baseturf, flags)
+/turf/open/floor/engine/cult/ChangeTurf(path, new_baseturf, defer_change = FALSE, ignore_air = FALSE, forceop = FALSE)
 	if(path != type)
 		be_removed()
 	return ..()
 
 /turf/open/floor/engine/cult/proc/be_removed()
-	qdel(realappearance)
-	realappearance = null
+	qdel(realappearence)
+	realappearence = null
 
 /turf/open/floor/engine/cult/ratvar_act()
 	. = ..()

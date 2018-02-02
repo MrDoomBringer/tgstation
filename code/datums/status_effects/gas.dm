@@ -21,7 +21,7 @@
 
 /datum/status_effect/freon/tick()
 	owner.update_canmove()
-	if(can_melt && owner.bodytemperature >= BODYTEMP_NORMAL)
+	if(can_melt && owner.bodytemperature >= 310.055)
 		qdel(src)
 
 /datum/status_effect/freon/on_remove()

@@ -81,7 +81,7 @@
 				return
 			playsound(src.loc, 'sound/effects/splat.ogg', 25, 1)
 			L.visible_message("<span class='danger'>[user] slams [L] onto the meat spike!</span>", "<span class='userdanger'>[user] slams you onto the meat spike!</span>", "<span class='italics'>You hear a squishy wet noise.</span>")
-			L.forceMove(drop_location())
+			L.loc = src.loc
 			L.emote("scream")
 			L.add_splatter_floor()
 			L.adjustBruteLoss(30)
@@ -129,24 +129,15 @@
 				return
 		if(!M.buckled)
 			return
-		release_mob(M)
-
-/obj/structure/kitchenspike/proc/release_mob(mob/living/M)
-	var/matrix/m180 = matrix(M.transform)
-	m180.Turn(180)
-	animate(M, transform = m180, time = 3)
-	M.pixel_y = M.get_standard_pixel_y_offset(180)
-	M.adjustBruteLoss(30)
-	src.visible_message(text("<span class='danger'>[M] falls free of [src]!</span>"))
-	unbuckle_mob(M,force=1)
-	M.emote("scream")
-	M.AdjustKnockdown(20)
-
-/obj/structure/kitchenspike/Destroy()
-	if(has_buckled_mobs())
-		for(var/mob/living/L in buckled_mobs)
-			release_mob(L)
-	return ..()
+		var/matrix/m180 = matrix(M.transform)
+		m180.Turn(180)
+		animate(M, transform = m180, time = 3)
+		M.pixel_y = M.get_standard_pixel_y_offset(180)
+		M.adjustBruteLoss(30)
+		src.visible_message(text("<span class='danger'>[M] falls free of [src]!</span>"))
+		unbuckle_mob(M,force=1)
+		M.emote("scream")
+		M.AdjustKnockdown(20)
 
 /obj/structure/kitchenspike/deconstruct(disassembled = TRUE)
 	if(disassembled)

@@ -49,7 +49,6 @@ Possible to do for anyone motivated enough:
 	var/datum/holocall/outgoing_call	//do not modify the datums only check and call the public procs
 	var/obj/item/disk/holodisk/disk //Record disk
 	var/replay_mode = FALSE //currently replaying a recording
-	var/loop_mode = FALSE //currently looping a recording
 	var/record_mode = FALSE //currently recording
 	var/record_start = 0  	//recording start time
 	var/record_user			//user that inititiated the recording
@@ -76,7 +75,7 @@ Possible to do for anyone motivated enough:
 		replay_stop()
 	if(record_mode)
 		record_stop()
-
+	
 	QDEL_NULL(disk)
 
 	holopads -= src
@@ -151,20 +150,19 @@ Possible to do for anyone motivated enough:
 	if(temp)
 		dat = temp
 	else
-		dat = "<a href='?src=[REF(src)];AIrequest=1'>Request an AI's presence</a><br>"
-		dat += "<a href='?src=[REF(src)];Holocall=1'>Call another holopad</a><br>"
+		dat = "<a href='?src=[REF(src)];AIrequest=1'>Request an AI's presence.</a><br>"
+		dat += "<a href='?src=[REF(src)];Holocall=1'>Call another holopad.</a><br>"
 		if(disk)
 			if(disk.record)
 				//Replay
-				dat += "<a href='?src=[REF(src)];replay_start=1'>Replay disk recording</a><br>"
-				dat += "<a href='?src=[REF(src)];loop_start=1'>Loop disk recording</a><br>"
+				dat += "<a href='?src=[REF(src)];replay_start=1'>Replay disk recording.</a><br>"
 				//Clear
-				dat += "<a href='?src=[REF(src)];record_clear=1'>Clear disk recording</a><br>"
+				dat += "<a href='?src=[REF(src)];record_clear=1'>Clear disk recording.</a><br>"
 			else
 				//Record
-				dat += "<a href='?src=[REF(src)];record_start=1'>Start new recording</a><br>"
+				dat += "<a href='?src=[REF(src)];record_start=1'>Start new recording.</a><br>"
 			//Eject
-			dat += "<a href='?src=[REF(src)];disk_eject=1'>Eject disk</a><br>"
+			dat += "<a href='?src=[REF(src)];disk_eject=1'>Eject disk.</a><br>"
 
 		if(LAZYLEN(holo_calls))
 			dat += "=====================================================<br>"
@@ -174,7 +172,7 @@ Possible to do for anyone motivated enough:
 		for(var/I in holo_calls)
 			var/datum/holocall/HC = I
 			if(HC.connected_holopad != src)
-				dat += "<a href='?src=[REF(src)];connectcall=[REF(HC)]'>Answer call from [get_area(HC.calling_holopad)]</a><br>"
+				dat += "<a href='?src=[REF(src)];connectcall=[REF(HC)]'>Answer call from [get_area(HC.calling_holopad)].</a><br>"
 				one_unanswered_call = TRUE
 			else
 				one_answered_call = TRUE
@@ -185,10 +183,10 @@ Possible to do for anyone motivated enough:
 		for(var/I in holo_calls)
 			var/datum/holocall/HC = I
 			if(HC.connected_holopad == src)
-				dat += "<a href='?src=[REF(src)];disconnectcall=[REF(HC)]'>Disconnect call from [HC.user]</a><br>"
+				dat += "<a href='?src=[REF(src)];disconnectcall=[REF(HC)]'>Disconnect call from [HC.user].</a><br>"
 
 
-	var/datum/browser/popup = new(user, "holopad", name, 300, 175)
+	var/datum/browser/popup = new(user, "holopad", name, 300, 150)
 	popup.set_content(dat)
 	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
 	popup.open()
@@ -258,18 +256,15 @@ Possible to do for anyone motivated enough:
 		temp = ""
 		if(outgoing_call)
 			outgoing_call.Disconnect()
-
+	
 	else if(href_list["disk_eject"])
 		if(disk && !replay_mode)
 			disk.forceMove(drop_location())
 			disk = null
-
+	
 	else if(href_list["replay_stop"])
 		replay_stop()
 	else if(href_list["replay_start"])
-		replay_start()
-	else if(href_list["loop_start"])
-		loop_mode = TRUE
 		replay_start()
 	else if(href_list["record_start"])
 		record_start(usr)
@@ -429,7 +424,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(masters[user])
 		var/obj/effect/overlay/holo_pad_hologram/H = masters[user]
 		step_to(H, new_turf)
-		H.forceMove(new_turf)
+		H.loc = new_turf
 		var/area/holo_area = get_area(src)
 		var/area/eye_area = new_turf.loc
 
@@ -469,7 +464,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/holopad/proc/replay_stop()
 	if(replay_mode)
 		replay_mode = FALSE
-		loop_mode = FALSE
 		temp = null
 		QDEL_NULL(replay_holo)
 		SetLightsAndPower()
@@ -496,7 +490,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(!record_mode)
 		return
 	//make this command so you can have multiple languages in single record
-	if((!disk.record.caller_name || disk.record.caller_name == "Unknown") && istype(speaker))
+	if(!disk.record.caller_name && istype(speaker))
 		disk.record.caller_name = speaker.name
 	if(!disk.record.language)
 		disk.record.language = language
@@ -511,7 +505,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		current_delay += entry[2]
 
 	var/time_delta = world.time - record_start - current_delay
-
+	
 	if(time_delta >= 1)
 		disk.record.entries += list(list(HOLORECORD_DELAY,time_delta))
 	disk.record.entries += list(list(HOLORECORD_SAY,message))
@@ -522,11 +516,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(!replay_mode)
 		return
 	if(disk.record.entries.len < entry_number)
-		if (loop_mode)	
-			entry_number = 1
-		else
-			replay_stop()
-			return
+		replay_stop()
+		return
 	var/list/entry = disk.record.entries[entry_number]
 	var/command = entry[1]
 	switch(command)

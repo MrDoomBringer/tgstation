@@ -38,7 +38,7 @@
 
 				if(prob(src.getBruteLoss() - 50))
 					for(var/atom/movable/A in stomach_contents)
-						A.forceMove(drop_location())
+						A.loc = loc
 						stomach_contents.Remove(A)
 					src.gib()
 
@@ -157,8 +157,6 @@
 			if(!throwable_mob.buckled)
 				thrown_thing = throwable_mob
 				stop_pulling()
-				if(has_trait(TRAIT_PACIFISM))
-					to_chat(src, "<span class='notice'>You gently let go of [throwable_mob].</span>")
 				var/turf/start_T = get_turf(loc) //Get the start and target tile for the descriptors
 				var/turf/end_T = get_turf(target)
 				if(start_T && end_T)
@@ -169,10 +167,6 @@
 	else if(!(I.flags_1 & (NODROP_1|ABSTRACT_1)))
 		thrown_thing = I
 		dropItemToGround(I)
-
-		if(has_trait(TRAIT_PACIFISM) && I.throwforce)
-			to_chat(src, "<span class='notice'>You set [I] down gently on the ground.</span>")
-			return
 
 	if(thrown_thing)
 		visible_message("<span class='danger'>[src] has thrown [thrown_thing].</span>")
@@ -302,10 +296,10 @@
 
 
 /mob/living/carbon/proc/cuff_resist(obj/item/I, breakouttime = 600, cuff_break = 0)
-	if(I.item_flags & BEING_REMOVED)
+	if(I.being_removed)
 		to_chat(src, "<span class='warning'>You're already attempting to remove [I]!</span>")
 		return
-	I.item_flags |= BEING_REMOVED
+	I.being_removed = TRUE
 	breakouttime = I.breakouttime
 	if(!cuff_break)
 		visible_message("<span class='warning'>[src] attempts to remove [I]!</span>")
@@ -326,7 +320,7 @@
 
 	else if(cuff_break == INSTANT_CUFFBREAK)
 		clear_cuffs(I, cuff_break)
-	I.item_flags &= ~BEING_REMOVED
+	I.being_removed = FALSE
 
 /mob/living/carbon/proc/uncuff()
 	if (handcuffed)
@@ -338,7 +332,7 @@
 		if (client)
 			client.screen -= W
 		if (W)
-			W.forceMove(drop_location())
+			W.loc = loc
 			W.dropped(src)
 			if (W)
 				W.layer = initial(W.layer)
@@ -351,7 +345,7 @@
 		if (client)
 			client.screen -= W
 		if (W)
-			W.forceMove(drop_location())
+			W.loc = loc
 			W.dropped(src)
 			if (W)
 				W.layer = initial(W.layer)
@@ -365,13 +359,20 @@
 	to_chat(src, "<span class='notice'>You successfully [cuff_break ? "break" : "remove"] [I].</span>")
 
 	if(cuff_break)
-		. = !((I == handcuffed) || (I == legcuffed))
 		qdel(I)
-		return
+		if(I == handcuffed)
+			handcuffed = null
+			update_handcuffed()
+			return
+		else if(I == legcuffed)
+			legcuffed = null
+			update_inv_legcuffed()
+			return
+		return TRUE
 
 	else
 		if(I == handcuffed)
-			handcuffed.forceMove(drop_location())
+			handcuffed.loc = loc
 			handcuffed.dropped(src)
 			handcuffed = null
 			if(buckled && buckled.buckle_requires_restraints)
@@ -379,7 +380,7 @@
 			update_handcuffed()
 			return
 		if(I == legcuffed)
-			legcuffed.forceMove(drop_location())
+			legcuffed.loc = loc
 			legcuffed.dropped()
 			legcuffed = null
 			update_inv_legcuffed()
@@ -402,7 +403,7 @@
 	dropItemToGround(I)
 
 	var/modifier = 0
-	if(has_trait(TRAIT_CLUMSY))
+	if(disabilities & CLUMSY)
 		modifier -= 40 //Clumsy people are more likely to hit themselves -Honk!
 
 	switch(rand(1,100)+modifier) //91-100=Nothing special happens
@@ -511,7 +512,7 @@
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
 	update_stat()
 	if(((maxHealth - total_burn) < HEALTH_THRESHOLD_DEAD) && stat == DEAD )
-		become_husk("burn")
+		become_husk()
 	med_hud_set_health()
 
 /mob/living/carbon/update_sight()
@@ -720,7 +721,7 @@
 		if(health <= HEALTH_THRESHOLD_DEAD)
 			death()
 			return
-		if(IsUnconscious() || IsSleeping() || getOxyLoss() > 50 || (has_trait(TRAIT_FAKEDEATH)) || health <= HEALTH_THRESHOLD_FULLCRIT)
+		if(IsUnconscious() || IsSleeping() || getOxyLoss() > 50 || (status_flags & FAKEDEATH) || health <= HEALTH_THRESHOLD_FULLCRIT)
 			stat = UNCONSCIOUS
 			blind_eyes(1)
 		else
@@ -767,7 +768,7 @@
 			reagents.addiction_list = list()
 	cure_all_traumas(TRUE, TRUE)
 	..()
-	// heal ears after healing traits, since ears check TRAIT_DEAF trait
+	// heal ears after healing disabilities, since ears check DEAF disability
 	// when healing.
 	restoreEars()
 
@@ -785,7 +786,7 @@
 		if(prob(50))
 			organs_amt++
 			O.Remove(src)
-			O.forceMove(drop_location())
+			O.loc = get_turf(src)
 	if(organs_amt)
 		to_chat(user, "<span class='notice'>You retrieve some of [src]\'s internal organs!</span>")
 
@@ -852,6 +853,3 @@
 	.["Hallucinate"] = "?_src_=vars;[HrefToken()];hallucinate=[REF(src)]"
 	.["Give brain trauma"] = "?_src_=vars;[HrefToken()];givetrauma=[REF(src)]"
 	.["Cure brain traumas"] = "?_src_=vars;[HrefToken()];curetraumas=[REF(src)]"
-
-/mob/living/carbon/can_resist()
-	return bodyparts.len > 2 && ..()

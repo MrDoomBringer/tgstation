@@ -23,7 +23,7 @@
 /obj/item/target/Move()
 	. = ..()
 	if(pinnedLoc)
-		pinnedLoc.forceMove(loc)
+		pinnedLoc.loc = loc
 
 /obj/item/target/attackby(obj/item/W, mob/user, params)
 	if(istype(W, /obj/item/weldingtool))

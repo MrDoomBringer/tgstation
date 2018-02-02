@@ -159,7 +159,8 @@ GLOBAL_LIST_EMPTY(total_extraction_beacons)
 
 /obj/structure/extraction_point/Initialize()
 	. = ..()
-	name += " ([rand(100,999)]) ([get_area_name(src, TRUE)])"
+	var/area/area_name = get_area(src)
+	name += " ([rand(100,999)]) ([area_name.name])"
 	GLOB.total_extraction_beacons += src
 
 /obj/structure/extraction_point/Destroy()

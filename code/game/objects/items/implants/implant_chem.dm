@@ -2,7 +2,7 @@
 	name = "chem implant"
 	desc = "Injects things."
 	icon_state = "reagents"
-	container_type = OPENCONTAINER
+	container_type = OPENCONTAINER_1
 
 /obj/item/implant/chem/get_data()
 	var/dat = {"<b>Implant Specifications:</b><BR>

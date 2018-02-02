@@ -41,10 +41,10 @@
 				user.visible_message("<span class='warning'>[user] saws [src] open and pulls out a brain!</span>", "<span class='notice'>You saw [src] open and pull out a brain.</span>")
 			if(brainmob)
 				brainmob.container = null
-				brainmob.forceMove(brain)
+				brainmob.loc = brain
 				brain.brainmob = brainmob
 				brainmob = null
-			brain.forceMove(T)
+			brain.loc = T
 			brain = null
 			update_icon_dropped()
 		else
@@ -61,7 +61,7 @@
 		C = owner
 
 	real_name = C.real_name
-	if(C.has_trait(TRAIT_HUSK))
+	if(C.disabilities & HUSK)
 		real_name = "Unknown"
 		hair_style = "Bald"
 		facial_hair_style = "Shaved"

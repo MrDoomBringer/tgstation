@@ -80,6 +80,10 @@
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/powered/authorship)
+"q" = (
+/obj/effect/spawner/structure/window/reinforced,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/powered/authorship)
 "r" = (
 /obj/structure/table/wood,
 /obj/item/paper_bin,
@@ -102,7 +106,7 @@
 /turf/open/floor/mineral/titanium/purple,
 /area/ruin/space/has_grav/powered/authorship)
 "u" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/mineral/titanium/purple,
 /area/ruin/space/has_grav/powered/authorship)
 "v" = (
@@ -255,9 +259,9 @@ d
 c
 c
 c
-p
+q
 u
-p
+q
 c
 c
 c

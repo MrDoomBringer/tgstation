@@ -2,7 +2,7 @@
 //
 // consists of light fixtures (/obj/machinery/light) and light tube/bulb items (/obj/item/light)
 
-#define LIGHT_EMERGENCY_POWER_USE 0.2 //How much power emergency lights will consume per tick
+
 // status values shared between lighting fixtures and items
 #define LIGHT_OK 0
 #define LIGHT_EMPTY 1
@@ -17,7 +17,7 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "tube-construct-item"
 	result_path = /obj/structure/light_construct
-	inverse = TRUE
+	inverse = 1
 
 /obj/item/wallframe/light_fixture/small
 	name = "small light fixture frame"
@@ -204,28 +204,22 @@
 	active_power_usage = 20
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
 	var/on = FALSE					// 1 if on, 0 if off
-	var/on_gs = FALSE
+	var/on_gs = 0
 	var/static_power_used = 0
 	var/brightness = 8			// luminosity when on, also used in power calculation
-	var/bulb_power = 1			// basically the alpha of the emitted light source
-	var/bulb_colour = "#FFFFFF"	// befault colour of the light.
 	var/status = LIGHT_OK		// LIGHT_OK, _EMPTY, _BURNED or _BROKEN
-	var/flickering = FALSE
+	var/flickering = 0
 	var/light_type = /obj/item/light/tube		// the type of light item
 	var/fitting = "tube"
 	var/switchcount = 0			// count of number of times switched on/off
 								// this is used to calc the probability the light burns out
 
-	var/rigged = FALSE			// true if rigged to explode
+	var/rigged = 0				// true if rigged to explode
 
 	var/obj/item/stock_parts/cell/cell
 	var/start_with_cell = TRUE	// if true, this fixture generates a very weak cell at roundstart
 	var/emergency_mode = FALSE	// if true, the light is in emergency mode
 	var/no_emergency = FALSE	// if true, this light cannot ever have an emergency mode
-	var/bulb_emergency_brightness_mul = 0.25	// multiplier for this light's base brightness in emergency power mode
-	var/bulb_emergency_colour = "#FF3232"	// determines the colour of the light while it's in emergency mode
-	var/bulb_emergency_pow_mul = 0.75	// the multiplier for determining the light's power in emergency mode
-	var/bulb_emergency_pow_min = 0.5	// the minimum value for the light's power in emergency mode
 
 // the smaller bulb light fixture
 
@@ -321,8 +315,8 @@
 					burn_out()
 			else
 				use_power = ACTIVE_POWER_USE
-				set_light(brightness, bulb_power, bulb_colour)
-	else if(has_emergency_power(LIGHT_EMERGENCY_POWER_USE) && !turned_off())
+				set_light(brightness, 1, "#FFFFFF")
+	else if(has_emergency_power() && !turned_off())
 		use_power = IDLE_POWER_USE
 		emergency_mode = TRUE
 	else
@@ -342,8 +336,8 @@
 
 /obj/machinery/light/process()
 	if(has_power() && cell)
-		cell.charge = min(cell.maxcharge, cell.charge + LIGHT_EMERGENCY_POWER_USE) //Recharge emergency power automatically while not using it
-	if(emergency_mode && !use_emergency_power(LIGHT_EMERGENCY_POWER_USE))
+		cell.charge = min(cell.maxcharge, cell.charge + 0.2) //Recharge emergency power automatically while not using it
+	if(emergency_mode && !use_emergency_power(0.2))
 		update(FALSE) //Disables emergency mode and sets the color to normal
 
 /obj/machinery/light/proc/burn_out()
@@ -498,7 +492,7 @@
 // if a light is turned off, it won't activate emergency power
 /obj/machinery/light/proc/turned_off()
 	var/area/A = get_area(src)
-	return !A.lightswitch && A.power_light || flickering
+	return !A.lightswitch && A.power_light
 
 // returns whether this light has power
 // true if area has power and lightswitch is on
@@ -515,7 +509,7 @@
 		return status == LIGHT_OK
 
 // attempts to use power from the installed emergency cell, returns true if it does and false if it doesn't
-/obj/machinery/light/proc/use_emergency_power(pwr = LIGHT_EMERGENCY_POWER_USE)
+/obj/machinery/light/proc/use_emergency_power(pwr = 0.2)
 	if(!has_emergency_power(pwr))
 		return FALSE
 	if(cell.charge > 300) //it's meant to handle 120 W, ya doofus
@@ -523,7 +517,7 @@
 		burn_out()
 		return FALSE
 	cell.use(pwr)
-	set_light(brightness * bulb_emergency_brightness_mul, max(bulb_emergency_pow_min, bulb_emergency_pow_mul * (cell.charge / cell.maxcharge)), bulb_emergency_colour)
+	set_light(brightness * 0.25, max(0.5, 0.75 * (cell.charge / cell.maxcharge)), "#FF3232") //RGB: 255, 50, 50
 	return TRUE
 
 
@@ -686,18 +680,8 @@
 	var/base_state
 	var/switchcount = 0	// number of times switched
 	materials = list(MAT_GLASS=100)
-	grind_results = list("silicon" = 5, "nitrogen" = 10) //Nitrogen is used as a cheaper alternative to argon in incandescent lighbulbs
 	var/rigged = 0		// true if rigged to explode
 	var/brightness = 2 //how much light it gives off
-	
-/obj/item/light/suicide_act(mob/living/carbon/user)
-	if (status == LIGHT_BROKEN)
-		user.visible_message("<span class='suicide'>[user] begins to stab [user.p_them()]self with \the [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
-		return BRUTELOSS
-	else
-		user.visible_message("<span class='suicide'>[user] begins to eat \the [src]! It looks like [user.p_theyre()] not very bright!</span>")
-		shatter()
-		return BRUTELOSS
 
 /obj/item/light/tube
 	name = "light tube"

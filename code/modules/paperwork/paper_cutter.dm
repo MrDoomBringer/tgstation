@@ -55,7 +55,7 @@
 		if(!user.transferItemToLoc(P, src))
 			return
 		to_chat(user, "<span class='notice'>You replace [src]'s [P].</span>")
-		P.forceMove(src)
+		P.loc = src
 		storedcutter = P
 		update_icon()
 		return

@@ -2,7 +2,7 @@
 	name = "Man-Machine Interface"
 	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity, that nevertheless has become standard-issue on Nanotrasen stations."
 	icon = 'icons/obj/assemblies.dmi'
-	icon_state = "mmi_off"
+	icon_state = "mmi_empty"
 	w_class = WEIGHT_CLASS_NORMAL
 	var/braintype = "Cyborg"
 	var/obj/item/device/radio/radio = null //Let's give it a radio.
@@ -15,19 +15,21 @@
 	var/overrides_aicore_laws = FALSE // Whether the laws on the MMI, if any, override possible pre-existing laws loaded on the AI core.
 
 /obj/item/device/mmi/update_icon()
-	if(!brain)
-		icon_state = "mmi_off"
-		return
-	if(istype(brain, /obj/item/organ/brain/alien))
-		icon_state = "mmi_brain_alien"
-		braintype = "Xenoborg" //HISS....Beep.
+	if(brain)
+		if(istype(brain, /obj/item/organ/brain/alien))
+			if(brainmob && brainmob.stat == DEAD)
+				icon_state = "mmi_alien_dead"
+			else
+				icon_state = "mmi_alien"
+			braintype = "Xenoborg" //HISS....Beep.
+		else
+			if(brainmob && brainmob.stat == DEAD)
+				icon_state = "mmi_dead"
+			else
+				icon_state = "mmi_full"
+			braintype = "Cyborg"
 	else
-		icon_state = "mmi_brain"
-		braintype = "Cyborg"
-	if(brainmob && brainmob.stat != DEAD)
-		add_overlay("mmi_alive")
-	else
-		add_overlay("mmi_dead")
+		icon_state = "mmi_empty"
 
 /obj/item/device/mmi/Initialize()
 	. = ..()
@@ -55,7 +57,7 @@
 
 		brainmob = newbrain.brainmob
 		newbrain.brainmob = null
-		brainmob.forceMove(src)
+		brainmob.loc = src
 		brainmob.container = src
 		if(!newbrain.damaged_brain) // the brain organ hasn't been beaten to death.
 			brainmob.stat = CONSCIOUS //we manually revive the brain mob
@@ -88,7 +90,7 @@
 
 /obj/item/device/mmi/proc/eject_brain(mob/user)
 	brainmob.container = null //Reset brainmob mmi var.
-	brainmob.forceMove(brain) //Throw mob into brain.
+	brainmob.loc = brain //Throw mob into brain.
 	brainmob.stat = DEAD
 	brainmob.emp_damage = 0
 	brainmob.reset_perspective() //so the brainmob follows the brain organ instead of the mmi. And to update our vision
@@ -118,7 +120,7 @@
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
 		var/obj/item/organ/brain/newbrain = H.getorgan(/obj/item/organ/brain)
-		newbrain.forceMove(src)
+		newbrain.loc = src
 		brain = newbrain
 	else if(!brain)
 		brain = new(src)
@@ -196,7 +198,7 @@
 		else
 			to_chat(user, "<span class='notice'>The MMI indicates the brain is active.</span>")
 
-/obj/item/device/mmi/relaymove(mob/user)
+/obj/item/device/mmi/relaymove()
 	return //so that the MMI won't get a warning about not being able to move if it tries to move
 
 /obj/item/device/mmi/syndie

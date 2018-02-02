@@ -100,7 +100,7 @@
 
 /obj/machinery/shuttle_scrambler/process()
 	if(active)
-		if(is_station_level(z))
+		if(z in GLOB.station_z_levels)
 			var/siphoned = min(SSshuttle.points,siphon_per_tick)
 			SSshuttle.points -= siphoned
 			credits_stored += siphoned
@@ -188,12 +188,11 @@
 	name = "pirate shuttle navigation computer"
 	desc = "Used to designate a precise transit location for the pirate shuttle."
 	shuttleId = "pirateship"
-	lock_override = CAMERA_LOCK_STATION
+	station_lock_override = TRUE
 	shuttlePortId = "pirateship_custom"
 	shuttlePortName = "custom location"
 	x_offset = 9
 	y_offset = 0
-	see_hidden = FALSE
 
 /obj/docking_port/mobile/pirate
 	name = "pirate shuttle"
@@ -206,9 +205,9 @@
 	if(engines_cooling)
 		return "[.] - Engines cooling."
 
-/obj/docking_port/mobile/pirate/initiate_docking(obj/docking_port/stationary/new_dock, movement_direction, force=FALSE)
+/obj/docking_port/mobile/pirate/dock(obj/docking_port/stationary/new_dock, movement_direction, force=FALSE)
 	. = ..()
-	if(. == DOCKING_SUCCESS && !is_transit_level(new_dock.z))
+	if(. == DOCKING_SUCCESS && new_dock.z != ZLEVEL_TRANSIT)
 		engines_cooling = TRUE
 		addtimer(CALLBACK(src,.proc/reset_cooldown),engine_cooldown,TIMER_UNIQUE)
 
@@ -252,7 +251,7 @@
 	var/list/results = list()
 	for(var/atom/movable/AM in world)
 		if(is_type_in_typecache(AM,GLOB.pirate_loot_cache))
-			if(is_station_level(AM.z))
+			if(AM.z in GLOB.station_z_levels)
 				if(get_area(AM) == get_area(src)) //Should this be variable ?
 					continue
 				results += AM
@@ -264,6 +263,7 @@
 			if(!results.len)
 				return
 			var/atom/movable/AM = pick_n_take(results)
-			say("Located: [AM.name] at [get_area_name(AM)]")
+			var/area/loot_area = get_area(AM)
+			say("Located: [AM.name] at [loot_area.name]")
 
 #undef LOOT_LOCATOR_COOLDOWN

@@ -26,11 +26,11 @@
 	update_icon()
 
 /obj/structure/grille/update_icon()
-	if(QDELETED(src) || broken)
+	if(QDELETED(src))
 		return
 
 	var/ratio = obj_integrity / max_integrity
-	ratio = CEILING(ratio*4, 1) * 25
+	ratio = Ceiling(ratio*4) * 25
 
 	if(smooth)
 		queue_smooth(src)

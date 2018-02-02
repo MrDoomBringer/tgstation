@@ -29,6 +29,7 @@
 				if("Nothing")
 					return
 
+
 /mob/living/simple_animal/drone/attack_hand(mob/user)
 	if(ishuman(user))
 		if(stat == DEAD || status_flags & GODMODE || !can_be_held)
@@ -48,8 +49,11 @@
 			return
 		to_chat(user, "<span class='notice'>You pick [src] up.</span>")
 		drop_all_held_items()
-		var/obj/item/clothing/head/mob_holder/drone/DH = new(get_turf(src), src)
+		var/obj/item/clothing/head/drone_holder/DH = new /obj/item/clothing/head/drone_holder(src)
+		DH.updateVisualAppearence(src)
+		DH.drone = src
 		user.put_in_hands(DH)
+		forceMove(DH)
 
 /mob/living/simple_animal/drone/proc/try_reactivate(mob/living/user)
 	var/mob/dead/observer/G = get_ghost()
@@ -105,7 +109,7 @@
 	var/armorval = 0
 
 	if(head)
-		armorval = head.armor.getRating(type)
+		armorval = head.armor[type]
 	return (armorval * get_armor_effectiveness()) //armor is reduced for tiny fragile drones
 
 /mob/living/simple_animal/drone/proc/get_armor_effectiveness()

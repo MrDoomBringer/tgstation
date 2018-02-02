@@ -26,7 +26,6 @@
 	filling_color = "#E9967A"
 	bitesize = 100
 	foodtype = VEGETABLES
-	juice_results = list("potato" = 0)
 
 
 /obj/item/reagent_containers/food/snacks/grown/potato/wedges

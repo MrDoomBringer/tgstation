@@ -77,7 +77,7 @@
 	P.info += "<h4>Stamp below to confirm receipt of goods:</h4>"
 
 	P.update_icon()
-	P.forceMove(C)
+	P.loc = C
 	C.manifest = P
 	C.update_icon()
 

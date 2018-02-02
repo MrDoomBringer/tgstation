@@ -45,7 +45,6 @@ doesn't have toxins access.
 	var/disk_slot_selected
 	var/searchstring = ""
 	var/searchtype = ""
-	var/ui_mode = RDCONSOLE_UI_MODE_NORMAL
 
 	var/research_control = TRUE
 
@@ -153,7 +152,7 @@ doesn't have toxins access.
 	if(stored_research.research_points >= price)
 		investigate_log("[key_name(user)] researched [id]([price]) on techweb id [stored_research.id].", INVESTIGATE_RESEARCH)
 		if(stored_research == SSresearch.science_tech)
-			SSblackbox.record_feedback("associative", "science_techweb_unlock", 1, list("id" = "[id]", "name" = TN.display_name, "price" = "[price]", "time" = SQLtime()))
+			SSblackbox.record_feedback("associative", "science_techweb_unlock", 1, list("id" = "[id]", "price" = "[price]", "time" = "[SQLtime()]"))
 		if(stored_research.research_node(SSresearch.techweb_nodes[id]))
 			say("Sucessfully researched [TN.display_name].")
 			var/logname = "Unknown"
@@ -191,10 +190,10 @@ doesn't have toxins access.
 	..()
 
 /obj/machinery/computer/rdconsole/emag_act(mob/user)
-	if(!(obj_flags & EMAGGED))
+	if(!emagged)
 		to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 		playsound(src, "sparks", 75, 1)
-		obj_flags |= EMAGGED
+		emagged = TRUE
 	return ..()
 
 /obj/machinery/computer/rdconsole/proc/list_categories(list/categories, menu_num as num)
@@ -219,9 +218,8 @@ doesn't have toxins access.
 	var/list/l = list()
 	l += "<div class='statusDisplay'><b>[stored_research.organization] Research and Development Network</b>"
 	l += "Available points: [round(stored_research.research_points)] (+[round(stored_research.last_bitcoins * 60)] / minute)"
-	l += "Security protocols: [obj_flags & EMAGGED ? "<font color='red'>Disabled</font>" : "<font color='green'>Enabled</font>"]"
+	l += "Security protocols: [emagged? "<font color='red'>Disabled</font>" : "<font color='green'>Enabled</font>"]"
 	l += "<a href='?src=[REF(src)];switch_screen=[RDSCREEN_MENU]'>Main Menu</a> | <a href='?src=[REF(src)];switch_screen=[back]'>Back</a></div>[RDSCREEN_NOBREAK]"
-	l += "[ui_mode == 1? "<span class='linkOn'>Normal View</span>" : "<a href='?src=[REF(src)];ui_mode=1'>Normal View</a>"] | [ui_mode == 2? "<span class='linkOn'>Expert View</span>" : "<a href='?src=[REF(src)];ui_mode=2'>Expert View</a>"] | [ui_mode == 3? "<span class='linkOn'>List View</span>" : "<a href='?src=[REF(src)];ui_mode=3'>List View</a>"]"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_main_menu()
@@ -280,8 +278,6 @@ doesn't have toxins access.
 		var/datum/design/D = stored_research.researched_designs[v]
 		if(!(selected_category in D.category)|| !(D.build_type & PROTOLATHE))
 			continue
-		if(!(D.departmental_flags & linked_lathe.allowed_department_flags))
-			continue
 		var/temp_material
 		var/c = 50
 		var/t
@@ -332,8 +328,6 @@ doesn't have toxins access.
 	l += ui_protolathe_header()
 	var/coeff = linked_lathe.efficiency_coeff
 	for(var/datum/design/D in matching_designs)
-		if(!(D.departmental_flags & linked_lathe.allowed_department_flags))
-			continue
 		var/temp_material
 		var/c = 50
 		var/t
@@ -422,8 +416,6 @@ doesn't have toxins access.
 		var/datum/design/D = stored_research.researched_designs[v]
 		if(!(selected_category in D.category) || !(D.build_type & IMPRINTER))
 			continue
-		if(!(D.departmental_flags & linked_imprinter.allowed_department_flags))
-			continue
 		var/temp_materials
 		var/check_materials = TRUE
 
@@ -451,8 +443,6 @@ doesn't have toxins access.
 
 	var/coeff = linked_imprinter.efficiency_coeff
 	for(var/datum/design/D in matching_designs)
-		if(!(D.departmental_flags & linked_imprinter.allowed_department_flags))
-			continue
 		var/temp_materials
 		var/check_materials = TRUE
 		var/all_materials = D.materials + D.reagents_list
@@ -600,52 +590,23 @@ doesn't have toxins access.
 		l += "</div>"
 	return l
 
-/obj/machinery/computer/rdconsole/proc/ui_techweb()
+/obj/machinery/computer/rdconsole/proc/ui_techweb()		//Legacy code.
 	var/list/l = list()
-	if(ui_mode != RDCONSOLE_UI_MODE_LIST)
-		var/list/columns = list()
-		var/max_tier = 0
-		for (var/node_ in stored_research.tiers)
-			var/datum/techweb_node/node = node_
-			var/tier = stored_research.tiers[node]
-			LAZYINITLIST(columns["[tier]"])  // String hackery to make the numbers associative
-			columns["[tier]"] += ui_techweb_single_node(node, minimal=(tier != 1))
-			max_tier = max(max_tier, tier)
+	var/list/columns = list()
+	var/max_tier = 0
+	for (var/node_ in stored_research.tiers)
+		var/datum/techweb_node/node = node_
+		var/tier = stored_research.tiers[node]
+		LAZYINITLIST(columns["[tier]"])  // String hackery to make the numbers associative
+		columns["[tier]"] += ui_techweb_single_node(node, minimal=(tier != 1))
+		max_tier = max(max_tier, tier)
 
-		l += "<table><tr><th align='left'>Researched</th><th align='left'>Available</th><th align='left'>Future</th></tr><tr>[RDSCREEN_NOBREAK]"
-		for(var/tier in 0 to max_tier)
-			l += "<td valign='top'>[RDSCREEN_NOBREAK]"
-			l += columns["[tier]"]
-			l += "</td>[RDSCREEN_NOBREAK]"
-		l += "</tr></table>[RDSCREEN_NOBREAK]"
-	else
-		var/list/avail = list()			//This could probably be optimized a bit later.
-		var/list/unavail = list()
-		var/list/res = list()
-		for(var/v in stored_research.researched_nodes)
-			res += stored_research.researched_nodes[v]
-		for(var/v in stored_research.available_nodes)
-			if(stored_research.researched_nodes[v])
-				continue
-			avail += stored_research.available_nodes[v]
-		for(var/v in stored_research.visible_nodes)
-			if(stored_research.available_nodes[v])
-				continue
-			unavail += stored_research.visible_nodes[v]
-		l += "<h2>Technology Nodes:</h2>[RDSCREEN_NOBREAK]"
-		l += "<div><h3>Available for Research:</h3>"
-		for(var/datum/techweb_node/N in avail)
-			var/not_unlocked = (stored_research.available_nodes[N.id] && !stored_research.researched_nodes[N.id])
-			var/has_points = (stored_research.research_points >= N.get_price(stored_research))
-			var/research_href = not_unlocked? (has_points? "<A href='?src=[REF(src)];research_node=[N.id]'>Research</A>" : "<span class='linkOff bad'>Not Enough Points</span>") : null
-			l += "<A href='?src=[REF(src)];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>[research_href]"
-		l += "</div><div><h3>Locked Nodes:</h3>"
-		for(var/datum/techweb_node/N in unavail)
-			l += "<A href='?src=[REF(src)];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
-		l += "</div><div><h3>Researched Nodes:</h3>"
-		for(var/datum/techweb_node/N in res)
-			l += "<A href='?src=[REF(src)];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
-		l += "</div>[RDSCREEN_NOBREAK]"
+	l += "<table><tr><th align='left'>Researched</th><th align='left'>Available</th><th align='left'>Future</th></tr><tr>[RDSCREEN_NOBREAK]"
+	for(var/tier in 0 to max_tier)
+		l += "<td valign='top'>[RDSCREEN_NOBREAK]"
+		l += columns["[tier]"]
+		l += "</td>[RDSCREEN_NOBREAK]"
+	l += "</tr></table>[RDSCREEN_NOBREAK]"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/machine_icon(atom/item)
@@ -660,7 +621,7 @@ doesn't have toxins access.
 	if (selflink)
 		display_name = "<A href='?src=[REF(src)];view_node=[node.id];back_screen=[screen]'>[display_name]</A>"
 	l += "<div class='statusDisplay technode'><b>[display_name]</b> [RDSCREEN_NOBREAK]"
-	if(minimal)
+	if (minimal)
 		l += "<br>[node.description]"
 	else
 		if(stored_research.researched_nodes[node.id])
@@ -672,15 +633,14 @@ doesn't have toxins access.
 				l += "<span class='linkOff'>[price]</span>"  // gray - too expensive
 		else
 			l += "<span class='linkOff bad'>[price]</span>"  // red - missing prereqs
-		if(ui_mode == RDCONSOLE_UI_MODE_NORMAL)
-			l += "[node.description]"
-			for(var/i in node.designs)
-				var/datum/design/D = node.designs[i]
-				l += "<span data-tooltip='[D.name]' onclick='location=\"?src=[REF(src)];view_design=[i];back_screen=[screen]\"'>[D.icon_html(usr)]</span>[RDSCREEN_NOBREAK]"
+		l += "[node.description]"
+		for(var/i in node.designs)
+			var/datum/design/D = node.designs[i]
+			l += "<span data-tooltip='[D.name]' onclick='location=\"?src=[REF(src)];view_design=[i];back_screen=[screen]\"'>[D.icon_html(usr)]</span>[RDSCREEN_NOBREAK]"
 	l += "</div>[RDSCREEN_NOBREAK]"
 	return l
 
-/obj/machinery/computer/rdconsole/proc/ui_techweb_nodeview()
+/obj/machinery/computer/rdconsole/proc/ui_techweb_nodeview()	//Legacy code
 	RDSCREEN_UI_SNODE_CHECK
 	var/list/l = list()
 	if(stored_research.hidden_nodes[selected_node.id])
@@ -812,8 +772,6 @@ doesn't have toxins access.
 	if(ls["switch_screen"])
 		back = screen
 		screen = text2num(ls["switch_screen"])
-	if(ls["ui_mode"])
-		ui_mode = text2num(ls["ui_mode"])
 	if(ls["lock_console"])
 		if(allowed(usr))
 			lock_console(usr)

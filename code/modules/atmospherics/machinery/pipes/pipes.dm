@@ -18,8 +18,8 @@
 	volume = 35 * device_type
 	..()
 
-/obj/machinery/atmospherics/pipe/nullifyNode(i)
-	var/obj/machinery/atmospherics/oldN = nodes[i]
+/obj/machinery/atmospherics/pipe/nullifyNode(I)
+	var/obj/machinery/atmospherics/oldN = NODE_I
 	..()
 	if(oldN)
 		oldN.build_network()
@@ -33,11 +33,11 @@
 		parent.build_pipeline(src)
 
 /obj/machinery/atmospherics/pipe/update_icon() //overridden by manifolds
-	if(nodes[1] && nodes[2])
+	if(NODE1&&NODE2)
 		icon_state = "intact[invisibility ? "-f" : "" ]"
 	else
-		var/have_node1 = nodes[1] ? TRUE : FALSE
-		var/have_node2 = nodes[2] ? TRUE : FALSE
+		var/have_node1 = NODE1?1:0
+		var/have_node2 = NODE2?1:0
 		icon_state = "exposed[have_node1][have_node2][invisibility ? "-f" : "" ]"
 
 /obj/machinery/atmospherics/pipe/atmosinit()
@@ -91,9 +91,9 @@
 	QDEL_NULL(parent)
 
 /obj/machinery/atmospherics/pipe/proc/update_node_icon()
-	for(var/i in 1 to device_type)
-		if(nodes[i])
-			var/obj/machinery/atmospherics/N = nodes[i]
+	for(DEVICE_TYPE_LOOP)
+		if(NODE_I)
+			var/obj/machinery/atmospherics/N = NODE_I
 			N.update_icon()
 
 /obj/machinery/atmospherics/pipe/returnPipenets()
@@ -109,3 +109,4 @@
 	pipe_color = paint_color
 	update_node_icon()
 	return TRUE
+

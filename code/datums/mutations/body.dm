@@ -85,12 +85,12 @@
 /datum/mutation/human/clumsy/on_acquiring(mob/living/carbon/human/owner)
 	if(..())
 		return
-	owner.add_trait(TRAIT_CLUMSY, GENETIC_MUTATION)
+	owner.disabilities |= CLUMSY
 
 /datum/mutation/human/clumsy/on_losing(mob/living/carbon/human/owner)
 	if(..())
 		return
-	owner.remove_trait(TRAIT_CLUMSY, GENETIC_MUTATION)
+	owner.disabilities &= ~CLUMSY
 
 
 //Tourettes causes you to randomly stand in place and shout.
@@ -124,12 +124,12 @@
 /datum/mutation/human/deaf/on_acquiring(mob/living/carbon/human/owner)
 	if(..())
 		return
-	owner.add_trait(TRAIT_DEAF, GENETIC_MUTATION)
+	owner.disabilities |= DEAF
 
 /datum/mutation/human/deaf/on_losing(mob/living/carbon/human/owner)
 	if(..())
 		return
-	owner.remove_trait(TRAIT_DEAF, GENETIC_MUTATION)
+	owner.disabilities &= ~DEAF
 
 
 //Monified turns you into a monkey.

@@ -30,7 +30,6 @@
 	var/light_intensity = 2 //how powerful the emitted light is when used.
 	var/burned_fuel_for = 0	//when fuel was last removed
 	heat = 3800
-	tool_behaviour = TOOL_WELDER
 	toolspeed = 1
 
 /obj/item/weldingtool/Initialize()
@@ -52,7 +51,7 @@
 	cut_overlays()
 	if(change_icons)
 		var/ratio = get_fuel() / max_fuel
-		ratio = CEILING(ratio*4, 1) * 25
+		ratio = Ceiling(ratio*4) * 25
 		add_overlay("[initial(icon_state)][ratio]")
 	update_torch()
 	return
@@ -121,7 +120,7 @@
 /obj/item/weldingtool/afterattack(atom/O, mob/user, proximity)
 	if(!proximity)
 		return
-	if(!status && O.is_refillable())
+	if(!status && istype(O, /obj/item/reagent_containers) && O.is_open_container())
 		reagents.trans_to(O, reagents.total_volume)
 		to_chat(user, "<span class='notice'>You empty [src]'s fuel tank into [O].</span>")
 		update_icon()
@@ -242,7 +241,7 @@
 		container_type = NONE
 	else
 		to_chat(user, "<span class='notice'>[src] can now be attached, modified, and refuelled.</span>")
-		container_type = OPENCONTAINER
+		container_type = OPENCONTAINER_1
 	add_fingerprint(user)
 
 /obj/item/weldingtool/proc/flamethrower_rods(obj/item/I, mob/user)

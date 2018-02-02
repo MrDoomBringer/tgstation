@@ -124,7 +124,7 @@
 /obj/item/storage/box/mechabeacons
 	name = "exosuit tracking beacons"
 
-/obj/item/storage/box/mechabeacons/PopulateContents()
+/obj/item/storage/box/mechabeacons/New()
 	..()
 	new /obj/item/mecha_parts/mecha_tracking(src)
 	new /obj/item/mecha_parts/mecha_tracking(src)

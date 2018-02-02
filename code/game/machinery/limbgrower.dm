@@ -10,7 +10,7 @@
 	icon = 'icons/obj/machines/limbgrower.dmi'
 	icon_state = "limbgrower_idleoff"
 	density = TRUE
-	container_type = OPENCONTAINER
+	container_type = OPENCONTAINER_1
 	anchored = TRUE
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 10
@@ -165,7 +165,7 @@
 	dat += "<table style='width:100%' align='center'><tr>"
 
 	for(var/C in categories)
-		if(C=="special" && !(obj_flags & EMAGGED))	//Only want to show special when console is emagged
+		if(C=="special" && !emagged)	//Only want to show special when console is emagged
 			continue
 
 		dat += "<td><A href='?src=[REF(src)];category=[C];menu=[LIMBGROWER_CATEGORY_MENU]'>[C]</A></td>"
@@ -220,10 +220,10 @@
 	return dat
 
 /obj/machinery/limbgrower/emag_act(mob/user)
-	if(obj_flags & EMAGGED)
+	if(emagged)
 		return
 	for(var/datum/design/D in SSresearch.techweb_designs)
 		if((D.build_type & LIMBGROWER) && ("special" in D.category))
 			stored_research.add_design(D)
 	to_chat(user, "<span class='warning'>A warning flashes onto the screen, stating that safety overrides have been deactivated!</span>")
-	obj_flags |= EMAGGED
+	emagged = TRUE

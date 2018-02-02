@@ -21,7 +21,7 @@
 
 /datum/round_event/wormholes/start()
 	for(var/turf/open/floor/T in world)
-		if(is_station_level(T.z))
+		if(T.z in GLOB.station_z_levels)
 			pick_turfs += T
 
 	for(var/i = 1, i <= number_of_wormholes, i++)

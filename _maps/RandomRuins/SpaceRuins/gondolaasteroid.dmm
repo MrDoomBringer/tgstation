@@ -23,6 +23,11 @@
 /obj/structure/flora/ausbushes/ywflowers,
 /turf/open/floor/plating/asteroid/airless,
 /area/ruin/space/has_grav)
+"g" = (
+/turf/open/floor/plating/asteroid/airless,
+/area/ruin/space/has_grav{
+	dynamic_lighting = 1
+	})
 "h" = (
 /mob/living/simple_animal/pet/gondola,
 /turf/open/floor/plating/asteroid/airless,
@@ -76,9 +81,7 @@
 /turf/open/floor/plating/asteroid/airless,
 /area/ruin/space/has_grav)
 "u" = (
-/obj/machinery/door/airlock/survival_pod/glass{
-	dir = 4
-	},
+/obj/machinery/door/airlock/survival_pod/vertical,
 /turf/open/floor/plating/asteroid/airless,
 /area/ruin/space/has_grav)
 
@@ -758,7 +761,7 @@ b
 b
 b
 b
-c
+g
 c
 c
 c

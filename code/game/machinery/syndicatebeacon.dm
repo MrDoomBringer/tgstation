@@ -128,7 +128,3 @@
 /obj/item/device/sbeacondrop/powersink
 	desc = "A label on it reads: <i>Warning: Activating this device will send a power draining device to your location</i>."
 	droptype = /obj/item/device/powersink
-
-/obj/item/device/sbeacondrop/clownbomb
-	desc = "A label on it reads: <i>Warning: Activating this device will send a silly explosive to your location</i>."
-	droptype = /obj/machinery/syndicatebomb/badmin/clown

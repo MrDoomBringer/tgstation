@@ -16,17 +16,11 @@
 	is_reflectable = TRUE
 
 /obj/item/projectile/beam/laser
-	tracer_type = /obj/effect/projectile/tracer/laser
-	muzzle_type = /obj/effect/projectile/muzzle/laser
-	impact_type = /obj/effect/projectile/impact/laser
 
 /obj/item/projectile/beam/laser/heavylaser
 	name = "heavy laser"
 	icon_state = "heavylaser"
 	damage = 40
-	tracer_type = /obj/effect/projectile/tracer/heavy_laser
-	muzzle_type = /obj/effect/projectile/muzzle/heavy_laser
-	impact_type = /obj/effect/projectile/impact/heavy_laser
 
 /obj/item/projectile/beam/laser/on_hit(atom/target, blocked = FALSE)
 	. = ..()
@@ -60,9 +54,6 @@
 
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/green_laser
 	light_color = LIGHT_COLOR_GREEN
-	tracer_type = /obj/effect/projectile/tracer/xray
-	muzzle_type = /obj/effect/projectile/muzzle/xray
-	impact_type = /obj/effect/projectile/impact/xray
 
 /obj/item/projectile/beam/disabler
 	name = "disabler beam"
@@ -74,9 +65,6 @@
 	eyeblur = 0
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/blue_laser
 	light_color = LIGHT_COLOR_BLUE
-	tracer_type = /obj/effect/projectile/tracer/disabler
-	muzzle_type = /obj/effect/projectile/muzzle/disabler
-	impact_type = /obj/effect/projectile/impact/disabler
 
 /obj/item/projectile/beam/pulse
 	name = "pulse"
@@ -84,9 +72,6 @@
 	damage = 50
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/blue_laser
 	light_color = LIGHT_COLOR_BLUE
-	tracer_type = /obj/effect/projectile/tracer/pulse
-	muzzle_type = /obj/effect/projectile/muzzle/pulse
-	impact_type = /obj/effect/projectile/impact/pulse
 
 /obj/item/projectile/beam/pulse/on_hit(atom/target, blocked = FALSE)
 	. = ..()
@@ -141,22 +126,10 @@
 	suit_types = list(/obj/item/clothing/suit/bluetag)
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/red_laser
 	light_color = LIGHT_COLOR_RED
-	tracer_type = /obj/effect/projectile/tracer/laser
-	muzzle_type = /obj/effect/projectile/muzzle/laser
-	impact_type = /obj/effect/projectile/impact/laser
-
-/obj/item/projectile/beam/lasertag/redtag/hitscan
-	hitscan = TRUE
 
 /obj/item/projectile/beam/lasertag/bluetag
 	icon_state = "bluelaser"
 	suit_types = list(/obj/item/clothing/suit/redtag)
-	tracer_type = /obj/effect/projectile/tracer/laser/blue
-	muzzle_type = /obj/effect/projectile/muzzle/laser/blue
-	impact_type = /obj/effect/projectile/impact/laser/blue
-
-/obj/item/projectile/beam/lasertag/bluetag/hitscan
-	hitscan = TRUE
 
 /obj/item/projectile/beam/instakill
 	name = "instagib laser"

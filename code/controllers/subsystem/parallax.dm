@@ -2,7 +2,7 @@ SUBSYSTEM_DEF(parallax)
 	name = "Parallax"
 	wait = 2
 	flags = SS_POST_FIRE_TIMING | SS_BACKGROUND | SS_NO_INIT
-	priority = FIRE_PRIORITY_PARALLAX
+	priority = 65
 	runlevels = RUNLEVEL_LOBBY | RUNLEVELS_DEFAULT
 	var/list/currentrun
 
@@ -21,8 +21,8 @@ SUBSYSTEM_DEF(parallax)
 				return
 			continue
 		var/atom/movable/A = C.eye
-		if(!istype(A))
-			continue
+		if(!A)
+			return
 		for (A; isloc(A.loc) && !isturf(A.loc); A = A.loc);
 
 		if(A != C.movingmob)

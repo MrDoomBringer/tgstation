@@ -9,23 +9,10 @@
 	wires = WIRE_RECEIVE | WIRE_PULSE | WIRE_RADIO_PULSE | WIRE_RADIO_RECEIVE
 	attachable = 1
 
-	var/code = DEFAULT_SIGNALER_CODE
-	var/frequency = FREQ_SIGNALER
+	var/code = 30
+	var/frequency = 1457
 	var/delay = 0
 	var/datum/radio_frequency/radio_connection
-	var/suicider = null
-
-/obj/item/device/assembly/signaler/suicide_act(mob/living/carbon/user)
-	user.visible_message("<span class='suicide'>[user] eats \the [src]! If it is signaled, [user.p_they()] will die!</span>")
-	playsound(src, 'sound/items/eatfood.ogg', 50, 1)
-	user.transferItemToLoc(src, user, TRUE)
-	suicider = user
-	return MANUAL_SUICIDE
-
-/obj/item/device/assembly/signaler/proc/manual_suicide(mob/living/carbon/user)
-	user.visible_message("<span class='suicide'>[user]'s \the [src] recieves a signal, killing them instantly!</span>")
-	user.adjustOxyLoss(200)//it sends an electrical pulse to their heart, killing them. or something.
-	user.death(0)
 
 /obj/item/device/assembly/signaler/New()
 	..()
@@ -86,7 +73,7 @@ Code:
 
 	if (href_list["freq"])
 		var/new_frequency = (frequency + text2num(href_list["freq"]))
-		if(new_frequency < MIN_FREE_FREQ || new_frequency > MAX_FREE_FREQ)
+		if(new_frequency < 1200 || new_frequency > 1600)
 			new_frequency = sanitize_frequency(new_frequency)
 		set_frequency(new_frequency)
 
@@ -118,7 +105,10 @@ Code:
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(list("code" = code))
+	var/datum/signal/signal = new
+	signal.source = src
+	signal.encryption = code
+	signal.data["message"] = "ACTIVATE"
 	radio_connection.post_signal(src, signal)
 
 	var/time = time2text(world.realtime,"hh:mm:ss")
@@ -132,21 +122,23 @@ Code:
 /obj/item/device/assembly/signaler/receive_signal(datum/signal/signal)
 	if(!signal)
 		return 0
-	if(signal.data["code"] != code)
+	if(signal.encryption != code)
 		return 0
 	if(!(src.wires & WIRE_RADIO_RECEIVE))
 		return 0
-	if(suicider)
-		manual_suicide(suicider)
 	pulse(1)
 	audible_message("[icon2html(src, hearers(src))] *beep* *beep*", null, 1)
 	return
 
 
 /obj/item/device/assembly/signaler/proc/set_frequency(new_frequency)
+	if(!SSradio)
+		sleep(20)
+	if(!SSradio)
+		return
 	SSradio.remove_object(src, frequency)
 	frequency = new_frequency
-	radio_connection = SSradio.add_object(src, frequency, RADIO_SIGNALER)
+	radio_connection = SSradio.add_object(src, frequency, GLOB.RADIO_CHAT)
 	return
 
 // Embedded signaller used in grenade construction.
@@ -183,7 +175,7 @@ Code:
 /obj/item/device/assembly/signaler/anomaly/receive_signal(datum/signal/signal)
 	if(!signal)
 		return 0
-	if(signal.data["code"] != code)
+	if(signal.encryption != code)
 		return 0
 	for(var/obj/effect/anomaly/A in get_turf(src))
 		A.anomalyNeutralize()

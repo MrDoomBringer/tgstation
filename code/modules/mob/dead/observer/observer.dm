@@ -59,8 +59,7 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 
 	verbs += list(
 		/mob/dead/observer/proc/dead_tele,
-		/mob/dead/observer/proc/open_spawners_menu,
-		/mob/dead/observer/proc/view_gas)
+		/mob/dead/observer/proc/open_spawners_menu)
 
 	if(icon_state in GLOB.ghost_forms_with_directions_list)
 		ghostimage_default = image(src.icon,src,src.icon_state + "_nodir")
@@ -107,9 +106,9 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 		if(turfs.len)
 			T = pick(turfs)
 		else
-			T = SSmapping.get_station_center()
+			T = locate(round(world.maxx/2), round(world.maxy/2), ZLEVEL_STATION_PRIMARY)	//middle of the station
 
-	forceMove(T)
+	loc = T
 
 	if(!name)							//To prevent nameless ghosts
 		name = random_unique_name(gender)
@@ -288,10 +287,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/oldloc = loc
 
 	if(NewLoc)
-		forceMove(NewLoc)
+		loc = NewLoc
 		update_parallax_contents()
 	else
-		forceMove(get_turf(src))  //Get out of closets and such as a ghost
+		loc = get_turf(src) //Get out of closets and such as a ghost
 		if((direct & NORTH) && y < world.maxy)
 			y++
 		else if((direct & SOUTH) && y > 1)
@@ -320,7 +319,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(mind.current.key && copytext(mind.current.key,1,2)!="@")	//makes sure we don't accidentally kick any clients
 		to_chat(usr, "<span class='warning'>Another consciousness is in your body...It is resisting you.</span>")
 		return
-	client.change_view(CONFIG_GET(string/default_view))
+	client.change_view(world.view)
 	SStgui.on_transfer(src, mind.current) // Transfer NanoUIs.
 	mind.current.key = key
 	return 1
@@ -371,16 +370,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(!L || !L.len)
 		to_chat(usr, "No area available.")
 
-	usr.forceMove(pick(L))
+	usr.loc = pick(L)
 	update_parallax_contents()
-
-/mob/dead/observer/proc/view_gas()
-	set category = "Ghost"
-	set name = "View Gases"
-	set desc= "View the atmospheric conditions in a location"
-
-	var/turf/loc = get_turf(src)
-	show_air_status_to(loc, usr)
 
 /mob/dead/observer/verb/follow()
 	set category = "Ghost"
@@ -453,7 +444,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			var/turf/T = get_turf(M) //Turf of the destination mob
 
 			if(T && isturf(T))	//Make sure the turf exists, then move the source to that destination.
-				A.forceMove(T)
+				A.loc = T
 				A.update_parallax_contents()
 			else
 				to_chat(A, "This mob is not located in the game world.")
@@ -464,22 +455,22 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set desc = "Change your view range."
 
 	var/max_view = client.prefs.unlock_content ? GHOST_MAX_VIEW_RANGE_MEMBER : GHOST_MAX_VIEW_RANGE_DEFAULT
-	if(client.view == CONFIG_GET(string/default_view))
+	if(client.view == world.view)
 		var/list/views = list()
 		for(var/i in 7 to max_view)
 			views |= i
 		var/new_view = input("Choose your new view", "Modify view range", 7) as null|anything in views
 		if(new_view)
-			client.change_view(CLAMP(new_view, 7, max_view))
+			client.change_view(Clamp(new_view, 7, max_view))
 	else
-		client.change_view(CONFIG_GET(string/default_view))
+		client.change_view(world.view)
 
 /mob/dead/observer/verb/add_view_range(input as num)
 	set name = "Add View Range"
 	set hidden = TRUE
 	var/max_view = client.prefs.unlock_content ? GHOST_MAX_VIEW_RANGE_MEMBER : GHOST_MAX_VIEW_RANGE_DEFAULT
 	if(input)
-		client.rescale_view(input, 15, (max_view*2)+1)
+		client.change_view(Clamp(client.view + input, 7, max_view))
 
 /mob/dead/observer/verb/boo()
 	set category = "Ghost"
@@ -720,7 +711,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	update_icon()
 
-/mob/dead/observer/canUseTopic(atom/movable/M, be_close=FALSE, no_dextery=FALSE)
+/mob/dead/observer/canUseTopic(atom/movable/AM,be_close = FALSE)
 	return IsAdminGhost(usr)
 
 /mob/dead/observer/is_literate()

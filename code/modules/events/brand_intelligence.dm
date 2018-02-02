@@ -32,7 +32,7 @@
 
 /datum/round_event/brand_intelligence/start()
 	for(var/obj/machinery/vending/V in GLOB.machines)
-		if(!is_station_level(V.z))
+		if(!(V.z in GLOB.station_z_levels))
 			continue
 		vendingMachines.Add(V)
 	if(!vendingMachines.len)
@@ -67,12 +67,12 @@
 
 		kill()
 		return
-	if(ISMULTIPLE(activeFor, 4))
+	if(IsMultiple(activeFor, 4))
 		var/obj/machinery/vending/rebel = pick(vendingMachines)
 		vendingMachines.Remove(rebel)
 		infectedMachines.Add(rebel)
 		rebel.shut_up = 0
 		rebel.shoot_inventory = 1
 
-		if(ISMULTIPLE(activeFor, 8))
+		if(IsMultiple(activeFor, 8))
 			originMachine.speak(pick(rampant_speeches))

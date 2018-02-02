@@ -132,11 +132,11 @@
 /mob/living/simple_animal/hostile/mining_drone/proc/CollectOre()
 	var/obj/item/ore/O
 	for(O in src.loc)
-		O.forceMove(src)
+		O.loc = src
 	for(var/dir in GLOB.alldirs)
 		var/turf/T = get_step(src,dir)
 		for(O in T)
-			O.forceMove(src)
+			O.loc = src
 	return
 
 /mob/living/simple_animal/hostile/mining_drone/proc/DropOre(message = 1)
@@ -148,7 +148,7 @@
 		to_chat(src, "<span class='notice'>You dump your stored ore.</span>")
 	for(var/obj/item/ore/O in contents)
 		contents -= O
-		O.forceMove(drop_location())
+		O.loc = src.loc
 	return
 
 /mob/living/simple_animal/hostile/mining_drone/adjustHealth(amount)
@@ -255,7 +255,7 @@
 
 
 //AI
-/obj/item/slimepotion/slime/sentience/mining
+/obj/item/slimepotion/sentience/mining
 	name = "minebot AI upgrade"
 	desc = "Can be used to grant sentience to minebots."
 	icon_state = "door_electronics"

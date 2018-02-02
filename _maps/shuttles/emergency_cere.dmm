@@ -244,7 +244,7 @@
 /turf/open/floor/plasteel/darkred,
 /area/shuttle/escape)
 "aR" = (
-/obj/machinery/door/airlock/public/glass{
+/obj/machinery/door/airlock/glass{
 	name = "Emergency Shuttle Cockpit";
 	req_access_txt = "19"
 	},
@@ -399,7 +399,7 @@
 	},
 /area/shuttle/escape)
 "bn" = (
-/obj/machinery/door/airlock/security/glass{
+/obj/machinery/door/airlock/glass_security{
 	name = "Emergency Shuttle Brig";
 	req_access_txt = "2"
 	},
@@ -423,7 +423,7 @@
 /turf/open/floor/mineral/plastitanium/brig,
 /area/shuttle/escape)
 "bq" = (
-/obj/machinery/door/airlock/public/glass{
+/obj/machinery/door/airlock/glass{
 	name = "Emergency Shuttle Brig";
 	req_access_txt = "2"
 	},
@@ -695,7 +695,7 @@
 /turf/open/floor/plasteel,
 /area/shuttle/escape)
 "cb" = (
-/obj/structure/sign/departments/medbay/alt{
+/obj/structure/sign/bluecross_2{
 	pixel_x = 32;
 	pixel_y = -32
 	},
@@ -717,7 +717,7 @@
 /turf/open/floor/plasteel,
 /area/shuttle/escape)
 "ce" = (
-/obj/machinery/door/airlock/medical/glass{
+/obj/machinery/door/airlock/glass_medical{
 	name = "Emergency Shuttle Medbay"
 	},
 /turf/open/floor/plasteel/whiteblue,
@@ -986,7 +986,7 @@
 	},
 /area/shuttle/escape)
 "cP" = (
-/obj/machinery/door/airlock/engineering/glass{
+/obj/machinery/door/airlock/glass_engineering{
 	name = "Engine Room";
 	req_one_access_txt = "10;24"
 	},
@@ -1109,7 +1109,7 @@
 	},
 /area/shuttle/escape)
 "di" = (
-/obj/structure/sign/warning/electricshock{
+/obj/structure/sign/electricshock{
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/yellow/side{
@@ -1131,7 +1131,7 @@
 /area/shuttle/escape)
 "dl" = (
 /obj/structure/table,
-/obj/structure/sign/warning/enginesafety{
+/obj/structure/sign/enginesafety{
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel/yellow/side,

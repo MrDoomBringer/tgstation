@@ -114,7 +114,10 @@
 /turf/open/floor/mineral/plasma,
 /area/shuttle/escape)
 "v" = (
-/obj/machinery/disco/indestructible,
+/obj/machinery/disco{
+	anchored = 1;
+	req_access = null
+	},
 /turf/open/floor/light/colour_cycle,
 /area/shuttle/escape)
 "w" = (
@@ -219,6 +222,12 @@
 /turf/open/floor/plating/airless,
 /area/shuttle/escape)
 "O" = (
+/turf/closed/wall/mineral/plastitanium/nodiagonal,
+/area/shuttle/escape)
+"P" = (
+/turf/closed/wall/mineral/plastitanium/nodiagonal,
+/area/shuttle/escape)
+"Q" = (
 /turf/closed/wall/mineral/plastitanium/nodiagonal,
 /area/shuttle/escape)
 

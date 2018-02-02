@@ -2,10 +2,12 @@
 	name = "Department Circuit Imprinter"
 	desc = "A special circuit imprinter with a built in interface meant for departmental usage, with built in ExoSync recievers allowing it to print designs researched that match its ROM-encoded department type. Features a bluespace materials reciever for recieving materials without the hassle of running to mining!"
 	icon_state = "circuit_imprinter"
-	container_type = OPENCONTAINER
+	container_type = OPENCONTAINER_1
 	circuit = /obj/item/circuitboard/machine/circuit_imprinter/department
+	console_link = FALSE
 	requires_console = FALSE
 
+	var/list/allowed_department_flags = DEPARTMENTAL_FLAG_ALL
 	var/list/datum/design/cached_designs
 	var/list/datum/design/matching_designs
 	var/department_tag = "Unidentified"			//used for material distribution among other things.
@@ -144,7 +146,7 @@
 /obj/machinery/rnd/circuit_imprinter/department/proc/ui_header()
 	var/list/l = list()
 	l += "<div class='statusDisplay'><b>[host_research.organization] [department_tag] Department Circuit Imprinter</b>"
-	l += "Security protocols: [(obj_flags & EMAGGED) ? "<font color='red'>Disabled</font>" : "<font color='green'>Enabled</font>"]"
+	l += "Security protocols: [emagged? "<font color='red'>Disabled</font>" : "<font color='green'>Enabled</font>"]"
 	l += "<A href='?src=[REF(src)];switch_screen=[DEPPRINTER_SCREEN_MATERIALS]'><B>Material Amount:</B> [materials.total_amount] / [materials.max_amount]</A>"
 	l += "<A href='?src=[REF(src)];switch_screen=[DEPPRINTER_SCREEN_CHEMICALS]'><B>Chemical volume:</B> [reagents.total_volume] / [reagents.maximum_volume]</A>"
 	l += "<a href='?src=[REF(src)];sync_research=1'>Synchronize Research</a>"

@@ -55,7 +55,7 @@
 		new /datum/data/mining_equipment("Drone Melee Upgrade",	/obj/item/device/mine_bot_ugprade,										400),
 		new /datum/data/mining_equipment("Drone Health Upgrade", /obj/item/device/mine_bot_ugprade/health,								400),
 		new /datum/data/mining_equipment("Drone Ranged Upgrade", /obj/item/device/mine_bot_ugprade/cooldown,								600),
-		new /datum/data/mining_equipment("Drone AI Upgrade",	/obj/item/slimepotion/slime/sentience/mining,									1000),
+		new /datum/data/mining_equipment("Drone AI Upgrade",	/obj/item/slimepotion/sentience/mining,									1000),
 		new /datum/data/mining_equipment("Jump Boots",			/obj/item/clothing/shoes/bhop,											2500),
 		)
 
@@ -110,7 +110,7 @@
 		if(istype(inserted_id))
 			if(href_list["choice"] == "eject")
 				to_chat(usr, "<span class='notice'>You eject the ID from [src]'s card slot.</span>")
-				inserted_id.forceMove(loc)
+				inserted_id.loc = loc
 				inserted_id.verb_pickup()
 				inserted_id = null
 		else if(href_list["choice"] == "insert")

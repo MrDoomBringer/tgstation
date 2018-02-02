@@ -5,8 +5,8 @@
 	set hidden = TRUE
 
 	keys_held[_key] = world.time
-	var/movement = SSinput.movement_keys[_key]
-	if(!(next_move_dir_sub & movement) && !keys_held["Ctrl"])
+	var/movement = GLOB.movement_keys[_key]
+	if(!(next_move_dir_sub & movement))
 		next_move_dir_add |= movement
 
 	// Client-level keybindings are ones anyone should be able to do at any time
@@ -17,14 +17,11 @@
 			if(keys_held["Ctrl"] && keys_held["Shift"]) // Is this command ever used?
 				winset(src, null, "command=.options")
 			else
-				get_adminhelp()
-			return
+				adminhelp()
 		if("F2") // Screenshot. Hold shift to choose a name and location to save in
 			winset(src, null, "command=.screenshot [!keys_held["shift"] ? "auto" : ""]")
-			return
 		if("F12") // Toggles minimal HUD
 			mob.button_pressed_F12()
-			return
 
 	if(holder)
 		holder.key_down(_key, src)
@@ -36,7 +33,7 @@
 	set hidden = TRUE
 
 	keys_held -= _key
-	var/movement = SSinput.movement_keys[_key]
+	var/movement = GLOB.movement_keys[_key]
 	if(!(next_move_dir_add & movement))
 		next_move_dir_sub |= movement
 

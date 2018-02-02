@@ -1,33 +1,23 @@
 /obj/effect/spawner/lootdrop
-	icon = 'icons/effects/landmarks_static.dmi'
-	icon_state = "random_loot"
-	layer = OBJ_LAYER
+	icon = 'icons/mob/screen_gen.dmi'
+	icon_state = "x2"
+	color = "#00FF00"
 	var/lootcount = 1		//how many items will be spawned
 	var/lootdoubles = TRUE	//if the same item can be spawned twice
 	var/list/loot			//a list of possible items to spawn e.g. list(/obj/item, /obj/structure, /obj/effect)
-	var/fan_out_items = FALSE //Whether the items should be distributed to offsets 0,3,-3,6,-6,9,-9.. This overrides pixel_x/y on the spawner itself
 
 /obj/effect/spawner/lootdrop/Initialize(mapload)
 	..()
 	if(loot && loot.len)
 		var/turf/T = get_turf(src)
-		var/loot_spawned = 0
-		while((lootcount-loot_spawned) && loot.len)
+		while(lootcount && loot.len)
 			var/lootspawn = pickweight(loot)
 			if(!lootdoubles)
 				loot.Remove(lootspawn)
 
 			if(lootspawn)
-				var/atom/movable/spawned_loot = new lootspawn(T)
-				if (!fan_out_items)
-					if (pixel_x != 0)
-						spawned_loot.pixel_x = pixel_x
-					if (pixel_y != 0)
-						spawned_loot.pixel_y = pixel_y
-				else
-					if (loot_spawned)
-						spawned_loot.pixel_x = spawned_loot.pixel_y = ((!(loot_spawned%2)*loot_spawned/2)*-3)+((loot_spawned%2)*(loot_spawned+1)/2*3)
-			loot_spawned++
+				new lootspawn(T)
+			lootcount--
 	return INITIALIZE_HINT_QDEL
 
 /obj/effect/spawner/lootdrop/armory_contraband
@@ -113,10 +103,10 @@
 /obj/effect/spawner/lootdrop/organ_spawner
 	name = "organ spawner"
 	loot = list(
-		/obj/item/organ/heart/gland/electric = 3,
-		/obj/item/organ/heart/gland/trauma = 4,
+		/obj/item/organ/heart/gland/bloody = 7,
+		/obj/item/organ/heart/gland/bodysnatch = 4,
 		/obj/item/organ/heart/gland/egg = 7,
-		/obj/item/organ/heart/gland/chem = 5,
+		/obj/item/organ/heart/gland/emp = 3,
 		/obj/item/organ/heart/gland/mindshock = 5,
 		/obj/item/organ/heart/gland/plasma = 7,
 		/obj/item/organ/heart/gland/pop = 5,
@@ -202,6 +192,5 @@
 				/obj/item/aiModule/core/full/antimov,
 				/obj/item/aiModule/core/full/balance,
 				/obj/item/aiModule/core/full/tyrant,
-				/obj/item/aiModule/core/full/thermurderdynamic,
-				/obj/item/aiModule/core/full/damaged
+				/obj/item/aiModule/core/full/thermurderdynamic
 				)

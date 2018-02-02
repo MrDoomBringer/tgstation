@@ -19,9 +19,11 @@
 		if(month == MM && day == DD)
 			return 1
 
-//returns timestamp in a sql and a not-quite-compliant ISO 8601 friendly format
+//returns timestamp in a sql and ISO 8601 friendly format
 /proc/SQLtime(timevar)
-	return time2text(timevar || world.timeofday, "YYYY-MM-DD hh:mm:ss")
+	if(!timevar)
+		timevar = world.realtime
+	return time2text(timevar, "YYYY-MM-DD hh:mm:ss")
 
 
 GLOBAL_VAR_INIT(midnight_rollovers, 0)
@@ -58,7 +60,7 @@ GLOBAL_VAR_INIT(rollovercheck_last_timeofday, 0)
 	if(!second)
 		return "0 seconds"
 	if(second >= 60)
-		minute = FLOOR(second/60, 1)
+		minute = round_down(second/60)
 		second = round(second - (minute*60), 0.1)
 		second_rounded = TRUE
 	if(second)	//check if we still have seconds remaining to format, or if everything went into minute.
@@ -89,7 +91,7 @@ GLOBAL_VAR_INIT(rollovercheck_last_timeofday, 0)
 	if(!minute)
 		return "[second]"
 	if(minute >= 60)
-		hour = FLOOR(minute/60, 1)
+		hour = round_down(minute/60,1)
 		minute = (minute - (hour*60))
 	if(minute) //alot simpler from here since you don't have to worry about fractions
 		if(minute != 1)
@@ -112,7 +114,7 @@ GLOBAL_VAR_INIT(rollovercheck_last_timeofday, 0)
 	if(!hour)
 		return "[minute][second]"
 	if(hour >= 24)
-		day = FLOOR(hour/24, 1)
+		day = round_down(hour/24,1)
 		hour = (hour - (day*24))
 	if(hour)
 		if(hour != 1)

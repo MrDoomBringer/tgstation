@@ -4,17 +4,23 @@
 /area/template_noop)
 "ab" = (
 /obj/structure/lattice,
-/obj/structure/fluff/broken_flooring{
-	icon_state = "singular";
-	dir = 1
-	},
 /turf/template_noop,
-/area/space/nearstation)
+/area/template_noop)
 "ac" = (
-/obj/structure/lattice,
-/turf/template_noop,
-/area/space/nearstation)
+/turf/open/floor/plating/airless{
+	icon_plating = "platingdmg3";
+	icon_state = "platingdmg3"
+	},
+/turf/open/floor/plating/airless{
+	icon_plating = "platingdmg2";
+	icon_state = "platingdmg2"
+	},
+/area/ruin/unpowered)
 "ad" = (
+/turf/open/floor/plating/airless{
+	icon_plating = "platingdmg3";
+	icon_state = "platingdmg3"
+	},
 /obj/structure/girder,
 /turf/open/floor/plating/airless{
 	icon_plating = "platingdmg2";
@@ -25,14 +31,18 @@
 /obj/item/stack/sheet/metal,
 /obj/structure/lattice,
 /turf/template_noop,
-/area/space/nearstation)
-"af" = (
-/obj/structure/fluff/broken_flooring{
-	icon_state = "pile";
-	dir = 8
-	},
-/turf/template_noop,
 /area/template_noop)
+"af" = (
+/turf/open/floor/plating/airless{
+	icon_plating = "platingdmg3";
+	icon_state = "platingdmg3"
+	},
+/obj/item/stack/sheet/metal,
+/turf/open/floor/plating/airless{
+	icon_plating = "platingdmg2";
+	icon_state = "platingdmg2"
+	},
+/area/ruin/unpowered)
 "ag" = (
 /turf/open/floor/plasteel/airless,
 /area/ruin/unpowered)
@@ -53,6 +63,10 @@
 /turf/template_noop,
 /area/template_noop)
 "ak" = (
+/turf/open/floor/plating/airless{
+	icon_plating = "platingdmg3";
+	icon_state = "platingdmg3"
+	},
 /obj/item/stack/rods,
 /turf/open/floor/plating/airless{
 	icon_plating = "platingdmg2";
@@ -60,13 +74,11 @@
 	},
 /area/ruin/unpowered)
 "al" = (
-/obj/structure/fluff/broken_flooring{
-	icon_state = "singular";
-	dir = 4
+/turf/open/floor/plating/airless{
+	icon_plating = "platingdmg2";
+	icon_state = "platingdmg2"
 	},
-/obj/structure/lattice,
-/turf/template_noop,
-/area/space/nearstation)
+/area/ruin/unpowered)
 "am" = (
 /obj/item/stack/rods,
 /turf/open/floor/plating/airless,
@@ -104,6 +116,7 @@
 /turf/open/floor/plating/airless,
 /area/ruin/unpowered)
 "as" = (
+/turf/open/floor/plating/airless,
 /obj/item/stack/sheet/metal,
 /turf/open/floor/plating/airless{
 	icon_plating = "platingdmg2";
@@ -134,6 +147,7 @@
 /turf/open/floor/plasteel/airless,
 /area/ruin/unpowered)
 "ay" = (
+/turf/open/floor/plating/airless,
 /obj/item/stack/tile/plasteel,
 /turf/open/floor/plating/airless{
 	icon_plating = "platingdmg2";
@@ -171,10 +185,6 @@
 /turf/open/floor/plasteel/airless,
 /area/ruin/unpowered)
 "aD" = (
-/turf/open/floor/plasteel/bar{
-	initial_gas_mix = "TEMP=2.7"
-	},
-/obj/item/stack/sheet/metal,
 /turf/open/floor/plating/airless{
 	icon_plating = "platingdmg2";
 	icon_state = "platingdmg2"
@@ -187,11 +197,11 @@
 /turf/open/floor/plating/airless,
 /area/ruin/unpowered)
 "aF" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/plasteel/airless/bar,
 /area/ruin/unpowered)
 "aG" = (
-/obj/structure/door_assembly/door_assembly_public{
+/obj/structure/door_assembly/door_assembly_glass{
 	name = "broken airlock"
 	},
 /turf/open/floor/plasteel/airless/bar,
@@ -284,15 +294,22 @@
 /turf/open/floor/plasteel/airless/bar,
 /area/ruin/unpowered)
 "aY" = (
-/obj/structure/lattice,
+/turf/open/floor/plasteel/bar{
+	initial_gas_mix = "TEMP=2.7"
+	},
 /obj/item/stack/sheet/metal,
-/turf/template_noop,
-/area/space/nearstation)
+/turf/open/floor/plating/airless{
+	icon_plating = "platingdmg2";
+	icon_state = "platingdmg2"
+	},
+/area/ruin/unpowered)
 "aZ" = (
-/obj/structure/lattice,
-/obj/item/shard,
+/obj/structure/fluff/broken_flooring{
+	icon_state = "pile";
+	dir = 8
+	},
 /turf/template_noop,
-/area/space/nearstation)
+/area/template_noop)
 "ba" = (
 /mob/living/simple_animal/hostile/retaliate/ghost,
 /turf/open/floor/plasteel/airless/cafeteria,
@@ -311,11 +328,19 @@
 /turf/open/floor/plasteel/airless/bar,
 /area/ruin/unpowered)
 "be" = (
+/turf/open/floor/plasteel/bar{
+	initial_gas_mix = "TEMP=2.7"
+	},
 /turf/open/floor/plating/airless{
 	icon_plating = "platingdmg2";
 	icon_state = "platingdmg2"
 	},
 /area/ruin/unpowered)
+"bf" = (
+/obj/structure/lattice,
+/obj/item/stack/sheet/metal,
+/turf/template_noop,
+/area/template_noop)
 "bg" = (
 /obj/item/stack/sheet/metal,
 /turf/open/floor/plating/airless{
@@ -366,6 +391,11 @@
 	icon_state = "platingdmg3"
 	},
 /area/ruin/unpowered)
+"bn" = (
+/obj/structure/lattice,
+/obj/item/shard,
+/turf/template_noop,
+/area/template_noop)
 "bo" = (
 /obj/item/stack/rods,
 /turf/template_noop,
@@ -393,6 +423,14 @@
 	icon_state = "platingdmg1"
 	},
 /area/ruin/unpowered)
+"bs" = (
+/obj/structure/lattice,
+/obj/structure/fluff/broken_flooring{
+	icon_state = "singular";
+	dir = 1
+	},
+/turf/template_noop,
+/area/template_noop)
 "bt" = (
 /obj/structure/fluff/broken_flooring{
 	icon_state = "side";
@@ -449,6 +487,14 @@
 /obj/structure/fluff/broken_flooring{
 	icon_state = "singular"
 	},
+/turf/template_noop,
+/area/template_noop)
+"bB" = (
+/obj/structure/fluff/broken_flooring{
+	icon_state = "singular";
+	dir = 4
+	},
+/obj/structure/lattice,
 /turf/template_noop,
 /area/template_noop)
 "bC" = (
@@ -515,7 +561,11 @@ aa
 aa
 aa
 aa
-ac
+aa
+aa
+ab
+aa
+aa
 aa
 aa
 aa
@@ -536,10 +586,12 @@ aa
 aa
 aa
 aa
+aa
+aa
 bA
 aa
-ac
-ac
+ab
+ab
 aa
 aa
 aa
@@ -552,28 +604,34 @@ aa
 aa
 aa
 aa
+aZ
+aa
 "}
 (3,1,1) = {"
 aa
 aa
 aa
 aa
-ac
 aa
-ac
+aa
+ab
+aa
+ab
 bC
 bE
 aa
 aa
 aa
-ac
-ac
+ab
+ab
 aa
-ac
-ac
+ab
+ab
 aa
 aa
-af
+aa
+aa
+aa
 aa
 "}
 (4,1,1) = {"
@@ -581,25 +639,31 @@ aa
 aa
 aa
 aa
+aa
+aa
+ab
 ac
-ap
 aw
 ag
 ag
-be
+aD
 bH
 aa
-ac
-ac
+ab
+ab
 aa
-ac
-ac
-ac
+ab
+ab
+ab
+aa
+aa
 aa
 aa
 aa
 "}
 (5,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -610,15 +674,17 @@ ag
 ag
 ag
 ah
-be
-be
-be
-be
-be
-be
-be
-be
+al
+al
+al
+al
+al
+al
+al
+al
 bH
+aa
+aa
 aa
 aa
 "}
@@ -626,9 +692,11 @@ aa
 aa
 aa
 aa
+aa
+aa
+ab
 ac
-ap
-ap
+ac
 at
 bD
 ag
@@ -641,16 +709,20 @@ bg
 bl
 ah
 ay
-be
-ac
+al
+ab
+aa
+aa
 aa
 "}
 (7,1,1) = {"
 aa
-ac
-ac
-ac
-be
+aa
+aa
+ab
+ab
+ab
+al
 ai
 aw
 ag
@@ -663,16 +735,20 @@ ap
 ap
 ah
 ah
-be
-be
+al
+al
+aa
+aa
 aa
 aa
 "}
 (8,1,1) = {"
 aa
+aa
+aa
+ab
+ab
 ac
-ac
-ap
 am
 ai
 ag
@@ -688,14 +764,18 @@ aq
 bp
 ah
 as
-ac
+ab
+aa
+aa
 aa
 "}
 (9,1,1) = {"
 aa
+aa
+aa
+ab
+ab
 ac
-ac
-ap
 ah
 ai
 av
@@ -710,15 +790,19 @@ bh
 ap
 ap
 br
-ac
-ac
+ab
+ab
+aa
+aa
 aa
 "}
 (10,1,1) = {"
 aa
 aa
 aa
-ap
+aa
+aa
+ac
 ah
 aq
 ag
@@ -733,15 +817,19 @@ bi
 ap
 bq
 bl
-ac
-ac
+ab
+ab
+aa
+aa
 aa
 "}
 (11,1,1) = {"
 aa
 aa
+aa
+aa
 bw
-as
+af
 ai
 ai
 ag
@@ -756,13 +844,17 @@ bj
 au
 ap
 aq
-ac
-ac
 ab
+ab
+bs
+aa
+aa
 "}
 (12,1,1) = {"
+aa
+aa
+bs
 ab
-ac
 ag
 ag
 an
@@ -779,12 +871,16 @@ aR
 aR
 aR
 ai
-ac
-ac
-ac
+ab
+ab
+ab
+aa
+aa
 "}
 (13,1,1) = {"
-ac
+aa
+aa
+ab
 bt
 ag
 by
@@ -802,11 +898,15 @@ aR
 aS
 ai
 ai
-ac
-ac
-ac
+ab
+ab
+ab
+aa
+aa
 "}
 (14,1,1) = {"
+aa
+aa
 aa
 bu
 ag
@@ -825,11 +925,15 @@ aM
 aX
 aM
 ai
-ac
-ac
-ac
+ab
+ab
+ab
+aa
+aa
 "}
 (15,1,1) = {"
+aa
+aa
 aa
 aa
 ad
@@ -848,14 +952,18 @@ aT
 au
 be
 ai
-ac
+ab
+aa
+aa
 aa
 aa
 "}
 (16,1,1) = {"
 aa
+aa
+aa
+ab
 ac
-ap
 ap
 ao
 ai
@@ -865,19 +973,23 @@ ag
 aG
 aO
 bI
-ac
+ab
 be
 ap
-ac
+ab
 au
 aq
+aa
+aa
 aa
 aa
 aa
 "}
 (17,1,1) = {"
 aa
-ac
+aa
+aa
+ab
 bx
 ak
 ap
@@ -893,16 +1005,20 @@ ap
 bk
 bm
 az
-ac
+ab
 bo
+aa
+aa
 aa
 aa
 "}
 (18,1,1) = {"
 aa
 aa
+aa
+aa
 ae
-ap
+ac
 ap
 aq
 ag
@@ -913,9 +1029,11 @@ aM
 ap
 ap
 ap
+ab
 ac
-ap
-ac
+ab
+aa
+aa
 aa
 aa
 aa
@@ -925,8 +1043,10 @@ aa
 aa
 aa
 aa
+aa
+aa
 bz
-ap
+ac
 ai
 ag
 ag
@@ -934,10 +1054,12 @@ ag
 ai
 aP
 ap
-ac
+ab
 be
-ap
-aZ
+ac
+bn
+aa
+aa
 aa
 aa
 aa
@@ -948,8 +1070,10 @@ aa
 aa
 aa
 aa
+aa
+aa
+ab
 ac
-ap
 ai
 ag
 ag
@@ -957,14 +1081,16 @@ ag
 ai
 ap
 aV
-aD
-ap
+aY
 ac
-ac
+ab
+ab
 aa
 aa
 aa
 aA
+aa
+aa
 aa
 "}
 (21,1,1) = {"
@@ -972,7 +1098,9 @@ aa
 aa
 aa
 aa
-as
+aa
+aa
+af
 ar
 ag
 ag
@@ -980,10 +1108,12 @@ ag
 ai
 au
 ap
-ap
-aY
 ac
-ac
+bf
+ab
+ab
+aa
+aa
 aa
 aa
 aa
@@ -995,8 +1125,10 @@ aa
 aa
 aa
 aa
+aa
+aa
+ab
 ac
-ap
 aw
 at
 ag
@@ -1004,9 +1136,11 @@ ai
 ai
 ai
 aq
-ac
+ab
 aa
 bo
+aa
+aa
 aa
 aa
 aa
@@ -1015,17 +1149,21 @@ aa
 "}
 (23,1,1) = {"
 aa
+aa
+aa
 bv
 aa
 aa
 aa
 aa
-al
-ac
+bB
+ab
 bF
 ai
-ac
-ac
+ab
+ab
+aa
+aa
 aa
 aa
 aa
@@ -1044,8 +1182,12 @@ aa
 aa
 aa
 aa
-ac
-ac
+aa
+aa
+ab
+ab
+aa
+aa
 aa
 aa
 aa
@@ -1068,7 +1210,11 @@ aa
 aa
 aa
 aa
+aa
+aa
 bG
+aa
+aa
 aa
 aa
 aa

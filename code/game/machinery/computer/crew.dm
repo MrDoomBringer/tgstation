@@ -194,7 +194,9 @@ GLOBAL_DATUM_INIT(crewmonitor, /datum/crewmonitor, new)
 						if (U.sensor_mode >= SENSOR_COORDS)
 							if (!pos)
 								pos = get_turf(H)
-							area = get_area_name(H, TRUE)
+							var/area/player_area = get_area(H)
+
+							area = format_text(player_area.name)
 							pos_x = pos.x
 							pos_y = pos.y
 						else

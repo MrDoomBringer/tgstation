@@ -275,10 +275,6 @@
 /obj/effect/mob_spawn/human/corpse/assistant/spanishflu_infection
 	disease = /datum/disease/fluspanish
 
-/obj/effect/mob_spawn/human/corpse/cargo_tech
-	name = "Cargo Tech"
-	outfit = /datum/outfit/job/cargo_tech
-
 /obj/effect/mob_spawn/human/cook
 	name = "Cook"
 	outfit = /datum/outfit/job/cook
@@ -296,7 +292,7 @@
 	name = "sleeper"
 	icon = 'icons/obj/machines/sleeper.dmi'
 	icon_state = "sleeper"
-	flavour_text = "<span class='big bold'>You are a space doctor!</span>"
+	flavour_text = "You are a space doctor!"
 	assignedrole = "Space Doctor"
 
 /obj/effect/mob_spawn/human/doctor/alive/equip(mob/living/carbon/human/H)
@@ -351,7 +347,7 @@
 	name = "bartender sleeper"
 	icon = 'icons/obj/machines/sleeper.dmi'
 	icon_state = "sleeper"
-	flavour_text = "<span class='big bold'>You are a space bartender!</span>"
+	flavour_text = "You are a space bartender!"
 	assignedrole = "Space Bartender"
 
 /datum/outfit/spacebartender
@@ -375,7 +371,7 @@
 	name = "beach bum sleeper"
 	icon = 'icons/obj/machines/sleeper.dmi'
 	icon_state = "sleeper"
-	flavour_text = "<span class='big bold'>You are a beach bum!</span>"
+	flavour_text = "You are a beach bum!"
 	assignedrole = "Beach Bum"
 
 /datum/outfit/beachbum
@@ -453,7 +449,7 @@
 	name = "sleeper"
 	icon = 'icons/obj/machines/sleeper.dmi'
 	icon_state = "sleeper"
-	flavour_text = "<span class='big bold'>You are a Nanotrasen Commander!</span>"
+	flavour_text = "You are a Nanotrasen Commander!"
 
 /obj/effect/mob_spawn/human/nanotrasensoldier/alive
 	death = FALSE
@@ -463,7 +459,7 @@
 	icon = 'icons/obj/machines/sleeper.dmi'
 	icon_state = "sleeper"
 	faction = "nanotrasenprivate"
-	flavour_text = "<span class='big bold'>You are a Nanotrasen Private Security Officer!</span>"
+	flavour_text = "You are a Nanotrasen Private Security Officer!"
 
 
 /////////////////Spooky Undead//////////////////////
@@ -479,7 +475,7 @@
 	roundstart = FALSE
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "remains"
-	flavour_text = "<span class='big bold'>By unknown powers, your skeletal remains have been reanimated!</span><b> Walk this mortal plain and terrorize all living adventurers who dare cross your path.</b>"
+	flavour_text = "By unknown powers, your skeletal remains have been reanimated! Walk this mortal plain and terrorize all living adventurers who dare cross your path."
 	assignedrole = "Skeleton"
 
 /obj/effect/mob_spawn/human/zombie
@@ -493,7 +489,7 @@
 	roundstart = FALSE
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "remains"
-	flavour_text = "<span class='big bold'>By unknown powers, your rotting remains have been resurrected!</span><b> Walk this mortal plain and terrorize all living adventurers who dare cross your path.</b>"
+	flavour_text = "By unknown powers, your rotting remains have been resurrected! Walk this mortal plain and terrorize all living adventurers who dare cross your path."
 
 
 /obj/effect/mob_spawn/human/abductor

@@ -15,11 +15,11 @@
 		if(U.pockets) // storage items conflict
 			return FALSE
 
-		pockets.forceMove(U)
+		pockets.loc = U
 		U.pockets = pockets
 
 	U.attached_accessory = src
-	forceMove(U)
+	loc = U
 	layer = FLOAT_LAYER
 	plane = FLOAT_PLANE
 	if(minimize_when_attached)
@@ -28,13 +28,8 @@
 		pixel_y -= 8
 	U.add_overlay(src)
 
-	if (islist(U.armor)) 										// This proc can run before /obj/Initialize has run for U and src,
-		U.armor = getArmor(arglist(U.armor))	// we have to check that the armor list has been transformed into a datum before we try to call a proc on it
-																					// This is safe to do as /obj/Initialize only handles setting up the datum if actually needed.
-	if (islist(armor))
-		armor = getArmor(arglist(armor))
-
-	U.armor = U.armor.attachArmor(armor)
+	for(var/armor_type in armor)
+		U.armor[armor_type] += armor[armor_type]
 
 	if(isliving(user))
 		on_uniform_equip(U, user)
@@ -44,10 +39,11 @@
 
 /obj/item/clothing/accessory/proc/detach(obj/item/clothing/under/U, user)
 	if(pockets && pockets == U.pockets)
-		pockets.forceMove(src)
+		pockets.loc = src
 		U.pockets = null
 
-	U.armor = U.armor.detachArmor(armor)
+	for(var/armor_type in armor)
+		U.armor[armor_type] -= armor[armor_type]
 
 	if(isliving(user))
 		on_uniform_dropped(U, user)
@@ -139,7 +135,7 @@
 											 "<span class='notice'>You pin \the [src] on [M]'s chest.</span>")
 						if(input)
 							SSblackbox.record_feedback("associative", "commendation", 1, list("commender" = "[user.real_name]", "commendee" = "[M.real_name]", "medal" = "[src]", "reason" = input))
-							GLOB.commendations += "[user.real_name] awarded <b>[M.real_name]</b> the <span class='medaltext'>[name]</span>! \n- [input]"
+							GLOB.commendations += "[user.real_name] awarded <b>[M.real_name]</b> the <font color='blue'>[name]</font>! \n- [input]"
 							commended = TRUE
 							log_game("<b>[key_name(M)]</b> was given the following commendation by <b>[key_name(user)]</b>: [input]")
 							message_admins("<b>[key_name(M)]</b> was given the following commendation by <b>[key_name(user)]</b>: [input]")

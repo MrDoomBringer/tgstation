@@ -21,8 +21,7 @@
 				diseases_to_add += D
 		if(LAZYLEN(diseases_to_add))
 			AddComponent(/datum/component/infective, diseases_to_add)
-
-	return//. = ..()//cleanable stuff sometimes needs to be in objs
+	. = ..()
 
 /obj/effect/decal/cleanable/proc/replace_decal(obj/effect/decal/cleanable/C)
 	if(mergeable_decal)
@@ -80,10 +79,13 @@
 				add_blood = bloodiness
 			bloodiness -= add_blood
 			S.bloody_shoes[blood_state] = min(MAX_SHOE_BLOODINESS,S.bloody_shoes[blood_state]+add_blood)
-			S.add_blood_DNA(return_blood_DNA())
+			if(blood_DNA && blood_DNA.len)
+				S.add_blood(blood_DNA)
 			S.blood_state = blood_state
 			update_icon()
 			H.update_inv_shoes()
+
+
 
 /obj/effect/decal/cleanable/proc/can_bloodcrawl_in()
 	if((blood_state != BLOOD_STATE_OIL) && (blood_state != BLOOD_STATE_NOT_BLOODY))

@@ -149,7 +149,7 @@
 /turf/closed/wall/mineral/titanium,
 /area/shuttle/escape)
 "aB" = (
-/obj/machinery/door/airlock/public/glass{
+/obj/machinery/door/airlock/glass{
 	name = "Emergency Shuttle Cockpit";
 	req_access_txt = "19"
 	},
@@ -169,7 +169,7 @@
 /turf/open/floor/plating,
 /area/shuttle/escape)
 "aE" = (
-/obj/machinery/door/airlock/public/glass{
+/obj/machinery/door/airlock/glass{
 	name = "Emergency Shuttle Cargo Hold";
 	req_access_txt = "0"
 	},
@@ -182,7 +182,7 @@
 /turf/open/floor/mineral/titanium/blue,
 /area/shuttle/escape)
 "aG" = (
-/obj/machinery/door/airlock/public/glass{
+/obj/machinery/door/airlock/glass{
 	name = "Emergency Shuttle Brig";
 	req_access_txt = "2"
 	},
@@ -262,7 +262,7 @@
 /turf/open/floor/mineral/titanium/blue,
 /area/shuttle/escape)
 "aU" = (
-/obj/machinery/door/airlock/public/glass{
+/obj/machinery/door/airlock/glass{
 	name = "Emergency Shuttle Infirmary"
 	},
 /turf/open/floor/mineral/titanium/blue,
@@ -307,7 +307,7 @@
 	pixel_y = 3
 	},
 /obj/item/crowbar,
-/obj/structure/sign/warning/nosmoking{
+/obj/structure/sign/nosmoking_2{
 	pixel_x = 32
 	},
 /obj/machinery/light{
@@ -330,6 +330,21 @@
 /turf/open/floor/plating/airless,
 /area/shuttle/escape)
 "bd" = (
+/turf/closed/wall/mineral/titanium/nodiagonal,
+/area/shuttle/escape)
+"be" = (
+/turf/closed/wall/mineral/titanium/nodiagonal,
+/area/shuttle/escape)
+"bf" = (
+/turf/closed/wall/mineral/titanium/nodiagonal,
+/area/shuttle/escape)
+"bg" = (
+/turf/closed/wall/mineral/titanium/nodiagonal,
+/area/shuttle/escape)
+"bh" = (
+/turf/closed/wall/mineral/titanium/nodiagonal,
+/area/shuttle/escape)
+"bi" = (
 /turf/closed/wall/mineral/titanium/nodiagonal,
 /area/shuttle/escape)
 

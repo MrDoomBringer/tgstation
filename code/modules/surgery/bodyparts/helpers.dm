@@ -118,7 +118,7 @@
 		var/obj/item/bodypart/L = X
 		for(var/obj/item/I in L.embedded_objects)
 			L.embedded_objects -= I
-			I.forceMove(T)
+			I.loc = T
 
 	clear_alert("embeddedobject")
 

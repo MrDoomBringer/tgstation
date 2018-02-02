@@ -1,6 +1,8 @@
 
 /mob/living/brain/Life()
 	set invisibility = 0
+	set background = BACKGROUND_ENABLED
+
 	if (notransform)
 		return
 	if(!loc)
@@ -32,7 +34,7 @@
 /mob/living/brain/handle_status_effects()
 	return
 
-/mob/living/brain/handle_traits()
+/mob/living/brain/handle_disabilities()
 	return
 
 

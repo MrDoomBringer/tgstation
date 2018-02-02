@@ -6,78 +6,99 @@
 /turf/closed/indestructible/oldshuttle/corner{
 	dir = 8
 	},
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "c" = (
 /turf/closed/indestructible/oldshuttle,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "d" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/oldshuttle,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "e" = (
 /turf/closed/indestructible/oldshuttle/corner,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "f" = (
 /turf/closed/indestructible/oldshuttle/corner{
 	dir = 1
 	},
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "g" = (
 /turf/open/floor/oldshuttle,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "h" = (
 /turf/closed/indestructible/oldshuttle/corner{
 	dir = 4
 	},
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "i" = (
 /obj/structure/closet{
 	icon_state = "oldcloset"
 	},
 /turf/open/floor/oldshuttle,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "j" = (
 /obj/structure/shuttle/engine/propulsion/burst{
 	dir = 1
 	},
 /turf/open/space,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "k" = (
 /turf/closed/indestructible/oldshuttle{
 	icon_state = "orange"
 	},
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "l" = (
 /obj/structure/chair/old{
 	icon_state = "chairold";
 	dir = 1
 	},
 /turf/open/floor/oldshuttle,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
+"m" = (
+/turf/closed/indestructible/oldshuttle/corner{
+	dir = 8
+	},
+/area/ruin/powered)
+"n" = (
+/turf/closed/indestructible/oldshuttle/corner,
+/area/ruin/powered)
+"o" = (
+/turf/closed/indestructible/oldshuttle/corner{
+	dir = 1
+	},
+/area/ruin/powered)
+"p" = (
+/turf/closed/indestructible/oldshuttle/corner{
+	dir = 4
+	},
+/area/ruin/powered)
+"q" = (
+/turf/closed/indestructible/oldshuttle/corner,
+/area/ruin/powered)
 "r" = (
 /obj/machinery/power/generator,
 /turf/open/floor/oldshuttle,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "s" = (
 /obj/machinery/power/smes,
 /turf/open/floor/oldshuttle,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "t" = (
 /obj/structure/shuttle/engine/propulsion/burst/left,
 /turf/open/space,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "u" = (
 /obj/structure/shuttle/engine/propulsion/burst/right,
 /turf/open/space,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "v" = (
 /obj/structure/shuttle/engine/propulsion/burst/right,
 /turf/open/floor/plating/asteroid/basalt/lava_land_surface,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 "w" = (
 /obj/structure/shuttle/engine/propulsion/burst,
 /turf/open/space,
-/area/ruin/powered/shuttle/medium_4)
+/area/ruin/powered)
 
 (1,1,1) = {"
 a
@@ -141,7 +162,7 @@ g
 g
 g
 g
-b
+m
 d
 k
 u
@@ -157,8 +178,8 @@ c
 g
 g
 g
-b
-f
+m
+o
 a
 a
 a
@@ -178,7 +199,7 @@ c
 c
 c
 c
-h
+p
 a
 "}
 (7,1,1) = {"
@@ -196,7 +217,7 @@ i
 c
 s
 c
-h
+p
 "}
 (8,1,1) = {"
 b
@@ -212,7 +233,7 @@ l
 l
 c
 g
-e
+n
 c
 "}
 (9,1,1) = {"
@@ -226,7 +247,7 @@ l
 l
 l
 l
-b
+m
 c
 g
 g
@@ -260,7 +281,7 @@ l
 l
 l
 l
-e
+n
 c
 g
 g
@@ -280,7 +301,7 @@ l
 l
 c
 g
-b
+m
 c
 "}
 (13,1,1) = {"
@@ -298,7 +319,7 @@ i
 c
 s
 c
-f
+o
 "}
 (14,1,1) = {"
 a
@@ -314,7 +335,7 @@ c
 c
 c
 c
-f
+o
 a
 "}
 (15,1,1) = {"
@@ -327,8 +348,8 @@ c
 g
 g
 g
-e
-h
+n
+p
 a
 a
 a
@@ -345,7 +366,7 @@ g
 g
 g
 g
-e
+n
 d
 k
 t
@@ -396,7 +417,7 @@ a
 a
 a
 a
-e
+q
 c
 k
 v

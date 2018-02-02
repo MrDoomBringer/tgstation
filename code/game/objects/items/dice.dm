@@ -30,10 +30,6 @@
 	if(special_die == "100")
 		new /obj/item/dice/d100(src)
 
-/obj/item/storage/pill_bottle/dice/suicide_act(mob/user)
-	user.visible_message("<span class='suicide'>[user] is gambling with death! It looks like [user.p_theyre()] trying to commit suicide!</span>")
-	return (OXYLOSS)
-
 /obj/item/dice //depreciated d6, use /obj/item/dice/d6 if you actually want a d6
 	name = "die"
 	desc = "A die with six sides. Basic and servicable."
@@ -50,10 +46,6 @@
 	result = rand(1, sides)
 	update_icon()
 	..()
-
-/obj/item/dice/suicide_act(mob/user)
-	user.visible_message("<span class='suicide'>[user] is gambling with death! It looks like [user.p_theyre()] trying to commit suicide!</span>")
-	return (OXYLOSS)
 
 /obj/item/dice/d1
 	name = "d1"
@@ -72,10 +64,6 @@
 	desc = "A die with four sides. The nerd's caltrop."
 	icon_state = "d4"
 	sides = 4
-
-/obj/item/dice/d4/Initialize(mapload)
-	. = ..()
-	AddComponent(/datum/component/caltrop, 4)
 
 /obj/item/dice/d6
 	name = "d6"
@@ -166,7 +154,7 @@
 /obj/item/dice/proc/diceroll(mob/user)
 	result = rand(1, sides)
 	if(rigged && result != rigged)
-		if(prob(CLAMP(1/(sides - 1) * 100, 25, 80)))
+		if(prob(Clamp(1/(sides - 1) * 100, 25, 80)))
 			result = rigged
 	var/fake_result = rand(1, sides)//Daredevil isn't as good as he used to be
 	var/comment = ""
@@ -185,6 +173,14 @@
 							 "<span class='italics'>You hear [src] rolling, it sounds like a [fake_result].</span>")
 	else if(!src.throwing) //Dice was thrown and is coming to rest
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
+
+/obj/item/dice/d4/Crossed(mob/living/carbon/human/H)
+	if(istype(H) && !H.shoes)
+		if(PIERCEIMMUNE in H.dna.species.species_traits)
+			return 0
+		to_chat(H, "<span class='userdanger'>You step on the D4!</span>")
+		H.apply_damage(4,BRUTE,(pick("l_leg", "r_leg")))
+		H.Knockdown(60)
 
 /obj/item/dice/update_icon()
 	cut_overlays()

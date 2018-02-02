@@ -302,9 +302,6 @@ GLOBAL_LIST_EMPTY(allConsoles)
 	if(href_list["sendAnnouncement"])
 		if(!announcementConsole)
 			return
-		if(isliving(usr))
-			var/mob/living/L = usr
-			message = L.treat_message(message)
 		minor_announce(message, "[department] Announcement:")
 		GLOB.news_network.SubmitArticle(message, department, "Station Announcements", null)
 		log_talk(usr,"[key_name(usr)] has made a station announcement: [message]",LOGSAY)
@@ -318,13 +315,13 @@ GLOBAL_LIST_EMPTY(allConsoles)
 			var/radio_freq
 			switch(text2num(href_list["emergency"]))
 				if(1) //Security
-					radio_freq = FREQ_SECURITY
+					radio_freq = GLOB.SEC_FREQ
 					emergency = "Security"
 				if(2) //Engineering
-					radio_freq = FREQ_ENGINEERING
+					radio_freq = GLOB.ENG_FREQ
 					emergency = "Engineering"
 				if(3) //Medical
-					radio_freq = FREQ_MEDICAL
+					radio_freq = GLOB.MED_FREQ
 					emergency = "Medical"
 			if(radio_freq)
 				Radio.set_frequency(radio_freq)
@@ -344,28 +341,28 @@ GLOBAL_LIST_EMPTY(allConsoles)
 			sending += "<br>"
 		screen = 7 //if it's successful, this will get overrwritten (7 = unsufccessfull, 6 = successfull)
 		if (sending)
-			var/pass = FALSE
-			var/datum/data_rc_msg/log = new(href_list["department"], department, log_msg, msgStamped, msgVerified, priority)
-			for (var/obj/machinery/telecomms/message_server/MS in GLOB.telecomms_list)
-				if (MS.toggled)
-					MS.rc_msgs += log
-					pass = TRUE
+			var/pass = 0
+			for (var/obj/machinery/message_server/MS in GLOB.machines)
+				if(!MS.active)
+					continue
+				MS.send_rc_message(href_list["department"],department,log_msg,msgStamped,msgVerified,priority)
+				pass = 1
 
 			if(pass)
 				var/radio_freq = 0
 				switch(href_list["department"])
 					if("bridge")
-						radio_freq = FREQ_COMMAND
+						radio_freq = GLOB.COMM_FREQ
 					if("medbay")
-						radio_freq = FREQ_MEDICAL
+						radio_freq = GLOB.MED_FREQ
 					if("science")
-						radio_freq = FREQ_SCIENCE
+						radio_freq = GLOB.SCI_FREQ
 					if("engineering")
-						radio_freq = FREQ_ENGINEERING
+						radio_freq = GLOB.ENG_FREQ
 					if("security")
-						radio_freq = FREQ_SECURITY
+						radio_freq = GLOB.SEC_FREQ
 					if("cargobay" || "mining")
-						radio_freq = FREQ_SUPPLY
+						radio_freq = GLOB.SUPP_FREQ
 				Radio.set_frequency(radio_freq)
 				var/authentic
 				if(msgVerified || msgStamped)

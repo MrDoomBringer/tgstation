@@ -4,7 +4,7 @@
 #define RAD_AMOUNT_EXTREME 1000
 
 /datum/component/radioactive
-	dupe_mode = COMPONENT_DUPE_UNIQUE_PASSARGS
+	dupe_mode = COMPONENT_DUPE_UNIQUE
 
 	var/source
 
@@ -47,16 +47,13 @@
 	if(strength <= RAD_BACKGROUND_RADIATION)
 		return PROCESS_KILL
 
-/datum/component/radioactive/InheritComponent(datum/component/C, i_am_original, list/arguments)
+/datum/component/radioactive/InheritComponent(datum/component/C, i_am_original)
 	if(!i_am_original)
 		return
 	if(!hl3_release_date) // Permanently radioactive things don't get to grow stronger
 		return
-	if(C)
-		var/datum/component/radioactive/other = C
-		strength = max(strength, other.strength)
-	else
-		strength = max(strength, arguments[1])
+	var/datum/component/radioactive/other = C
+	strength = max(strength, other.strength)
 
 /datum/component/radioactive/proc/rad_examine(mob/user, atom/thing)
 	var/atom/master = parent

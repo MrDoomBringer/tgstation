@@ -23,7 +23,8 @@
 	if(..())
 		return
 	var/mob/living/silicon/ai/AI = usr
-	AI.show_camera_list()
+	var/camera = input(AI, "Choose which camera you want to view", "Cameras") as null|anything in AI.get_camera_list()
+	AI.ai_camera_list(camera)
 
 /obj/screen/ai/camera_track
 	name = "Track With Camera"

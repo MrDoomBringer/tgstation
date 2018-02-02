@@ -41,8 +41,6 @@
 	var/arrest_type = 0 //If true, don't handcuff
 	var/projectile = /obj/item/projectile/energy/electrode //Holder for projectile type
 	var/shoot_sound = 'sound/weapons/taser.ogg'
-	var/cell_type = /obj/item/stock_parts/cell
-	var/vest_type = /obj/item/clothing/suit/armor/vest
 
 
 /mob/living/simple_animal/bot/ed209/Initialize(mapload,created_name,created_lasercolor)
@@ -163,7 +161,7 @@ Auto Patrol[]"},
 		final = final|JUDGE_RECORDCHECK
 	if(weaponscheck)
 		final = final|JUDGE_WEAPONCHECK
-	if(emagged == 2)
+	if(emagged)
 		final = final|JUDGE_EMAGGED
 	//ED209's ignore monkeys
 	final = final|JUDGE_IGNOREMONKEYS
@@ -367,7 +365,7 @@ Auto Patrol[]"},
 			continue
 
 /mob/living/simple_animal/bot/ed209/proc/check_for_weapons(var/obj/item/slot_item)
-	if(slot_item && (slot_item.item_flags & NEEDS_PERMIT))
+	if(slot_item && slot_item.needs_permit)
 		return 1
 	return 0
 
@@ -376,12 +374,11 @@ Auto Patrol[]"},
 	visible_message("<span class='boldannounce'>[src] blows apart!</span>")
 	var/atom/Tsec = drop_location()
 
-	var/obj/item/bot_assembly/ed209/Sa = new (Tsec)
+	var/obj/item/ed209_assembly/Sa = new (Tsec)
 	Sa.build_step = 1
 	Sa.add_overlay("hs_hole")
 	Sa.created_name = name
 	new /obj/item/device/assembly/prox_sensor(Tsec)
-	drop_part(cell_type, Tsec)
 
 	if(!lasercolor)
 		var/obj/item/gun/energy/e_gun/advtaser/G = new (Tsec)
@@ -405,7 +402,7 @@ Auto Patrol[]"},
 			new /obj/item/clothing/head/helmet(Tsec)
 		else
 			if(!lasercolor)
-				drop_part(vest_type, Tsec)
+				new /obj/item/clothing/suit/armor/vest(Tsec)
 			if(lasercolor == "b")
 				new /obj/item/clothing/suit/bluetag(Tsec)
 			if(lasercolor == "r")

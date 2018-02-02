@@ -1,5 +1,5 @@
 /obj/item/melee
-	item_flags = NEEDS_PERMIT
+	needs_permit = 1
 
 /obj/item/melee/proc/check_martial_counter(mob/living/carbon/human/target, mob/living/carbon/human/user)
 	if(target.check_block())
@@ -52,7 +52,7 @@
 	lefthand_file = 'icons/mob/inhands/weapons/swords_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/swords_righthand.dmi'
 	flags_1 = CONDUCT_1
-	obj_flags = UNIQUE_RENAME
+	unique_rename = 1
 	force = 15
 	throwforce = 10
 	w_class = WEIGHT_CLASS_BULKY
@@ -99,7 +99,7 @@
 		return ..()
 
 	add_fingerprint(user)
-	if((user.has_trait(TRAIT_CLUMSY)) && prob(50))
+	if((CLUMSY in user.disabilities) && prob(50))
 		to_chat(user, "<span class ='danger'>You club yourself over the head.</span>")
 		user.Knockdown(60 * force)
 		if(ishuman(user))
@@ -148,7 +148,7 @@
 	item_state = null
 	slot_flags = SLOT_BELT
 	w_class = WEIGHT_CLASS_SMALL
-	item_flags = NONE
+	needs_permit = 0
 	force = 0
 	on = FALSE
 
@@ -220,7 +220,7 @@
 		return
 	if(!isturf(src.loc))
 		var/atom/target = src.loc
-		forceMove(target.loc)
+		loc = target.loc
 		consume_everything(target)
 	else
 		var/turf/T = get_turf(src)
@@ -275,18 +275,17 @@
 		consume_turf(target)
 
 /obj/item/melee/supermatter_sword/proc/consume_turf(turf/T)
-	var/oldtype = T.type
-	var/turf/newT = T.ScrapeAway()
-	if(newT.type == oldtype)
-		return
+	if(istype(T, T.baseturf))
+		return //Can't void the void, baby!
 	playsound(T, 'sound/effects/supermatter.ogg', 50, 1)
 	T.visible_message("<span class='danger'>[T] smacks into [src] and rapidly flashes to ash.</span>",\
 	"<span class='italics'>You hear a loud crack as you are washed with a wave of heat.</span>")
 	shard.Consume()
+	T.ChangeTurf(T.baseturf)
 	T.CalculateAdjacentTurfs()
 
-/obj/item/melee/supermatter_sword/add_blood_DNA(list/blood_dna)
-	return FALSE
+/obj/item/melee/supermatter_sword/add_blood(list/blood_dna)
+	return 0
 
 /obj/item/melee/curator_whip
 	name = "curator's whip"

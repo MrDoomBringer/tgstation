@@ -8,6 +8,7 @@
 	var/colour = "red"
 	var/open = FALSE
 
+
 /obj/item/lipstick/purple
 	name = "purple lipstick"
 	colour = "purple"
@@ -21,6 +22,7 @@
 	name = "black lipstick"
 	colour = "black"
 
+
 /obj/item/lipstick/random
 	name = "lipstick"
 	icon_state = "random_lipstick"
@@ -30,6 +32,8 @@
 	icon_state = "lipstick"
 	colour = pick("red","purple","lime","black","green","blue","white")
 	name = "[colour] lipstick"
+
+
 
 /obj/item/lipstick/attack_self(mob/user)
 	cut_overlays()
@@ -99,6 +103,7 @@
 	else
 		..()
 
+
 /obj/item/razor
 	name = "electric razor"
 	desc = "The latest and greatest power razor born from the science of shaving."
@@ -107,11 +112,6 @@
 	flags_1 = CONDUCT_1
 	w_class = WEIGHT_CLASS_TINY
 
-/obj/item/razor/suicide_act(mob/living/carbon/user)
-	user.visible_message("<span class='suicide'>[user] begins shaving [user.p_them()]self without the razor guard! It looks like [user.p_theyre()] trying to commit suicide!</span>")
-	shave(user, "mouth")
-	shave(user, "head")//doesnt need to be "head" specifically, but whatever 
-	return BRUTELOSS
 
 /obj/item/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
 	if(location == "mouth")

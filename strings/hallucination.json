@@ -1,8 +1,8 @@
 {
 	"suspicion": [
-		"@pick(add_name)i'm watching you...",
-		"@pick(add_name)i know what you're doing",
-		"@pick(add_name)what are you hiding?",
+		"I'm watching you...",
+		"I know what you're doing",
+		"What are you hiding?",
 		"I saw that"
 	],
 
@@ -16,12 +16,12 @@
 	],
 
 	"getout": [
-		"@pick(add_name)get out",
-		"@pick(add_name)get out!",
-		"@pick(add_name)go away",
-		"@pick(add_name)fuck off",
+		"Get out",
+		"Get out!",
+		"Go away",
+		"Fuck off",
 		"OUT!",
-		"@pick(add_name)out!"
+		"Out!"
 	],
 
 	"weird": [
@@ -43,10 +43,10 @@
 	"imatraitor": [
 		"Hail Ratvar",
 		"Hail Nar'Sie",
-		"Hey, @pick(add_name)i've got some TC left, want something?",
+		"Hey, i've got some TC left, want something?",
 		"Viva!",
 		"I'll spare you if you don't tell anybody about me",
-		"Hey, @pick(add_name)are you a traitor too?",
+		"Hey, are you a traitor too?",
 		"You're my target, but @pick(excuses)",
 		"Are you mr. @pick(ling_names)?"
 	],
@@ -79,24 +79,19 @@
 		"Omega"
 	],
 
-	"add_name": [
-		"%TARGETNAME%, ",
-		""
-	],
-
 	"doubt": [
 		"Why?",
 		"What?",
 		"Wait, what?",
-		"@pick(add_name)wait",
-		"@pick(add_name)hold on",
+		"Wait",
+		"Hold on",
 		"Uh..."
 	],
 
 	"aggressive": [
-		"@pick(add_name)give me that!",
-		"@pick(add_name)i'm going to kill you!",
-		"@pick(add_name)fuck you!"
+		"Give me that!",
+		"I'm going to kill you!",
+		"Fuck you!"
 	],
 
 	"help": [
@@ -110,19 +105,19 @@
 	],
 
 	"escape": [
-		"@pick(add_name)RUN!!",
+		"RUN!!",
 		"They're behind me!",
 		"It's here!",
-		"@pick(add_name)follow me!",
-		"@pick(add_name)follow me"
+		"Follow me!",
+		"Follow me"
 	],
 
 	"infection_advice": [
-		"@pick(add_name)stay away",
-		"@pick(add_name)don't get close",
-		"@pick(add_name)be careful",
-		"@pick(add_name)help me",
-		"@pick(add_name)kill me"
+		"stay away",
+		"don't get close",
+		"be careful",
+		"help me",
+		"kill me"
 	],
 
 	"people": [
@@ -136,7 +131,7 @@
 		"AI",
 		"Viro",
 		"Qm",
-		"%TARGETNAME%"
+		"[target.first_name()]"
 	],
 
 	"accusations": [
@@ -166,8 +161,7 @@
 		"Traitor",
 		"Harm",
 		"I hear flashing",
-		"Help",
-		"%TARGETNAME%"
+		"Help"
 	],
 
 	"location": [

@@ -16,14 +16,12 @@
 // It will also stream the chunk that the new loc is in.
 
 /mob/camera/aiEye/proc/setLoc(T)
+
 	if(ai)
 		if(!isturf(ai.loc))
 			return
 		T = get_turf(T)
-		if (T)
-			forceMove(T)
-		else
-			moveToNullspace() // ????
+		loc = T
 		if(use_static)
 			GLOB.cameranet.visibility(src)
 		if(ai.client)
@@ -33,8 +31,6 @@
 		if(istype(ai.current, /obj/machinery/holopad))
 			var/obj/machinery/holopad/H = ai.current
 			H.move_hologram(ai, T)
-		if(ai.camera_light_on)
-			ai.light_cameras()
 
 /mob/camera/aiEye/Move()
 	return 0
@@ -85,6 +81,11 @@
 
 	if(!user.tracking)
 		user.cameraFollow = null
+
+	//user.unset_machine() //Uncomment this if it causes problems.
+	//user.lightNearbyCamera()
+	if(user.camera_light_on)
+		user.light_cameras()
 
 // Return to the Core.
 /mob/living/silicon/ai/proc/view_core()

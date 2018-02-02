@@ -262,7 +262,8 @@
 
 /obj/machinery/computer/bsa_control/proc/get_target_name()
 	if(istype(target, /area))
-		return get_area_name(target, TRUE)
+		var/area/A = target
+		return A.name
 	else if(istype(target, /obj/item/device/gps))
 		var/obj/item/device/gps/G = target
 		return G.gpstag

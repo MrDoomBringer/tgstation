@@ -59,7 +59,7 @@
 			if(ishuman(user))
 				user.put_in_hands(I)
 			else
-				I.forceMove(drop_location())
+				I.loc = get_turf(src)
 			to_chat(user, "<span class='notice'>You find [I] in the cistern.</span>")
 			w_items -= I.w_class
 	else
@@ -236,7 +236,7 @@
 		soundloop.stop()
 		if(isopenturf(loc))
 			var/turf/open/tile = loc
-			tile.MakeSlippery(TURF_WET_WATER, min_wet_time = 5, wet_time_to_add = 1)
+			tile.MakeSlippery(min_wet_time = 5, wet_time_to_add = 1)
 
 
 /obj/machinery/shower/attackby(obj/item/I, mob/user, params)
@@ -296,7 +296,8 @@
 
 
 /obj/machinery/shower/proc/wash_obj(obj/O)
-	. = O.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_WEAK)
+	O.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_WEAK)
+	. = O.clean_blood()
 	O.remove_atom_colour(WASHABLE_COLOUR_PRIORITY)
 	if(isitem(O))
 		var/obj/item/I = O
@@ -309,6 +310,7 @@
 		var/turf/tile = loc
 		tile.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_WEAK)
 		tile.remove_atom_colour(WASHABLE_COLOUR_PRIORITY)
+		tile.clean_blood()
 		for(var/obj/effect/E in tile)
 			if(is_cleanable(E))
 				qdel(E)
@@ -359,7 +361,7 @@
 			else if(H.w_uniform && wash_obj(H.w_uniform))
 				H.update_inv_w_uniform()
 			if(washgloves)
-				H.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_STRENGTH_BLOOD)
+				H.clean_blood()
 			if(H.shoes && washshoes && wash_obj(H.shoes))
 				H.update_inv_shoes()
 			if(H.wear_mask && washmask && wash_obj(H.wear_mask))
@@ -376,9 +378,9 @@
 		else
 			if(M.wear_mask && wash_obj(M.wear_mask))
 				M.update_inv_wear_mask(0)
-			M.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_STRENGTH_BLOOD)
+			M.clean_blood()
 	else
-		L.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_STRENGTH_BLOOD)
+		L.clean_blood()
 
 /obj/machinery/shower/proc/contamination_cleanse(atom/movable/thing)
 	var/datum/component/radioactive/healthy_green_glow = thing.GetComponent(/datum/component/radioactive)
@@ -471,7 +473,8 @@
 			H.regenerate_icons()
 		user.drowsyness = max(user.drowsyness - rand(2,3), 0) //Washing your face wakes you up if you're falling asleep
 	else
-		user.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_STRENGTH_BLOOD)
+		user.clean_blood()
+
 
 /obj/structure/sink/attackby(obj/item/O, mob/living/user, params)
 	if(busy)
@@ -480,9 +483,9 @@
 
 	if(istype(O, /obj/item/reagent_containers))
 		var/obj/item/reagent_containers/RG = O
-		if(RG.is_refillable())
+		if(RG.container_type & OPENCONTAINER_1)
 			if(!RG.reagents.holder_full())
-				RG.reagents.add_reagent(dispensedreagent, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+				RG.reagents.add_reagent("[dispensedreagent]", min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 				to_chat(user, "<span class='notice'>You fill [RG] from [src].</span>")
 				return TRUE
 			to_chat(user, "<span class='notice'>\The [RG] is full.</span>")
@@ -527,10 +530,10 @@
 			busy = FALSE
 			return 1
 		busy = FALSE
-		O.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_STRENGTH_BLOOD)
+		O.clean_blood()
 		O.acid_level = 0
 		create_reagents(5)
-		reagents.add_reagent(dispensedreagent, 5)
+		reagents.add_reagent("[dispensedreagent]", 5)
 		reagents.reaction(O, TOUCH)
 		user.visible_message("<span class='notice'>[user] washes [O] using [src].</span>", \
 							"<span class='notice'>You wash [O] using [src].</span>")
@@ -605,7 +608,7 @@
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/toy/crayon))
-		color = input(user,"","Choose Color",color) as color
+		color = input(user,"Choose Color") as color
 	else if(istype(W, /obj/item/screwdriver))
 		if(anchored)
 			playsound(src.loc, W.usesound, 100, 1)

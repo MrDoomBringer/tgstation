@@ -64,7 +64,7 @@
 	var/obj/machinery/door/airlock/closeOther = null
 	var/closeOtherId = null
 	var/lockdownbyai = FALSE
-	assemblytype = /obj/structure/door_assembly
+	assemblytype = /obj/structure/door_assembly/door_assembly_0
 	var/justzap = FALSE
 	normalspeed = 1
 	var/obj/item/electronics/airlock/electronics = null
@@ -80,7 +80,7 @@
 	var/boltUp = 'sound/machines/boltsup.ogg'
 	var/boltDown = 'sound/machines/boltsdown.ogg'
 	var/noPower = 'sound/machines/doorclick.ogg'
-	var/previous_airlock = /obj/structure/door_assembly //what airlock assembly mineral plating was applied to
+
 	var/airlock_material = null //material of inner filling; if its an airlock with glass, this should be set to "glass"
 	var/overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
 	var/note_overlay_file = 'icons/obj/doors/airlocks/station/overlays.dmi' //Used for papers and photos pinned to the airlock
@@ -135,7 +135,7 @@
 				for(var/turf/closed/T in range(2, src))
 					here.ChangeTurf(T.type)
 					return INITIALIZE_HINT_QDEL
-				here.PlaceOnTop(/turf/closed/wall)
+				here.ChangeTurf(/turf/closed/wall)
 			if(9 to 11)
 				lights = FALSE
 				locked = TRUE
@@ -208,22 +208,19 @@
 
 /obj/machinery/door/airlock/narsie_act()
 	var/turf/T = get_turf(src)
+	var/runed = prob(20)
 	var/obj/machinery/door/airlock/cult/A
-	if(GLOB.cult_narsie)
-		var/runed = prob(20)
-		if(glass)
-			if(runed)
-				A = new/obj/machinery/door/airlock/cult/glass(T)
-			else
-				A = new/obj/machinery/door/airlock/cult/unruned/glass(T)
+	if(glass)
+		if(runed)
+			A = new/obj/machinery/door/airlock/cult/glass(T)
 		else
-			if(runed)
-				A = new/obj/machinery/door/airlock/cult(T)
-			else
-				A = new/obj/machinery/door/airlock/cult/unruned(T)
-		A.name = name
+			A = new/obj/machinery/door/airlock/cult/unruned/glass(T)
 	else
-		A = new /obj/machinery/door/airlock/cult/weak(T)
+		if(runed)
+			A = new/obj/machinery/door/airlock/cult(T)
+		else
+			A = new/obj/machinery/door/airlock/cult/unruned(T)
+	A.name = name
 	qdel(src)
 
 /obj/machinery/door/airlock/ratvar_act() //Airlocks become pinion airlocks that only allow servants
@@ -258,13 +255,16 @@
 		note = null
 		update_icon()
 
+/obj/machinery/door/airlock/proc/unzap() //for addtimer
+	justzap = FALSE
+
 /obj/machinery/door/airlock/bumpopen(mob/living/user) //Airlocks now zap you when you 'bump' them open when they're electrified. --NeoFite
 	if(!issilicon(usr))
 		if(isElectrified())
 			if(!justzap)
 				if(shock(user, 100))
 					justzap = TRUE
-					addtimer(VARSET_CALLBACK(src, justzap, FALSE) , 10)
+					addtimer(CALLBACK(src, .proc/unzap), 10)
 					return
 			else
 				return
@@ -572,8 +572,6 @@
 
 /obj/machinery/door/airlock/examine(mob/user)
 	..()
-	if(obj_flags & EMAGGED)
-		to_chat(user, "<span class='warning'>Its access panel is smoking slightly.</span>")
 	if(charge && !panel_open && in_range(user, src))
 		to_chat(user, "<span class='warning'>The maintenance panel seems haphazardly fastened.</span>")
 	if(charge && panel_open)
@@ -614,7 +612,7 @@
 			return
 		else
 			to_chat(user, "<span class='warning'>Airlock AI control has been blocked with a firewall. Unable to hack.</span>")
-	if(obj_flags & EMAGGED)
+	if(emagged)
 		to_chat(user, "<span class='warning'>Unable to interface: Airlock is unresponsive.</span>")
 		return
 	if(detonated)
@@ -686,7 +684,7 @@
 
 	if(ishuman(user) && prob(40) && src.density)
 		var/mob/living/carbon/human/H = user
-		if((H.has_trait(TRAIT_DUMB)) && Adjacent(user))
+		if((H.disabilities & DUMB) && Adjacent(user))
 			playsound(src.loc, 'sound/effects/bang.ogg', 25, 1)
 			if(!istype(H.head, /obj/item/clothing/head/helmet))
 				H.visible_message("<span class='danger'>[user] headbutts the airlock.</span>", \
@@ -902,7 +900,7 @@
 		if(!panel_open || security_level)
 			to_chat(user, "<span class='warning'>The maintenance panel must be open to apply [C]!</span>")
 			return
-		if(obj_flags & EMAGGED)
+		if(emagged)
 			return
 		if(charge && !detonated)
 			to_chat(user, "<span class='warning'>There's already a charge hooked up to this door!</span>")
@@ -982,7 +980,7 @@
 		charge.forceMove(get_turf(user))
 		charge = null
 		return
-	if(beingcrowbarred && panel_open && ((obj_flags & EMAGGED) || (density && welded && !operating && !hasPower() && !locked)))
+	if( beingcrowbarred && (density && welded && !operating && src.panel_open && (!hasPower()) && !src.locked) )
 		playsound(src.loc, I.usesound, 100, 1)
 		user.visible_message("[user] removes the electronics from the airlock assembly.", \
 							 "<span class='notice'>You start to remove electronics from the airlock assembly...</span>")
@@ -1032,6 +1030,14 @@
 				if(density && !open(2))
 					to_chat(user, "<span class='warning'>Despite your attempts, [src] refuses to open.</span>")
 
+/obj/machinery/door/airlock/plasma/attackby(obj/item/C, mob/user, params)
+	if(C.is_hot() > 300)//If the temperature of the object is over 300, then ignite
+		message_admins("Plasma airlock ignited by [ADMIN_LOOKUPFLW(user)] in [ADMIN_COORDJMP(src)]")
+		log_game("Plasma wall ignited by [key_name(user)] in [COORD(src)]")
+		ignite(C.is_hot())
+	else
+		return ..()
+
 /obj/machinery/door/airlock/open(forced=0)
 	if( operating || welded || locked )
 		return FALSE
@@ -1042,7 +1048,7 @@
 		panel_open = TRUE
 		update_icon(AIRLOCK_OPENING)
 		visible_message("<span class='warning'>[src]'s panel is blown off in a spray of deadly shrapnel!</span>")
-		charge.forceMove(drop_location())
+		charge.loc = get_turf(src)
 		charge.ex_act(EXPLODE_DEVASTATE)
 		detonated = 1
 		charge = null
@@ -1053,7 +1059,7 @@
 			H.apply_damage(40, BRUTE, "chest")
 		return
 	if(forced < 2)
-		if(obj_flags & EMAGGED)
+		if(emagged)
 			return FALSE
 		use_power(50)
 		playsound(src.loc, doorOpen, 30, 1)
@@ -1090,8 +1096,6 @@
 /obj/machinery/door/airlock/close(forced=0)
 	if(operating || welded || locked)
 		return
-	if(density)
-		return TRUE
 	if(!forced)
 		if(!hasPower() || wires.is_cut(WIRE_BOLTS))
 			return
@@ -1102,7 +1106,7 @@
 				return
 
 	if(forced < 2)
-		if(obj_flags & EMAGGED)
+		if(emagged)
 			return
 		use_power(50)
 		playsound(src.loc, doorClose, 30, 1)
@@ -1113,6 +1117,8 @@
 	if(killthis)
 		killthis.ex_act(EXPLODE_HEAVY)//Smashin windows
 
+	if(density)
+		return TRUE
 	operating = TRUE
 	update_icon(AIRLOCK_CLOSING, 1)
 	layer = CLOSED_DOOR_LAYER
@@ -1138,7 +1144,7 @@
 	return TRUE
 
 /obj/machinery/door/airlock/proc/prison_open()
-	if(obj_flags & EMAGGED)
+	if(emagged)
 		return
 	locked = FALSE
 	src.open()
@@ -1152,22 +1158,22 @@
 
 	var/list/optionlist
 	if(airlock_material == "glass")
-		optionlist = list("Standard", "Public", "Engineering", "Atmospherics", "Security", "Command", "Medical", "Research", "Science", "Virology", "Mining", "Maintenance", "External", "External Maintenance")
+		optionlist = list("Public", "Public2", "Engineering", "Atmospherics", "Security", "Command", "Medical", "Research", "Mining", "Maintenance")
 	else
-		optionlist = list("Standard", "Public", "Engineering", "Atmospherics", "Security", "Command", "Medical", "Research", "Freezer", "Science", "Virology", "Mining", "Maintenance", "External", "External Maintenance")
+		optionlist = list("Public", "Engineering", "Atmospherics", "Security", "Command", "Medical", "Research", "Mining", "Maintenance", "External", "High Security")
 
 	var/paintjob = input(user, "Please select a paintjob for this airlock.") in optionlist
 	if((!in_range(src, usr) && src.loc != usr) || !W.use(user))
 		return
 	switch(paintjob)
-		if("Standard")
+		if("Public")
 			icon = 'icons/obj/doors/airlocks/station/public.dmi'
 			overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
-			assemblytype = /obj/structure/door_assembly
-		if("Public")
+			assemblytype = /obj/structure/door_assembly/door_assembly_0
+		if("Public2")
 			icon = 'icons/obj/doors/airlocks/station2/glass.dmi'
 			overlays_file = 'icons/obj/doors/airlocks/station2/overlays.dmi'
-			assemblytype = /obj/structure/door_assembly/door_assembly_public
+			assemblytype = /obj/structure/door_assembly/door_assembly_glass
 		if("Engineering")
 			icon = 'icons/obj/doors/airlocks/station/engineering.dmi'
 			overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
@@ -1192,18 +1198,6 @@
 			icon = 'icons/obj/doors/airlocks/station/research.dmi'
 			overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
 			assemblytype = /obj/structure/door_assembly/door_assembly_research
-		if("Freezer")
-			icon = 'icons/obj/doors/airlocks/station/freezer.dmi'
-			overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
-			assemblytype = /obj/structure/door_assembly/door_assembly_fre
-		if("Science")
-			icon = 'icons/obj/doors/airlocks/station/science.dmi'
-			overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
-			assemblytype = /obj/structure/door_assembly/door_assembly_science
-		if("Virology")
-			icon = 'icons/obj/doors/airlocks/station/virology.dmi'
-			overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
-			assemblytype = /obj/structure/door_assembly/door_assembly_viro
 		if("Mining")
 			icon = 'icons/obj/doors/airlocks/station/mining.dmi'
 			overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
@@ -1216,10 +1210,10 @@
 			icon = 'icons/obj/doors/airlocks/external/external.dmi'
 			overlays_file = 'icons/obj/doors/airlocks/external/overlays.dmi'
 			assemblytype = /obj/structure/door_assembly/door_assembly_ext
-		if("External Maintenance")
-			icon = 'icons/obj/doors/airlocks/station/maintenanceexternal.dmi'
-			overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
-			assemblytype = /obj/structure/door_assembly/door_assembly_extmai
+		if("High Security")
+			icon = 'icons/obj/doors/airlocks/highsec/highsec.dmi'
+			overlays_file = 'icons/obj/doors/airlocks/highsec/overlays.dmi'
+			assemblytype = /obj/structure/door_assembly/door_assembly_highsecurity
 	update_icon()
 
 /obj/machinery/door/airlock/CanAStarPass(obj/item/card/id/ID)
@@ -1227,7 +1221,7 @@
 	return !density || (check_access(ID) && !locked && hasPower())
 
 /obj/machinery/door/airlock/emag_act(mob/user)
-	if(!operating && density && hasPower() && !(obj_flags & EMAGGED))
+	if(!operating && density && hasPower() && !emagged)
 		operating = TRUE
 		update_icon(AIRLOCK_EMAG, 1)
 		sleep(6)
@@ -1236,7 +1230,8 @@
 		operating = FALSE
 		if(!open())
 			update_icon(AIRLOCK_CLOSED, 1)
-		obj_flags |= EMAGGED
+		emagged = TRUE
+		desc = "<span class='warning'>Its access panel is smoking slightly.</span>"
 		lights = FALSE
 		locked = TRUE
 		loseMainPower()
@@ -1311,22 +1306,16 @@
 		var/obj/structure/door_assembly/A
 		if(assemblytype)
 			A = new assemblytype(src.loc)
+			A.heat_proof_finished = src.heat_proof //tracks whether there's rglass in
 		else
-			A = new /obj/structure/door_assembly(loc)
+			A = new /obj/structure/door_assembly/door_assembly_0(src.loc)
 			//If you come across a null assemblytype, it will produce the default assembly instead of disintegrating.
-		A.heat_proof_finished = src.heat_proof //tracks whether there's rglass in
-		A.anchored = TRUE
-		A.glass = src.glass
-		A.state = AIRLOCK_ASSEMBLY_NEEDS_ELECTRONICS
 		A.created_name = name
-		A.previous_assembly = previous_airlock
-		A.update_name()
-		A.update_icon()
 
 		if(!disassembled)
 			if(A)
 				A.obj_integrity = A.max_integrity * 0.5
-		else if(obj_flags & EMAGGED)
+		else if(emagged)
 			if(user)
 				to_chat(user, "<span class='warning'>You discard the damaged electronics.</span>")
 		else
@@ -1345,7 +1334,7 @@
 			else
 				ae = electronics
 				electronics = null
-				ae.forceMove(drop_location())
+				ae.loc = src.loc
 	qdel(src)
 
 /obj/machinery/door/airlock/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)

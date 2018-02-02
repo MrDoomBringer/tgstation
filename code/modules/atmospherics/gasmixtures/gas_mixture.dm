@@ -22,36 +22,28 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 
 /datum/gas_mixture
 	var/list/gases
-	var/temperature = 0 //kelvins
-	var/tmp/temperature_archived = 0
-	var/volume = CELL_VOLUME //liters
-	var/last_share = 0
+	var/temperature //kelvins
+	var/tmp/temperature_archived
+	var/volume //liters
+	var/last_share
 	var/list/reaction_results
 
-/datum/gas_mixture/New(volume)
+/datum/gas_mixture/New(volume = CELL_VOLUME)
 	gases = new
-	if (!isnull(volume))
-		src.volume = volume
+	temperature = 0
+	temperature_archived = 0
+	src.volume = volume
+	last_share = 0
 	reaction_results = new
 
 //listmos procs
-//use the macros in performance intensive areas. for their definitions, refer to code/__DEFINES/atmospherics.dm
 
-	//assert_gas(gas_id) - used to guarantee that the gas list for this id exists in gas_mixture.gases.
-	//Must be used before adding to a gas. May be used before reading from a gas.
-/datum/gas_mixture/proc/assert_gas(gas_id)
-	ASSERT_GAS(gas_id, src)
+// The following procs used to live here: thermal_energy(), assert_gas() and add_gas(). They have been moved into defines in code/__DEFINES/atmospherics.dm
 
 	//assert_gases(args) - shorthand for calling ASSERT_GAS() once for each gas type.
 /datum/gas_mixture/proc/assert_gases()
 	for(var/id in args)
 		ASSERT_GAS(id, src)
-
-	//add_gas(gas_id) - similar to assert_gas(), but does not check for an existing
-		//gas list for this id. This can clobber existing gases.
-	//Used instead of assert_gas() when you know the gas does not exist. Faster than assert_gas().
-/datum/gas_mixture/proc/add_gas(gas_id)
-	ADD_GAS(gas_id, gases)
 
 	//add_gases(args) - shorthand for calling add_gas() once for each gas_type.
 /datum/gas_mixture/proc/add_gases()
@@ -108,9 +100,6 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 
 /datum/gas_mixture/proc/return_volume() //liters
 	return max(0, volume)
-
-/datum/gas_mixture/proc/thermal_energy() //joules
-	return THERMAL_ENERGY(src) //see code/__DEFINES/atmospherics.dm; use the define in performance critical areas
 
 /datum/gas_mixture/proc/archive()
 	//Update archived versions of variables
@@ -410,7 +399,7 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 	return ""
 
 /datum/gas_mixture/react(turf/open/dump_location)
-	. = NO_REACTION
+	. = 0
 
 	reaction_results = new
 
@@ -433,22 +422,6 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 				if(!cached_gases[id] || cached_gases[id][MOLES] < min_reqs[id])
 					continue reaction_loop
 			//at this point, all minimum requirements for the reaction are satisfied.
-
-			/*	currently no reactions have maximum requirements, so we can leave the checks commented out for a slight performance boost
-				PLEASE DO NOT REMOVE THIS CODE. the commenting is here only for a performance increase.
-				enabling these checks should be as easy as possible and the fact that they are disabled should be as clear as possible
-
-			var/list/max_reqs = reaction.max_requirements.Copy()
-			if((max_reqs["TEMP"] && temp > max_reqs["TEMP"]) \
-			|| (max_reqs["ENER"] && ener > max_reqs["ENER"]))
-				continue
-			max_reqs -= "TEMP"
-			max_reqs -= "ENER"
-			for(var/id in max_reqs)
-				if(cached_gases[id] && cached_gases[id][MOLES] > max_reqs[id])
-					continue reaction_loop
-			//at this point, all requirements for the reaction are satisfied. we can now react()
-			*/
 
 			. |= reaction.react(src, dump_location)
 			if (. & STOP_REACTIONS)

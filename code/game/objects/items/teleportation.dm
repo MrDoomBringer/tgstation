@@ -17,7 +17,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "locator"
 	var/temp = null
-	var/frequency = FREQ_LOCATOR_IMPLANT
+	var/frequency = 1451
 	var/broadcasting = null
 	var/listening = 1
 	flags_1 = CONDUCT_1
@@ -53,7 +53,7 @@ Frequency:
 	if (usr.stat || usr.restrained())
 		return
 	var/turf/current_location = get_turf(usr)//What turf is the user on?
-	if(!current_location || is_centcom_level(current_location.z))//If turf was not found or they're on CentCom
+	if(!current_location || current_location.z == ZLEVEL_CENTCOM)//If turf was not found or they're on CentCom
 		to_chat(usr, "[src] is malfunctioning.")
 		return
 	if(usr.contents.Find(src) || (in_range(src, usr) && isturf(loc)))
@@ -84,10 +84,10 @@ Frequency:
 
 				src.temp += "<B>Extranneous Signals:</B><BR>"
 				for (var/obj/item/implant/tracking/W in GLOB.tracked_implants)
-					if (!W.imp_in || !isliving(W.loc))
+					if (!W.imp_in || !ismob(W.loc))
 						continue
 					else
-						var/mob/living/M = W.loc
+						var/mob/M = W.loc
 						if (M.stat == DEAD)
 							if (M.timeofdeath + 6000 < world.time)
 								continue
@@ -168,7 +168,7 @@ Frequency:
 /obj/item/hand_tele/attack_self(mob/user)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
 	var/area/current_area = current_location.loc
-	if(!current_location || current_area.noteleport || is_away_level(current_location.z) || !isturf(user.loc))//If turf was not found or they're on z level 2 or >7 which does not currently exist. or if user is not located on a turf
+	if(!current_location || current_area.noteleport || current_location.z > ZLEVEL_SPACEMAX || !isturf(user.loc))//If turf was not found or they're on z level 2 or >7 which does not currently exist. or if user is not located on a turf
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
 		return
 	var/list/L = list(  )
@@ -206,9 +206,9 @@ Frequency:
 		return
 	current_location = get_turf(user)	//Recheck.
 	current_area = current_location.loc
-	if(!current_location || current_area.noteleport || is_away_level(current_location.z) || !isturf(user.loc))//If turf was not found or they're on z level 2 or >7 which does not currently exist. or if user is not located on a turf
+	if(!current_location || current_area.noteleport || current_location.z > ZLEVEL_SPACEMAX || !isturf(user.loc))//If turf was not found or they're on z level 2 or >7 which does not currently exist. or if user is not located on a turf
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
-		return
+		return	
 	user.show_message("<span class='notice'>Locked In.</span>", 2)
 	var/list/obj/effect/portal/created = create_portal_pair(current_location, get_teleport_turf(get_turf(T)), src, 300, 1)
 	if(!(LAZYLEN(created) == 2))

@@ -19,9 +19,6 @@
 	jitter = 20
 	hitsound = 'sound/weapons/taserhit.ogg'
 	range = 7
-	tracer_type = /obj/effect/projectile/tracer/stun
-	muzzle_type = /obj/effect/projectile/muzzle/stun
-	impact_type = /obj/effect/projectile/impact/stun
 
 /obj/item/projectile/energy/electrode/on_hit(atom/target, blocked = FALSE)
 	. = ..()
@@ -31,7 +28,7 @@
 		var/mob/living/carbon/C = target
 		if(C.dna && C.dna.check_mutation(HULK))
 			C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		else if((C.status_flags & CANKNOCKDOWN) && !C.has_trait(TRAIT_STUNIMMUNE))
+		else if(C.status_flags & CANKNOCKDOWN)
 			addtimer(CALLBACK(C, /mob/living/carbon.proc/do_jitter_animation, jitter), 5)
 
 /obj/item/projectile/energy/electrode/on_range() //to ensure the bolt sparks when it reaches the end of its range if it didn't hit a target yet

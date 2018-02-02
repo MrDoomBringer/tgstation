@@ -55,26 +55,21 @@
 	sheet_type = /obj/item/stack/tile/brass
 	sheet_amount = 1
 	girder_type = /obj/structure/destructible/clockwork/wall_gear
-	baseturfs = /turf/open/floor/clockwork/reebe
+	baseturf = /turf/open/floor/clockwork/reebe
 	var/heated
-	var/obj/effect/clockwork/overlay/wall/realappearance
+	var/obj/effect/clockwork/overlay/wall/realappearence
 
 /turf/closed/wall/clockwork/Initialize()
 	. = ..()
 	new /obj/effect/temp_visual/ratvar/wall(src)
 	new /obj/effect/temp_visual/ratvar/beam(src)
-	realappearance = new /obj/effect/clockwork/overlay/wall(src)
-	realappearance.linked = src
+	realappearence = new /obj/effect/clockwork/overlay/wall(src)
+	realappearence.linked = src
 
 /turf/closed/wall/clockwork/Destroy()
-	if(realappearance)
-		qdel(realappearance)
-		realappearance = null
-	if(heated)
-		var/mob/camera/eminence/E = get_eminence()
-		if(E)
-			E.superheated_walls--
-
+	if(realappearence)
+		qdel(realappearence)
+		realappearence = null
 	return ..()
 
 /turf/closed/wall/clockwork/ReplaceWithLattice()
@@ -93,20 +88,20 @@
 /turf/closed/wall/clockwork/dismantle_wall(devastated=0, explode=0)
 	if(devastated)
 		devastate_wall()
-		ScrapeAway()
+		ChangeTurf(/turf/open/floor/plating)
 	else
 		playsound(src, 'sound/items/welder.ogg', 100, 1)
 		var/newgirder = break_wall()
 		if(newgirder) //maybe we want a gear!
 			transfer_fingerprints_to(newgirder)
-		ScrapeAway()
+		ChangeTurf(/turf/open/floor/clockwork)
 
 	for(var/obj/O in src) //Eject contents!
 		if(istype(O, /obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
 		else
-			O.forceMove(src)
+			O.loc = src
 
 /turf/closed/wall/clockwork/devastate_wall()
 	for(var/i in 1 to 2)
@@ -137,14 +132,14 @@
 		heated = TRUE
 		hardness = -100 //Lower numbers are tougher, so this makes the wall essentially impervious to smashing
 		slicing_duration = 150
-		animate(realappearance, color = "#FFC3C3", time = 5)
+		animate(realappearence, color = "#FFC3C3", time = 5)
 	else
 		name = initial(name)
 		visible_message("<span class='notice'>[src] cools down.</span>")
 		heated = FALSE
 		hardness = initial(hardness)
 		slicing_duration = initial(slicing_duration)
-		animate(realappearance, color = initial(realappearance.color), time = 25)
+		animate(realappearence, color = initial(realappearence.color), time = 25)
 
 
 /turf/closed/wall/vault

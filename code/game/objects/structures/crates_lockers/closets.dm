@@ -61,11 +61,14 @@
 			add_overlay("[icon_state]_door")
 		if(welded)
 			add_overlay("welded")
-		if(secure && !broken)
-			if(locked)
-				add_overlay("locked")
+		if(secure)
+			if(!broken)
+				if(locked)
+					add_overlay("locked")
+				else
+					add_overlay("unlocked")
 			else
-				add_overlay("unlocked")
+				add_overlay("off")
 
 	else
 		layer = BELOW_OBJ_LAYER
@@ -132,7 +135,7 @@
 	if(opened || !can_open(user))
 		return
 	playsound(loc, open_sound, 15, 1, -3)
-	opened = TRUE
+	opened = 1
 	if(!dense_when_open)
 		density = FALSE
 	climb_time *= 0.5 //it's faster to climb onto an open thing
@@ -185,7 +188,7 @@
 	take_contents()
 	playsound(loc, close_sound, 15, 1, -3)
 	climb_time = initial(climb_time)
-	opened = FALSE
+	opened = 0
 	density = TRUE
 	update_icon()
 	return 1
@@ -208,11 +211,6 @@
 /obj/structure/closet/attackby(obj/item/W, mob/user, params)
 	if(user in src)
 		return
-	if(!src.tool_interact(W,user))
-		return ..()
-
-/obj/structure/closet/proc/tool_interact(obj/item/W, mob/user)//returns TRUE if attackBy call shouldnt be continued (because tool was used/closet was of wrong type), FALSE if otherwise
-	. = TRUE
 	if(opened)
 		if(istype(W, cutting_tool))
 			if(istype(W, /obj/item/weldingtool))
@@ -228,14 +226,14 @@
 										"<span class='notice'>You cut \the [src] apart with \the [WT].</span>",
 										"<span class='italics'>You hear welding.</span>")
 						deconstruct(TRUE)
-					return
+					return 0
 			else // for example cardboard box is cut with wirecutters
 				user.visible_message("<span class='notice'>[user] cut apart \the [src].</span>", \
 									"<span class='notice'>You cut \the [src] apart with \the [W].</span>")
 				deconstruct(TRUE)
-				return
+				return 0
 		if(user.transferItemToLoc(W, drop_location())) // so we put in unlit welder too
-			return
+			return 1
 	else if(istype(W, /obj/item/weldingtool) && can_weld_shut)
 		var/obj/item/weldingtool/WT = W
 		if(!WT.remove_fuel(0, user))
@@ -262,8 +260,9 @@
 	else if(user.a_intent != INTENT_HARM && !(W.flags_1 & NOBLUDGEON_1))
 		if(W.GetID() || !toggle(user))
 			togglelock(user)
+		return 1
 	else
-		return FALSE
+		return ..()
 
 /obj/structure/closet/MouseDrop_T(atom/movable/O, mob/living/user)
 	if(!istype(O) || O.anchored || istype(O, /obj/screen))

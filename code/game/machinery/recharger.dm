@@ -79,7 +79,7 @@
 	add_fingerprint(user)
 	if(charging)
 		charging.update_icon()
-		charging.forceMove(drop_location())
+		charging.loc = loc
 		user.put_in_hands(charging)
 		charging = null
 		use_power = IDLE_POWER_USE
@@ -91,7 +91,7 @@
 /obj/machinery/recharger/attack_tk(mob/user)
 	if(charging)
 		charging.update_icon()
-		charging.forceMove(drop_location())
+		charging.loc = loc
 		charging = null
 		use_power = IDLE_POWER_USE
 		update_icon()

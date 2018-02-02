@@ -16,7 +16,7 @@
 "ae" = (
 /obj/structure/lattice,
 /turf/template_noop,
-/area/space/nearstation)
+/area/template_noop)
 "af" = (
 /turf/closed/wall,
 /area/ruin/space/djstation)
@@ -85,7 +85,10 @@
 	icon_state = "4-8"
 	},
 /obj/item/storage/box/lights/mixed,
-/obj/structure/sign/warning/electricshock{
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'HIGH VOLTAGE'";
+	icon_state = "shock";
+	name = "HIGH VOLTAGE";
 	pixel_y = -32
 	},
 /turf/open/floor/plating,
@@ -169,7 +172,7 @@
 /turf/open/floor/plasteel/bar,
 /area/ruin/space/djstation)
 "aG" = (
-/obj/machinery/door/airlock/public/glass{
+/obj/machinery/door/airlock/glass{
 	name = "Kitchen"
 	},
 /turf/open/floor/plasteel/cafeteria,
@@ -190,7 +193,7 @@
 /turf/open/floor/plasteel/cafeteria,
 /area/ruin/space/djstation)
 "aJ" = (
-/obj/machinery/door/airlock/public/glass{
+/obj/machinery/door/airlock/glass{
 	name = "Rest Room"
 	},
 /turf/open/floor/plasteel/cafeteria,
@@ -279,7 +282,7 @@
 "aZ" = (
 /obj/structure/disposalpipe/segment,
 /turf/open/floor/plating/airless,
-/area/space/nearstation)
+/area/template_noop)
 "ba" = (
 /turf/open/floor/plasteel/freezer,
 /area/ruin/space/djstation)
@@ -330,7 +333,11 @@
 /turf/open/floor/plasteel/cafeteria,
 /area/ruin/space/djstation)
 "bh" = (
-/obj/structure/sign/warning/vacuum/external{
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	layer = 4;
+	name = "EXTERNAL AIRLOCK";
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel/cafeteria,
@@ -349,7 +356,7 @@
 	},
 /obj/structure/disposaloutlet,
 /turf/open/floor/plating/airless,
-/area/space/nearstation)
+/area/template_noop)
 
 (1,1,1) = {"
 aa

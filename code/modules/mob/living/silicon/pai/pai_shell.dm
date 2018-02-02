@@ -68,12 +68,9 @@
 		lay_down()
 
 /mob/living/silicon/pai/proc/choose_chassis()
-	if(!isturf(loc) && loc != card)
-		to_chat(src, "<span class='boldwarning'>You can not change your holochassis composite while not on the ground or in your card!</span>")
-		return FALSE
 	var/choice = input(src, "What would you like to use for your holochassis composite?") as null|anything in possible_chassis
 	if(!choice)
-		return FALSE
+		return 0
 	chassis = choice
 	icon_state = "[chassis]"
 	if(resting)
@@ -106,16 +103,3 @@
 /mob/living/silicon/pai/movement_delay()
 	. = ..()
 	. += 1 //A bit slower than humans, so they're easier to smash
-
-/mob/living/silicon/pai/mob_pickup(mob/living/L)
-	var/obj/item/clothing/head/mob_holder/holder = new(get_turf(src), src, chassis, item_head_icon, item_lh_icon, item_rh_icon)
-	if(!L.put_in_hands(holder))
-		qdel(holder)
-	else
-		L.visible_message("<span class='warning'>[L] scoops up [src]!</span>")
-
-/mob/living/silicon/pai/mob_try_pickup(mob/living/user)
-	if(!possible_chassis[chassis])
-		to_chat(user, "<span class='wraning'>[src]'s current form isn't able to be carried!</span>")
-		return FALSE
-	return ..()

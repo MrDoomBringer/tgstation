@@ -24,6 +24,12 @@
 	lefthand_file = 'icons/mob/inhands/equipment/hydroponics_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/hydroponics_righthand.dmi'
 	volume = 100
+	container_type = OPENCONTAINER_1
+	slot_flags = SLOT_BELT
+	throwforce = 0
+	w_class = WEIGHT_CLASS_SMALL
+	throw_speed = 3
+	throw_range = 10
 
 /obj/item/reagent_containers/spray/weedspray/Initialize()
 	. = ..()
@@ -42,6 +48,12 @@
 	lefthand_file = 'icons/mob/inhands/equipment/hydroponics_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/hydroponics_righthand.dmi'
 	volume = 100
+	container_type = OPENCONTAINER_1
+	slot_flags = SLOT_BELT
+	throwforce = 0
+	w_class = WEIGHT_CLASS_SMALL
+	throw_speed = 3
+	throw_range = 10
 
 /obj/item/reagent_containers/spray/pestspray/Initialize()
 	. = ..()
@@ -67,10 +79,6 @@
 	attack_verb = list("slashed", "sliced", "cut", "clawed")
 	hitsound = 'sound/weapons/bladeslice.ogg'
 
-/obj/item/cultivator/suicide_act(mob/user)
-	user.visible_message("<span class='suicide'>[user] is scratching [user.p_their()] back as hard as [user.p_they()] can with \the [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
-	return (BRUTELOSS)
-
 /obj/item/hatchet
 	name = "hatchet"
 	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."
@@ -92,7 +100,7 @@
 
 /obj/item/hatchet/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is chopping at [user.p_them()]self with [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
-	playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return (BRUTELOSS)
 
 /obj/item/scythe
@@ -120,7 +128,7 @@
 		var/obj/item/bodypart/BP = C.get_bodypart("head")
 		if(BP)
 			BP.drop_limb()
-			playsound(src,pick('sound/misc/desceration-01.ogg','sound/misc/desceration-02.ogg','sound/misc/desceration-01.ogg') ,50, 1, -1)
+			playsound(loc,pick('sound/misc/desceration-01.ogg','sound/misc/desceration-02.ogg','sound/misc/desceration-01.ogg') ,50, 1, -1)
 	return (BRUTELOSS)
 
 /obj/item/scythe/pre_attackby(atom/A, mob/living/user, params)

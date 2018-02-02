@@ -14,8 +14,6 @@
 			organ = organs[organ]
 			organ = new organ
 			organ.Insert(C)
-			log_admin("[key_name(usr)] has added organ [organ.type] to [key_name(C)]")
-			message_admins("[key_name_admin(usr)] has added organ [organ.type] to [key_name(C)]")
 
 		if("add implant")
 			for(var/path in subtypesof(/obj/item/implant))
@@ -26,8 +24,6 @@
 			organ = organs[organ]
 			organ = new organ
 			organ.implant(C)
-			log_admin("[key_name(usr)] has added implant [organ.type] to [key_name(C)]")
-			message_admins("[key_name_admin(usr)] has added implant [organ.type] to [key_name(C)]")
 
 		if("drop organ/implant", "remove organ/implant")
 			for(var/X in C.internal_organs)
@@ -45,9 +41,6 @@
 			var/obj/item/organ/O
 			var/obj/item/implant/I
 
-			log_admin("[key_name(usr)] has removed [organ.type] from [key_name(C)]")
-			message_admins("[key_name_admin(usr)] has removed [organ.type] from [key_name(C)]")
-
 			if(isorgan(organ))
 				O = organ
 				O.Remove(C)
@@ -62,5 +55,5 @@
 			else if(I) // Put the implant in case.
 				var/obj/item/implantcase/case = new(get_turf(C))
 				case.imp = I
-				I.forceMove(case)
+				I.loc = case
 				case.update_icon()

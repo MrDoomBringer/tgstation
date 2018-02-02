@@ -13,30 +13,6 @@
 	var/heater_coefficient = 0.1
 	var/on = FALSE
 
-/obj/machinery/chem_heater/Destroy()
-	QDEL_NULL(beaker)
-	return ..()
-
-/obj/machinery/chem_heater/handle_atom_del(atom/A)
-	. = ..()
-	if(A == beaker)
-		beaker = null
-		update_icon()
-
-/obj/machinery/chem_heater/update_icon()
-	if(beaker)
-		icon_state = "mixer1b"
-	else
-		icon_state = "mixer0b"
-
-/obj/machinery/chem_heater/proc/eject_beaker(mob/user)
-	if(beaker)
-		beaker.forceMove(drop_location())
-		if(Adjacent(user) && !issilicon(user))
-			user.put_in_hands(beaker)
-		beaker = null
-		update_icon()
-
 /obj/machinery/chem_heater/RefreshParts()
 	heater_coefficient = 0.1
 	for(var/obj/item/stock_parts/micro_laser/M in component_parts)
@@ -66,7 +42,7 @@
 	if(default_deconstruction_crowbar(I))
 		return
 
-	if(istype(I, /obj/item/reagent_containers) && !(I.flags_1 & ABSTRACT_1) && I.is_open_container())
+	if(istype(I, /obj/item/reagent_containers) && (I.container_type & OPENCONTAINER_1))
 		. = 1 //no afterattack
 		if(beaker)
 			to_chat(user, "<span class='warning'>A container is already loaded into [src]!</span>")
@@ -76,13 +52,12 @@
 			return
 		beaker = I
 		to_chat(user, "<span class='notice'>You add [I] to [src].</span>")
-		update_icon()
+		icon_state = "mixer1b"
 		return
 	return ..()
 
 /obj/machinery/chem_heater/on_deconstruction()
 	eject_beaker()
-	return ..()
 
 /obj/machinery/chem_heater/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, \
 										datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
@@ -128,8 +103,15 @@
 				target = text2num(target)
 				. = TRUE
 			if(.)
-				target_temperature = CLAMP(target, 0, 1000)
+				target_temperature = Clamp(target, 0, 1000)
 		if("eject")
 			on = FALSE
-			eject_beaker(usr)
+			eject_beaker()
 			. = TRUE
+
+/obj/machinery/chem_heater/proc/eject_beaker()
+	if(beaker)
+		beaker.forceMove(drop_location())
+		beaker.reagents.handle_reactions()
+		beaker = null
+		icon_state = "mixer0b"

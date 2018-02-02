@@ -12,7 +12,6 @@
 		new /obj/item/storage/backpack/satchel/cap(src)
 	new /obj/item/clothing/neck/cloak/cap(src)
 	new /obj/item/clothing/neck/petcollar(src)
-	new /obj/item/pet_carrier(src)
 	new /obj/item/storage/backpack/duffelbag/captain(src)
 	new /obj/item/clothing/head/crown/fancy(src)
 	new /obj/item/clothing/suit/captunic(src)
@@ -54,7 +53,6 @@
 	new /obj/item/restraints/handcuffs/cable/zipties(src)
 	new /obj/item/gun/energy/e_gun(src)
 	new /obj/item/clothing/neck/petcollar(src)
-	new /obj/item/pet_carrier(src)
 	new /obj/item/door_remote/civillian(src)
 	new /obj/item/circuitboard/machine/protolathe/department/service(src)
 

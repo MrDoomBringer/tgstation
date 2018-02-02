@@ -5,8 +5,7 @@
 	icon_state = null
 	lefthand_file = 'icons/mob/inhands/misc/food_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/food_righthand.dmi'
-	obj_flags = UNIQUE_RENAME
-	grind_results = list() //To let them be ground up to transfer their reagents
+	unique_rename = 1
 	var/bitesize = 2
 	var/bitecount = 0
 	var/trash = null
@@ -94,7 +93,7 @@
 
 				if(!do_mob(user, M))
 					return
-				add_logs(user, M, "fed", reagents.log_list())
+				add_logs(user, M, "fed", reagentlist(src))
 				M.visible_message("<span class='danger'>[user] forces [M] to eat [src].</span>", \
 									"<span class='userdanger'>[user] forces [M] to eat [src].</span>")
 
@@ -277,7 +276,7 @@
 /obj/item/reagent_containers/food/snacks/Destroy()
 	if(contents)
 		for(var/atom/movable/something in contents)
-			something.forceMove(drop_location())
+			something.loc = get_turf(src)
 	return ..()
 
 /obj/item/reagent_containers/food/snacks/attack_animal(mob/M)

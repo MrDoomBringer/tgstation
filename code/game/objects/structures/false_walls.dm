@@ -85,7 +85,7 @@
 
 /obj/structure/falsewall/proc/ChangeToWall(delete = 1)
 	var/turf/T = get_turf(src)
-	T.PlaceOnTop(walltype)
+	T.ChangeTurf(walltype)
 	if(delete)
 		qdel(src)
 	return T
@@ -261,14 +261,14 @@
 	if(exposed_temperature > 300)
 		burnbabyburn()
 
-/obj/structure/falsewall/bananium
+/obj/structure/falsewall/clown
 	name = "bananium wall"
 	desc = "A wall with bananium plating. Honk!"
 	icon = 'icons/turf/walls/bananium_wall.dmi'
 	icon_state = "bananium"
 	mineral = /obj/item/stack/sheet/mineral/bananium
-	walltype = /turf/closed/wall/mineral/bananium
-	canSmoothWith = list(/obj/structure/falsewall/bananium, /turf/closed/wall/mineral/bananium)
+	walltype = /turf/closed/wall/mineral/clown
+	canSmoothWith = list(/obj/structure/falsewall/clown, /turf/closed/wall/mineral/clown)
 
 
 /obj/structure/falsewall/sandstone

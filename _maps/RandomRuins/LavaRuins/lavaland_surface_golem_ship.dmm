@@ -105,6 +105,10 @@
 /obj/machinery/computer/shuttle,
 /turf/open/floor/mineral/titanium/purple,
 /area/ruin/powered/golem_ship)
+"s" = (
+/obj/machinery/bluespace_beacon,
+/turf/open/floor/mineral/titanium/purple,
+/area/ruin/powered/golem_ship)
 "t" = (
 /obj/structure/extinguisher_cabinet{
 	pixel_y = 30
@@ -205,6 +209,14 @@
 /obj/machinery/light/small,
 /turf/open/floor/plating,
 /area/ruin/powered/golem_ship)
+"J" = (
+/obj/machinery/light/small,
+/turf/open/floor/plating,
+/area/ruin/powered/golem_ship)
+"K" = (
+/obj/machinery/light/small,
+/turf/open/floor/plating,
+/area/ruin/powered/golem_ship)
 "L" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -230,7 +242,27 @@
 	},
 /turf/open/floor/mineral/titanium/purple,
 /area/ruin/powered/golem_ship)
+"P" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/open/floor/mineral/titanium/purple,
+/area/ruin/powered/golem_ship)
 "Q" = (
+/obj/machinery/light/small,
+/turf/open/floor/mineral/titanium/purple,
+/area/ruin/powered/golem_ship)
+"R" = (
+/obj/machinery/light/small,
+/turf/open/floor/mineral/titanium/purple,
+/area/ruin/powered/golem_ship)
+"S" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/open/floor/mineral/titanium/purple,
+/area/ruin/powered/golem_ship)
+"T" = (
 /obj/machinery/light/small,
 /turf/open/floor/mineral/titanium/purple,
 /area/ruin/powered/golem_ship)
@@ -245,6 +277,22 @@
 	},
 /turf/open/floor/plating,
 /area/ruin/powered/golem_ship)
+"W" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/open/floor/plating,
+/area/ruin/powered/golem_ship)
+"X" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/open/floor/plating,
+/area/ruin/powered/golem_ship)
+"Y" = (
+/obj/effect/baseturf_helper/lava_land/surface,
+/turf/open/floor/mineral/titanium/purple,
+/area/ruin/powered/golem_ship)
 
 (1,1,1) = {"
 a
@@ -253,10 +301,14 @@ a
 a
 a
 a
+a
+a
 b
 b
 b
 b
+a
+a
 a
 a
 a
@@ -265,6 +317,8 @@ a
 a
 "}
 (2,1,1) = {"
+a
+a
 a
 a
 a
@@ -281,8 +335,12 @@ a
 a
 a
 a
+a
+a
 "}
 (3,1,1) = {"
+a
+a
 a
 a
 a
@@ -299,8 +357,12 @@ b
 a
 a
 a
+a
+a
 "}
 (4,1,1) = {"
+a
+a
 a
 a
 a
@@ -317,11 +379,15 @@ b
 a
 a
 a
+a
+a
 "}
 (5,1,1) = {"
 a
 a
 a
+a
+a
 b
 L
 l
@@ -332,11 +398,15 @@ j
 l
 l
 b
+a
+a
 a
 a
 a
 "}
 (6,1,1) = {"
+a
+a
 b
 b
 b
@@ -353,8 +423,12 @@ b
 b
 b
 b
+a
+a
 "}
 (7,1,1) = {"
+a
+a
 b
 c
 f
@@ -371,8 +445,12 @@ j
 f
 F
 b
+a
+a
 "}
 (8,1,1) = {"
+a
+a
 b
 c
 f
@@ -389,8 +467,12 @@ j
 f
 F
 b
+a
+a
 "}
 (9,1,1) = {"
+a
+a
 b
 c
 I
@@ -407,8 +489,12 @@ b
 V
 F
 b
+a
+a
 "}
 (10,1,1) = {"
+a
+a
 b
 c
 f
@@ -425,8 +511,12 @@ b
 f
 F
 b
+a
+a
 "}
 (11,1,1) = {"
+a
+a
 b
 c
 f
@@ -443,8 +533,12 @@ b
 f
 F
 b
+a
+a
 "}
 (12,1,1) = {"
+a
+a
 b
 c
 I
@@ -461,8 +555,12 @@ b
 V
 F
 b
+a
+a
 "}
 (13,1,1) = {"
+a
+a
 b
 d
 f
@@ -470,7 +568,7 @@ j
 l
 l
 l
-l
+s
 l
 l
 l
@@ -479,8 +577,12 @@ j
 f
 F
 b
+a
+a
 "}
 (14,1,1) = {"
+a
+a
 b
 d
 f
@@ -497,8 +599,12 @@ j
 f
 e
 b
+a
+a
 "}
 (15,1,1) = {"
+a
+a
 b
 d
 f
@@ -506,7 +612,7 @@ b
 l
 l
 l
-l
+Y
 l
 l
 l
@@ -515,8 +621,12 @@ b
 f
 f
 b
+a
+a
 "}
 (16,1,1) = {"
+a
+a
 b
 e
 I
@@ -533,8 +643,12 @@ b
 V
 f
 b
+a
+a
 "}
 (17,1,1) = {"
+a
+a
 b
 f
 f
@@ -551,8 +665,12 @@ b
 f
 f
 b
+a
+a
 "}
 (18,1,1) = {"
+a
+a
 b
 g
 g
@@ -569,8 +687,12 @@ b
 E
 E
 b
+a
+a
 "}
 (19,1,1) = {"
+a
+a
 b
 h
 h
@@ -587,8 +709,12 @@ b
 h
 h
 b
+a
+a
 "}
 (20,1,1) = {"
+a
+a
 b
 i
 i
@@ -605,4 +731,6 @@ b
 i
 i
 b
+a
+a
 "}

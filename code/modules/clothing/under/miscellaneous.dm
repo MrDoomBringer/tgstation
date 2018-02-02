@@ -274,7 +274,6 @@
 	icon_state = "burial"
 	item_state = "burial"
 	item_color = "burial"
-	has_sensor = NO_SENSORS
 
 /obj/item/clothing/under/skirt/black
 	name = "black skirt"

@@ -18,7 +18,7 @@
 		return list("reason"="invalid login data", "desc"="Error: Could not check ban status, Please try again. Error message: Your computer provided an invalid Computer ID.)")
 	var/admin = 0
 	var/ckey = ckey(key)
-	if(GLOB.admin_datums[ckey] || GLOB.deadmins[ckey])
+	if((ckey in GLOB.admin_datums) || (ckey in GLOB.deadmins))
 		admin = 1
 
 	//Whitelist

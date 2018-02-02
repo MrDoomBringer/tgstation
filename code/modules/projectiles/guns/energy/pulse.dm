@@ -20,8 +20,7 @@
 /obj/item/gun/energy/pulse/prize/Initialize()
 	. = ..()
 	GLOB.poi_list += src
-	var/turf/T = get_turf(src)
-	var/msg = "A pulse rifle prize has been created at [ADMIN_COORDJMP(T)]"
+	var/msg = "A pulse rifle prize has been created at [ADMIN_COORDJMP(src)]"
 
 	message_admins(msg)
 	log_game(msg)

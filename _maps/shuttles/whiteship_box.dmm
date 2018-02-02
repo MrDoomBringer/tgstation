@@ -2,6 +2,9 @@
 "aa" = (
 /turf/template_noop,
 /area/template_noop)
+"ab" = (
+/turf/closed/wall/mineral/titanium/overspace,
+/area/shuttle/abandoned)
 "ac" = (
 /turf/closed/wall/mineral/titanium,
 /area/shuttle/abandoned)
@@ -19,10 +22,14 @@
 	name = "NT Medical Ship";
 	port_direction = 8;
 	preferred_direction = 4;
+	roundstart_move = "whiteship_away";
 	timid = 1;
 	width = 35
 	},
 /turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
+"ae" = (
+/turf/closed/wall/mineral/titanium,
 /area/shuttle/abandoned)
 "af" = (
 /obj/machinery/door/airlock/titanium,
@@ -33,6 +40,12 @@
 	dir = 8
 	},
 /turf/open/floor/plating/airless,
+/area/shuttle/abandoned)
+"ah" = (
+/turf/closed/wall/mineral/titanium,
+/area/shuttle/abandoned)
+"ai" = (
+/turf/closed/wall/mineral/titanium,
 /area/shuttle/abandoned)
 "aj" = (
 /turf/open/floor/mineral/titanium,
@@ -49,6 +62,9 @@
 	dir = 1
 	},
 /turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
+"am" = (
+/turf/closed/wall/mineral/titanium,
 /area/shuttle/abandoned)
 "an" = (
 /obj/structure/shuttle/engine/propulsion{
@@ -68,6 +84,9 @@
 "ap" = (
 /turf/closed/wall/mineral/titanium/interior,
 /area/shuttle/abandoned)
+"aq" = (
+/turf/closed/wall/mineral/titanium,
+/area/shuttle/abandoned)
 "ar" = (
 /obj/machinery/computer/pod{
 	dir = 8;
@@ -75,8 +94,14 @@
 	},
 /turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
+"as" = (
+/turf/closed/wall/mineral/titanium,
+/area/shuttle/abandoned)
 "at" = (
 /turf/open/floor/plating,
+/area/shuttle/abandoned)
+"au" = (
+/turf/closed/wall/mineral/titanium,
 /area/shuttle/abandoned)
 "av" = (
 /obj/structure/rack,
@@ -85,7 +110,7 @@
 /turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
 "aw" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/plating,
 /area/shuttle/abandoned)
 "ax" = (
@@ -103,11 +128,20 @@
 	},
 /turf/open/floor/plating,
 /area/shuttle/abandoned)
+"az" = (
+/turf/closed/wall/mineral/titanium,
+/area/shuttle/abandoned)
+"aA" = (
+/turf/closed/wall/mineral/titanium,
+/area/shuttle/abandoned)
 "aB" = (
 /obj/structure/shuttle/engine/propulsion/right{
 	dir = 8
 	},
 /turf/open/floor/plating/airless,
+/area/shuttle/abandoned)
+"aC" = (
+/turf/closed/wall/mineral/titanium,
 /area/shuttle/abandoned)
 "aD" = (
 /obj/machinery/door/airlock/titanium,
@@ -119,6 +153,9 @@
 	maxcharge = 15000
 	},
 /turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
+"aF" = (
+/turf/closed/wall/mineral/titanium,
 /area/shuttle/abandoned)
 "aG" = (
 /obj/structure/rack,
@@ -137,6 +174,9 @@
 /obj/structure/light_construct,
 /turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
+"aI" = (
+/turf/closed/wall/mineral/titanium,
+/area/shuttle/abandoned)
 "aJ" = (
 /obj/structure/chair{
 	dir = 1
@@ -152,6 +192,10 @@
 "aL" = (
 /obj/effect/spawner/structure/window/shuttle,
 /turf/open/floor/plating,
+/area/shuttle/abandoned)
+"aM" = (
+/obj/effect/spawner/structure/window/reinforced,
+/turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
 "aN" = (
 /obj/machinery/door/window,
@@ -176,7 +220,7 @@
 /turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
 "aR" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
 "aS" = (
@@ -200,6 +244,13 @@
 /obj/structure/table,
 /obj/item/tank/internals/oxygen,
 /turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
+"aW" = (
+/obj/machinery/door/airlock/titanium,
+/turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
+"aX" = (
+/turf/closed/wall/mineral/titanium/interior,
 /area/shuttle/abandoned)
 "aY" = (
 /obj/structure/bed,
@@ -234,6 +285,10 @@
 /area/shuttle/abandoned)
 "bd" = (
 /obj/structure/chair,
+/turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
+"be" = (
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
 "bf" = (
@@ -297,9 +352,23 @@
 	},
 /turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
+"bp" = (
+/obj/structure/light_construct,
+/turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
 "bq" = (
 /obj/structure/light_construct/small{
 	dir = 8
+	},
+/turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
+"br" = (
+/obj/structure/light_construct,
+/turf/open/floor/mineral/titanium,
+/area/shuttle/abandoned)
+"bs" = (
+/obj/structure/light_construct{
+	dir = 1
 	},
 /turf/open/floor/mineral/titanium,
 /area/shuttle/abandoned)
@@ -325,11 +394,11 @@ aa
 aa
 aa
 aa
-ac
-ac
-af
-ac
-ac
+aC
+aC
+aW
+aC
+aC
 aa
 aa
 aa
@@ -349,11 +418,11 @@ aa
 aa
 aa
 aa
-ac
-ap
+aC
+aX
 aj
-ap
-ac
+aX
+aC
 aa
 aa
 aa
@@ -373,11 +442,11 @@ aa
 aa
 aa
 aa
-ac
+aC
 aj
 aj
 aj
-ac
+aC
 aa
 aa
 aa
@@ -397,11 +466,11 @@ aa
 aa
 aa
 aa
-ac
+aC
 aj
 aj
 aj
-ac
+aC
 aa
 aa
 aa
@@ -421,11 +490,11 @@ aa
 aa
 aa
 aa
-ac
+aC
 aj
 aj
 aj
-ac
+aC
 aa
 aa
 aa
@@ -445,11 +514,11 @@ aa
 aa
 aa
 aa
-ac
+aC
 aj
 aj
 bk
-ac
+aC
 aa
 aa
 aa
@@ -469,11 +538,11 @@ aa
 aa
 aa
 aa
-ac
+aC
 aj
 aj
 aj
-ac
+aC
 aa
 aa
 aa
@@ -493,11 +562,11 @@ aa
 aa
 aa
 aa
-ac
+aC
 aj
 aj
 aj
-ac
+aC
 aa
 aa
 aa
@@ -517,11 +586,11 @@ aa
 aa
 aa
 aa
-ac
+aC
 aj
 aj
 aU
-ac
+aC
 aa
 aa
 aa
@@ -541,11 +610,11 @@ aa
 aa
 aa
 aa
-ac
-ap
+aC
+aX
 aj
-ap
-ac
+aX
+aC
 aa
 aa
 aa
@@ -565,11 +634,11 @@ aa
 aa
 aa
 aa
-ac
-ac
-af
-ac
-ac
+aC
+aC
+aW
+aC
+aC
 aa
 aa
 aa
@@ -590,9 +659,9 @@ aa
 aa
 aa
 aa
-ac
+aC
 aj
-ac
+aC
 aa
 aa
 aa
@@ -613,11 +682,11 @@ aa
 aa
 aa
 aa
-ac
-ac
-af
-ac
-ac
+aC
+aC
+aW
+aC
+aC
 aa
 aa
 aa
@@ -636,13 +705,13 @@ aa
 aa
 aa
 aa
-ac
-ac
-ap
+aC
+aC
+aX
 aj
-ap
-ac
-ac
+aX
+aC
+aC
 aa
 aa
 aa
@@ -653,85 +722,85 @@ aa
 aa
 "}
 (15,1,1) = {"
-ac
+aC
 ag
 an
 an
 an
 aB
 aa
-ac
-ap
+aC
+aX
 aj
 aj
 aj
-ap
-ac
+aX
+aC
 aa
 ag
 an
 an
 an
 aB
-ac
+aC
 aa
 "}
 (16,1,1) = {"
-ac
-ac
+aC
+aC
 ao
 ao
 ao
-ac
-ac
-ac
+aC
+aC
+aC
 bl
 aj
 aj
 aj
 bk
-ac
-ac
-ac
+aC
+aC
+aC
 ao
 ao
 ao
-ac
-ac
+aC
+aC
 aa
 "}
 (17,1,1) = {"
 aa
-ac
+aC
 ap
 at
 at
 ap
-ac
-ap
+aC
+aX
 aj
 aj
 aj
 aj
 aj
-ap
-ac
+aX
+aC
 ap
 at
 at
 ap
-ac
+aC
 aa
 aa
 "}
 (18,1,1) = {"
 aa
 aa
-ac
+aC
 ap
 at
 bi
-ac
+aC
 aj
 aj
 aj
@@ -739,11 +808,11 @@ aj
 aj
 aj
 ba
-ac
+aC
 bt
 at
 ap
-ac
+aC
 aa
 aa
 aa
@@ -752,21 +821,21 @@ aa
 aa
 aa
 aa
-ac
-ac
+aC
+aC
 aD
-ac
-ac
-ac
+aC
+aC
+aC
 aL
-aR
+be
 aL
-ac
-ac
-ac
+aC
+aC
+aC
 aD
-ac
-ac
+aC
+aC
 aa
 aa
 aa
@@ -776,8 +845,8 @@ aa
 aa
 aa
 aa
-ac
-ac
+aC
+aC
 aj
 aj
 aj
@@ -789,8 +858,8 @@ aj
 aj
 aj
 aj
-ac
-ac
+aC
+aC
 aa
 aa
 aa
@@ -799,9 +868,9 @@ aa
 (21,1,1) = {"
 aa
 aa
-ac
-ac
-ap
+aC
+aC
+aX
 aE
 aj
 aj
@@ -813,58 +882,58 @@ aj
 aj
 aj
 aj
-ac
-ac
-ac
+aC
+aC
+aC
 aa
 aa
 aa
 "}
 (22,1,1) = {"
 aa
-ac
-ac
-ap
+aC
+aC
+aX
 aj
 aj
 aj
 aj
-ac
-ac
-ac
-ac
-ac
-ac
+aC
+aC
+aC
+aC
+aC
+aC
 aj
 aj
-ac
-ac
-ac
-ac
+aC
+aC
+aC
+aC
 aa
 aa
 "}
 (23,1,1) = {"
-ac
-ac
-ac
-ac
-ac
-ac
-ap
+aC
+aC
+aC
+aC
+aC
+aC
+aX
 aj
-ac
+aC
 aN
 aj
 bq
 aj
-af
+aW
 aj
 aj
-af
+aW
 aj
-ap
-ac
+aX
+aC
 aa
 aa
 "}
@@ -874,80 +943,80 @@ aj
 aj
 av
 av
-ap
-ac
+aX
+aC
 bk
-ac
+aC
 aO
 aj
 aV
 aY
-ac
+aC
 bl
 aj
-ac
+aC
 aj
 bg
-ac
-ac
+aC
+aC
 aa
 "}
 (25,1,1) = {"
-ac
+aC
 aj
 aj
 aj
 aj
 aG
-ac
+aC
 aj
-af
+aW
 aj
 bn
 aj
 aZ
-ac
+aC
 aj
 aj
-ac
+aC
 aj
 aj
-ap
-ac
+aX
+aC
 aa
 "}
 (26,1,1) = {"
-ac
+aC
 ak
 aj
 aj
 aj
 aj
-ac
+aC
 aj
-ac
-ac
-ac
-ac
-ac
-ac
+aC
+aC
+aC
+aC
+aC
+aC
 aj
 aE
 aL
 bf
 aj
 aj
-ac
+aC
 aa
 "}
 (27,1,1) = {"
-ac
+aC
 al
 aj
 aj
 aj
 aj
-af
+aW
 aj
 aj
 aj
@@ -961,18 +1030,18 @@ aL
 aj
 aj
 bh
-ac
+aC
 aa
 "}
 (28,1,1) = {"
-ac
+aC
 aj
 aj
 aj
 aj
 aj
-ac
-ap
+aC
+aX
 aj
 aj
 aj
@@ -985,41 +1054,41 @@ aL
 aj
 aj
 aj
-ac
+aC
 aa
 "}
 (29,1,1) = {"
-ac
+aC
 aj
 aj
 aj
 aj
-ap
-ac
-ac
-ac
+aX
+aC
+aC
+aC
 aL
-aR
+be
 aL
-ac
-ac
-ac
-ac
-ac
+aC
+aC
+aC
+aC
+aC
 aj
 aj
 aj
-ac
+aC
 aa
 "}
 (30,1,1) = {"
-ac
+aC
 aj
 aj
 aj
-ap
-ac
-ap
+aX
+aC
+aX
 aj
 aj
 aj
@@ -1029,20 +1098,20 @@ aj
 aP
 aP
 aP
-ac
+aC
 aj
 aj
-ap
-ac
+aX
+aC
 aa
 "}
 (31,1,1) = {"
-af
+aW
 aj
 ar
 aj
-ac
-ap
+aC
+aX
 aj
 aj
 aj
@@ -1053,19 +1122,19 @@ aj
 aj
 aj
 aj
-ap
-ap
+aX
+aX
 bb
-ac
+aC
 aa
 aa
 "}
 (32,1,1) = {"
-ac
-ac
-ac
+aC
+aC
+aC
 aw
-ac
+aC
 bj
 aJ
 aj
@@ -1078,18 +1147,18 @@ aj
 aj
 bd
 aH
-ac
-ac
-ac
+aC
+aC
+aC
 aa
 aa
 "}
 (33,1,1) = {"
 aa
 aa
-ac
+aC
 ax
-ac
+aC
 bu
 aJ
 aj
@@ -1101,9 +1170,9 @@ aj
 aj
 aj
 aj
-ap
-ac
-ac
+aX
+aC
+aC
 aa
 aa
 aa
@@ -1111,10 +1180,10 @@ aa
 (34,1,1) = {"
 aa
 aa
-ac
+aC
 ay
-ac
-ap
+aC
+aX
 aK
 aj
 aj
@@ -1124,9 +1193,9 @@ aP
 aj
 aj
 aj
-ap
-ac
-ac
+aX
+aC
+aC
 aa
 aa
 aa
@@ -1137,9 +1206,9 @@ aa
 aa
 aa
 aa
-ac
-ac
-ac
+aC
+aC
+aC
 aL
 aL
 aL
@@ -1147,9 +1216,9 @@ aL
 aL
 aL
 aL
-ac
-ac
-ac
+aC
+aC
+aC
 aa
 aa
 aa

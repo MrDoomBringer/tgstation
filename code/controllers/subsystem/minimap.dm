@@ -5,10 +5,9 @@ SUBSYSTEM_DEF(minimap)
 	var/const/MINIMAP_SIZE = 2048
 	var/const/TILE_SIZE = 8
 
-	var/list/z_levels
+	var/list/z_levels = list(ZLEVEL_STATION_PRIMARY)
 
 /datum/controller/subsystem/minimap/Initialize(timeofday)
-	z_levels = SSmapping.levels_by_trait(ZTRAIT_STATION)
 	var/hash = md5(SSmapping.config.GetFullMapPath())
 	if(CONFIG_GET(flag/generate_minimaps))
 		if(hash == trim(file2text(hash_path())))
@@ -62,7 +61,7 @@ SUBSYSTEM_DEF(minimap)
 	for(var/z in z_levels)
 		send_asset(client, "minimap_[z].png")
 
-/datum/controller/subsystem/minimap/proc/generate(z, x1 = 1, y1 = 1, x2 = world.maxx, y2 = world.maxy)
+/datum/controller/subsystem/minimap/proc/generate(z = 1, x1 = 1, y1 = 1, x2 = world.maxx, y2 = world.maxy)
 	// Load the background.
 	var/icon/minimap = new /icon('icons/minimap.dmi')
 	// Scale it up to our target size.

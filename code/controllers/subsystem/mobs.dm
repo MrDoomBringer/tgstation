@@ -1,21 +1,14 @@
 SUBSYSTEM_DEF(mobs)
 	name = "Mobs"
-	priority = FIRE_PRIORITY_MOBS
-	flags = SS_KEEP_TIMING | SS_NO_INIT
+	priority = 100
+	flags = SS_KEEP_TIMING|SS_NO_INIT
 	runlevels = RUNLEVEL_GAME | RUNLEVEL_POSTGAME
 
 	var/list/currentrun = list()
-	var/static/list/clients_by_zlevel[][]
 
 /datum/controller/subsystem/mobs/stat_entry()
 	..("P:[GLOB.mob_living_list.len]")
 
-/datum/controller/subsystem/mobs/proc/MaxZChanged()
-	if (!islist(clients_by_zlevel))
-		clients_by_zlevel = new /list(world.maxz,0)
-	while (clients_by_zlevel.len < world.maxz)
-		clients_by_zlevel.len++
-		clients_by_zlevel[clients_by_zlevel.len] = list()
 
 /datum/controller/subsystem/mobs/fire(resumed = 0)
 	var/seconds = wait * 0.1

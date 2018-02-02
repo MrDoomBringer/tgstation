@@ -162,6 +162,7 @@
 /turf/open/floor/plating/asteroid/airless,
 /area/ruin/unpowered/no_grav)
 "I" = (
+/turf/open/space,
 /obj/effect/turf_decal/sand,
 /turf/open/floor/plasteel/airless/asteroid,
 /area/ruin/unpowered/no_grav)
@@ -184,6 +185,10 @@
 /obj/effect/overlay/palmtree_r,
 /turf/open/floor/plating/asteroid/airless,
 /area/ruin/unpowered/no_grav)
+"N" = (
+/obj/effect/turf_decal/sand,
+/turf/open/floor/plasteel/airless/asteroid,
+/area/ruin/unpowered/no_grav)
 "O" = (
 /obj/structure/chair/comfy/black{
 	dir = 8
@@ -197,7 +202,19 @@
 /obj/machinery/light/small,
 /turf/open/floor/plasteel/vaporwave,
 /area/ruin/space/has_grav/powered/aesthetic)
+"Q" = (
+/obj/machinery/light/small,
+/turf/open/floor/plasteel/vaporwave,
+/area/ruin/space/has_grav/powered/aesthetic)
 "R" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/open/floor/plating/astplate{
+	initial_gas_mix = "TEMP=2.7"
+	},
+/area/ruin/unpowered/no_grav)
+"S" = (
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -356,7 +373,7 @@ k
 f
 D
 J
-I
+N
 d
 "}
 (10,1,1) = {"
@@ -374,7 +391,7 @@ z
 E
 K
 E
-I
+N
 "}
 (11,1,1) = {"
 a
@@ -391,7 +408,7 @@ f
 D
 L
 E
-I
+N
 "}
 (12,1,1) = {"
 a

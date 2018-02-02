@@ -13,8 +13,6 @@
  * Parent class for morgue and crematorium
  * For overriding only
  */
-GLOBAL_LIST_EMPTY(bodycontainers) //Let them act as spawnpoints for revenants and other ghosties.
-
 /obj/structure/bodycontainer
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "morgue1"
@@ -24,16 +22,11 @@ GLOBAL_LIST_EMPTY(bodycontainers) //Let them act as spawnpoints for revenants an
 
 	var/obj/structure/tray/connected = null
 	var/locked = FALSE
-	dir = SOUTH
+	var/opendir = SOUTH
 	var/message_cooldown
 	var/breakout_time = 600
 
-/obj/structure/bodycontainer/Initialize()
-	. = ..()
-	GLOB.bodycontainers += src
-
 /obj/structure/bodycontainer/Destroy()
-	GLOB.bodycontainers -= src
 	open()
 	if(connected)
 		qdel(connected)
@@ -115,15 +108,12 @@ GLOBAL_LIST_EMPTY(bodycontainers) //Let them act as spawnpoints for revenants an
 
 /obj/structure/bodycontainer/proc/open()
 	playsound(src.loc, 'sound/items/deconstruct.ogg', 50, 1)
-	playsound(src, 'sound/effects/roll.ogg', 5, 1)
-	var/turf/T = get_step(src, dir)
-	connected.dir=dir
+	var/turf/T = get_step(src, opendir)
 	for(var/atom/movable/AM in src)
 		AM.forceMove(T)
 	update_icon()
 
 /obj/structure/bodycontainer/proc/close()
-	playsound(src, 'sound/effects/roll.ogg', 5, 1)
 	playsound(src.loc, 'sound/items/deconstruct.ogg', 50, 1)
 	for(var/atom/movable/AM in connected.loc)
 		if(!AM.anchored || AM == connected)
@@ -140,7 +130,7 @@ GLOBAL_LIST_EMPTY(bodycontainers) //Let them act as spawnpoints for revenants an
 	name = "morgue"
 	desc = "Used to keep bodies in until someone fetches them."
 	icon_state = "morgue1"
-	dir = EAST
+	opendir = EAST
 
 /obj/structure/bodycontainer/morgue/New()
 	connected = new/obj/structure/tray/m_tray(src)
@@ -159,13 +149,10 @@ GLOBAL_LIST_EMPTY(bodycontainers) //Let them act as spawnpoints for revenants an
 			if(!length(compiled)) // No mobs?
 				icon_state = "morgue3"
 				return
-
 			for(var/mob/living/M in compiled)
-				var/mob/living/mob_occupant = get_mob_or_brainmob(M)
-				if(!mob_occupant.suiciding && !(mob_occupant.has_trait(TRAIT_NOCLONE)) && !mob_occupant.hellbound)
+				if(M.client && !M.suiciding)
 					icon_state = "morgue4" // Cloneable
 					break
-
 
 /obj/item/paper/guides/jobs/medical/morgue
 	name = "morgue memo"
@@ -179,7 +166,7 @@ GLOBAL_LIST_EMPTY(crematoriums)
 	name = "crematorium"
 	desc = "A human incinerator. Works well on barbeque nights."
 	icon_state = "crema1"
-	dir = SOUTH
+	opendir = SOUTH
 	var/id = 1
 
 /obj/structure/bodycontainer/crematorium/attack_robot(mob/user) //Borgs can't use crematoriums without help
@@ -241,18 +228,12 @@ GLOBAL_LIST_EMPTY(crematoriums)
 				M.ghostize()
 				qdel(M)
 
-		var/ash_check = FALSE
-		for(var/obj/O in conts) //conts defined above, ignores crematorium and tray
-			if(istype(O,/obj/effect/decal/cleanable/ash)) ash_check = TRUE//creates the illusion of ash piling up
-			qdel(O)
+		for(var/obj/O in conts) //obj instead of obj/item so that bodybags and ashes get destroyed. We dont want tons and tons of ash piling up
+			if(O != connected) //Creamtorium does not burn hot enough to destroy the tray
+				qdel(O)
 
-		var/obj/effect/decal/cleanable/ash/a
-		if(ash_check) a=new/obj/effect/decal/cleanable/ash/large(src)//cont. illusion of more ash
-		else a=new/obj/effect/decal/cleanable/ash(src)
-		a.layer = connected.layer//Makes the ash the same layer as the tray.
-
+		new /obj/effect/decal/cleanable/ash(src)
 		sleep(30)
-
 		if(!QDELETED(src))
 			locked = FALSE
 			update_icon()
@@ -320,7 +301,7 @@ GLOBAL_LIST_EMPTY(crematoriums)
 			return
 	if(!ismob(user) || user.lying || user.incapacitated())
 		return
-	O.forceMove(src.loc)
+	O.loc = src.loc
 	if (user != O)
 		visible_message("<span class='warning'>[user] stuffs [O] into [src].</span>")
 	return

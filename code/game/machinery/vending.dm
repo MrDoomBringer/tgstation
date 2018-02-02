@@ -139,7 +139,7 @@
 		if(isnull(amount))
 			amount = 0
 
-		var/atom/temp = typepath
+		var/atom/temp = new typepath(null)
 		var/datum/data/vending_product/R = new /datum/data/vending_product()
 		R.product_name = initial(temp.name)
 		R.product_path = typepath
@@ -175,7 +175,7 @@
 		for(var/datum/data/vending_product/machine_content in machine)
 			if(refill.charges[charge_type] == 0)
 				break
-			var/restock = CEILING(((machine_content.max_amount - machine_content.amount)/to_restock)*tmp_charges, 1)
+			var/restock = Ceiling(((machine_content.max_amount - machine_content.amount)/to_restock)*tmp_charges)
 			if(restock > refill.charges[charge_type])
 				restock = refill.charges[charge_type]
 			machine_content.amount += restock
@@ -224,7 +224,7 @@
 
 /obj/machinery/vending/snack/proc/compartment_access_check(user)
 	req_access_txt = chef_compartment_access
-	if(!allowed(user) && !(obj_flags & EMAGGED) && scan_id)
+	if(!allowed(user) && !emagged && scan_id)
 		to_chat(user, "<span class='warning'>[src]'s chef compartment blinks red: Access denied.</span>")
 		req_access_txt = "0"
 		return 0
@@ -342,9 +342,9 @@
 	..()
 
 /obj/machinery/vending/emag_act(mob/user)
-	if(obj_flags & EMAGGED)
+	if(emagged)
 		return
-	obj_flags |= EMAGGED
+	emagged = TRUE
 	to_chat(user, "<span class='notice'>You short out the product lock on [src].</span>")
 
 /obj/machinery/vending/attack_ai(mob/user)
@@ -455,7 +455,7 @@
 			to_chat(usr, "<span class='notice'>The vending machine cannot dispense products while its service panel is open!</span>")
 			return
 
-		if((!allowed(usr)) && !(obj_flags & EMAGGED) && scan_id)	//For SECURE VENDING MACHINES YEAH
+		if((!allowed(usr)) && !emagged && scan_id)	//For SECURE VENDING MACHINES YEAH
 			to_chat(usr, "<span class='warning'>Access denied.</span>"	)
 			flick(icon_deny,src)
 			return
@@ -639,8 +639,7 @@ IF YOU MODIFY THE PRODUCTS LIST OF A MACHINE, MAKE SURE TO UPDATE ITS RESUPPLY C
 					/obj/item/reagent_containers/food/drinks/bottle/cream = 4, /obj/item/reagent_containers/food/drinks/soda_cans/tonic = 8,
 					/obj/item/reagent_containers/food/drinks/soda_cans/cola = 8, /obj/item/reagent_containers/food/drinks/soda_cans/sodawater = 15,
 					/obj/item/reagent_containers/food/drinks/drinkingglass = 30, /obj/item/reagent_containers/food/drinks/ice = 10,
-					/obj/item/reagent_containers/food/drinks/drinkingglass/shotglass = 12, /obj/item/reagent_containers/food/drinks/flask = 3,
-					/obj/item/reagent_containers/food/drinks/beer = 6)
+					/obj/item/reagent_containers/food/drinks/drinkingglass/shotglass = 12, /obj/item/reagent_containers/food/drinks/flask = 3)
 	contraband = list(/obj/item/reagent_containers/food/drinks/mug/tea = 12)
 	product_slogans = "I hope nobody asks me for a bloody cup o' tea...;Alcohol is humanity's friend. Would you abandon a friend?;Quite delighted to serve you!;Is nobody thirsty on this station?"
 	product_ads = "Drink up!;Booze is good for you!;Alcohol is humanity's best friend.;Quite delighted to serve you!;Care for a nice, cold beer?;Nothing cures you like booze!;Have a sip!;Have a drink!;Have a beer!;Beer is good for you!;Only the finest alcohol!;Best quality booze since 2053!;Award-winning wine!;Maximum alcohol!;Man loves beer.;A toast for progress!"
@@ -684,10 +683,10 @@ IF YOU MODIFY THE PRODUCTS LIST OF A MACHINE, MAKE SURE TO UPDATE ITS RESUPPLY C
 	desc = "Uh oh!"
 
 /obj/machinery/vending/snack/random/Initialize()
-	..()
-	var/T = pick(subtypesof(/obj/machinery/vending/snack) - /obj/machinery/vending/snack/random)
-	new T(loc)
-	return INITIALIZE_HINT_QDEL
+    ..()
+    var/T = pick(subtypesof(/obj/machinery/vending/snack) - /obj/machinery/vending/snack/random)
+    new T(get_turf(src))
+    return INITIALIZE_HINT_QDEL
 
 /obj/machinery/vending/snack/blue
 	icon_state = "snackblue"
@@ -737,10 +736,10 @@ IF YOU MODIFY THE PRODUCTS LIST OF A MACHINE, MAKE SURE TO UPDATE ITS RESUPPLY C
 	desc = "Uh oh!"
 
 /obj/machinery/vending/cola/random/Initialize()
-	..()
-	var/T = pick(subtypesof(/obj/machinery/vending/cola) - /obj/machinery/vending/cola/random)
-	new T(loc)
-	return INITIALIZE_HINT_QDEL
+    . = ..()
+    var/T = pick(subtypesof(/obj/machinery/vending/cola) - /obj/machinery/vending/cola/random)
+    new T(get_turf(src))
+    return INITIALIZE_HINT_QDEL
 
 /obj/machinery/vending/cola/blue
 	icon_state = "Cola_Machine"
@@ -1184,14 +1183,9 @@ IF YOU MODIFY THE PRODUCTS LIST OF A MACHINE, MAKE SURE TO UPDATE ITS RESUPPLY C
 	products = list(
 		/obj/item/toy/cards/deck = 5,
 		/obj/item/storage/pill_bottle/dice = 10,
-		/obj/item/toy/cards/deck/cas = 3,
-		/obj/item/toy/cards/deck/cas/black = 3)
-	contraband = list(/obj/item/dice/fudge = 9)
-	refill_canister = /obj/item/vending_refill/games
-
-
-/obj/machinery/vending/onTransitZ()
-	return
+		/obj/item/toy/cards/deck/cas = 2,
+		/obj/item/toy/cards/deck/cas/black = 2)
+	contraband = list(/obj/item/dice/fudge = 10)
 
 #undef STANDARD_CHARGE
 #undef CONTRABAND_CHARGE

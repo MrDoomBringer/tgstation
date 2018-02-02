@@ -5,6 +5,7 @@
 
 /mob/living/carbon/monkey/Life()
 	set invisibility = 0
+	set background = BACKGROUND_ENABLED
 
 	if (notransform)
 		return
@@ -43,7 +44,7 @@
 	return ..()
 
 /mob/living/carbon/monkey/handle_breath_temperature(datum/gas_mixture/breath)
-	if(abs(BODYTEMP_NORMAL - breath.temperature) > 50)
+	if(abs(310.15 - breath.temperature) > 50)
 		switch(breath.temperature)
 			if(-INFINITY to 120)
 				adjustFireLoss(3)
@@ -65,14 +66,13 @@
 	var/loc_temp = get_temperature(environment)
 
 	if(stat != DEAD)
-		bodytemperature += natural_bodytemperature_stabilization()
+		natural_bodytemperature_stabilization()
 
 	if(!on_fire) //If you're on fire, you do not heat up or cool down based on surrounding gases
 		if(loc_temp < bodytemperature)
-			bodytemperature += max((loc_temp - bodytemperature) / BODYTEMP_COLD_DIVISOR, BODYTEMP_COOLING_MAX)
+			bodytemperature += min(((loc_temp - bodytemperature) / BODYTEMP_COLD_DIVISOR), BODYTEMP_COOLING_MAX)
 		else
-			bodytemperature += min((loc_temp - bodytemperature) / BODYTEMP_HEAT_DIVISOR, BODYTEMP_HEATING_MAX)
-
+			bodytemperature += min(((loc_temp - bodytemperature) / BODYTEMP_HEAT_DIVISOR), BODYTEMP_HEATING_MAX)
 
 	if(bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT)
 		switch(bodytemperature)

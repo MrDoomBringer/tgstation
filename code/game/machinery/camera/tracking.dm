@@ -1,4 +1,10 @@
 /mob/living/silicon/ai/proc/get_camera_list()
+
+	track.cameras.Cut()
+
+	if(src.stat == DEAD)
+		return
+
 	var/list/L = list()
 	for (var/obj/machinery/camera/C in GLOB.cameranet.cameras)
 		L.Add(C)
@@ -12,18 +18,25 @@
 		if (tempnetwork.len)
 			T[text("[][]", C.c_tag, (C.can_use() ? null : " (Deactivated)"))] = C
 
+	track.cameras = T
 	return T
 
-/mob/living/silicon/ai/proc/show_camera_list()
-	var/list/cameras = get_camera_list()
-	var/camera = input(src, "Choose which camera you want to view", "Cameras") as null|anything in cameras
-	switchCamera(cameras[camera])
+
+/mob/living/silicon/ai/proc/ai_camera_list(camera)
+	if (!camera)
+		return 0
+
+	var/obj/machinery/camera/C = track.cameras[camera]
+	src.eyeobj.setLoc(C)
+
+	return
 
 /datum/trackable
 	var/list/names = list()
 	var/list/namecounts = list()
 	var/list/humans = list()
 	var/list/others = list()
+	var/list/cameras = list()
 
 /mob/living/silicon/ai/proc/trackable_mobs()
 
@@ -130,9 +143,13 @@
 /obj/machinery/camera/attack_ai(mob/living/silicon/ai/user)
 	if (!istype(user))
 		return
-	if (!can_use())
+	if (!src.can_use())
 		return
-	user.switchCamera(src)
+	user.eyeobj.setLoc(get_turf(src))
+
+
+/mob/living/silicon/ai/attack_ai(mob/user)
+	ai_camera_list()
 
 /proc/camera_sort(list/L)
 	var/obj/machinery/camera/a

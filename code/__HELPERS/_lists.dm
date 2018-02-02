@@ -9,16 +9,6 @@
  * Misc
  */
 
-#define LAZYINITLIST(L) if (!L) L = list()
-#define UNSETEMPTY(L) if (L && !L.len) L = null
-#define LAZYREMOVE(L, I) if(L) { L -= I; if(!L.len) { L = null; } }
-#define LAZYADD(L, I) if(!L) { L = list(); } L += I;
-#define LAZYACCESS(L, I) (L ? (isnum(I) ? (I > 0 && I <= L.len ? L[I] : null) : L[I]) : null)
-#define LAZYSET(L, K, V) if(!L) { L = list(); } L[K] = V;
-#define LAZYLEN(L) length(L)
-#define LAZYCLEARLIST(L) if(L) L.Cut()
-#define SANITIZE_LIST(L) ( islist(L) ? L : list() )
-
 //Returns a list in plain english as a string
 /proc/english_list(list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
 	var/total = input.len
@@ -42,9 +32,9 @@
 
 //Returns list element or null. Should prevent "index out of bounds" error.
 /proc/listgetindex(list/L, index)
-	if(LAZYLEN(L))
-		if(isnum(index) && ISINTEGER(index))
-			if(ISINRANGE(index,1,L.len))
+	if(istype(L))
+		if(isnum(index) && IsInteger(index))
+			if(IsInRange(index,1,L.len))
 				return L[index]
 		else if(index in L)
 			return L[index]
@@ -52,7 +42,7 @@
 
 //Return either pick(list) or null if list is not of type /list or is empty
 /proc/safepick(list/L)
-	if(LAZYLEN(L))
+	if(istype(L) && L.len)
 		return pick(L)
 
 //Checks if the list is empty
@@ -63,7 +53,7 @@
 
 //Checks for specific types in a list
 /proc/is_type_in_list(atom/A, list/L)
-	if(!LAZYLEN(L) || !A)
+	if(!L || !L.len || !A)
 		return FALSE
 	for(var/type in L)
 		if(istype(A, type))
@@ -72,7 +62,7 @@
 
 //Checks for specific types in specifically structured (Assoc "type" = TRUE) lists ('typecaches')
 /proc/is_type_in_typecache(atom/A, list/L)
-	if(!LAZYLEN(L) || !A)
+	if(!L || !L.len || !A)
 
 		return FALSE
 	if(ispath(A))
@@ -82,7 +72,7 @@
 
 //Checks for a string in a list
 /proc/is_string_in_list(string, list/L)
-	if(!LAZYLEN(L) || !string)
+	if(!L || !L.len || !string)
 		return
 	for(var/V in L)
 		if(string == V)
@@ -91,7 +81,7 @@
 
 //Removes a string from a list
 /proc/remove_strings_from_list(string, list/L)
-	if(!LAZYLEN(L) || !string)
+	if(!L || !L.len || !string)
 		return
 	for(var/V in L)
 		if(V == string)
@@ -495,6 +485,16 @@
 
 //Picks from the list, with some safeties, and returns the "default" arg if it fails
 #define DEFAULTPICK(L, default) ((islist(L) && length(L)) ? pick(L) : default)
+
+#define LAZYINITLIST(L) if (!L) L = list()
+#define UNSETEMPTY(L) if (L && !L.len) L = null
+#define LAZYREMOVE(L, I) if(L) { L -= I; if(!L.len) { L = null; } }
+#define LAZYADD(L, I) if(!L) { L = list(); } L += I;
+#define LAZYACCESS(L, I) (L ? (isnum(I) ? (I > 0 && I <= L.len ? L[I] : null) : L[I]) : null)
+#define LAZYSET(L, K, V) if(!L) { L = list(); } L[K] = V;
+#define LAZYLEN(L) length(L)
+#define LAZYCLEARLIST(L) if(L) L.Cut()
+#define SANITIZE_LIST(L) ( islist(L) ? L : list() )
 
 /* Definining a counter as a series of key -> numeric value entries
 

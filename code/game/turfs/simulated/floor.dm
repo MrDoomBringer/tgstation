@@ -21,14 +21,12 @@
 		broken_states = list("damaged1", "damaged2", "damaged3", "damaged4", "damaged5")
 	if (!burnt_states)
 		burnt_states = list()
-	if(!broken && broken_states && (icon_state in broken_states))
-		broken = TRUE
-	if(!burnt && burnt_states && (icon_state in burnt_states))
-		burnt = TRUE
 	. = ..()
 	//This is so damaged or burnt tiles or platings don't get remembered as the default tile
-	var/static/list/icons_to_ignore_at_floor_init = list("foam_plating", "plating","light_on","light_on_flicker1","light_on_flicker2",
-					"light_on_clicker3","light_on_clicker4","light_on_clicker5",
+	var/static/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","damaged4",
+					"damaged5","panelscorched","floorscorched1","floorscorched2","platingdmg1","platingdmg2", "foam_plating",
+					"platingdmg3","plating","light_on","light_on_flicker1","light_on_flicker2",
+					"light_on_clicker3","light_on_clicker4","light_on_clicker5","light_broken",
 					"light_on_broken","light_off","wall_thermite","grass", "sand",
 					"asteroid","asteroid_dug",
 					"asteroid0","asteroid1","asteroid2","asteroid3","asteroid4",
@@ -36,11 +34,11 @@
 					"basalt","basalt_dug",
 					"basalt0","basalt1","basalt2","basalt3","basalt4",
 					"basalt5","basalt6","basalt7","basalt8","basalt9","basalt10","basalt11","basalt12",
-					"oldburning","light-on-r","light-on-y","light-on-g","light-on-b", "wood", "carpetsymbol", "carpetstar",
+					"oldburning","light-on-r","light-on-y","light-on-g","light-on-b", "wood", "wood-broken",
 					"carpetcorner", "carpetside", "carpet", "ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5",
 					"ironsand6", "ironsand7", "ironsand8", "ironsand9", "ironsand10", "ironsand11",
 					"ironsand12", "ironsand13", "ironsand14", "ironsand15")
-	if(broken || burnt || (icon_state in icons_to_ignore_at_floor_init)) //so damaged/burned tiles or plating icons aren't saved as the default
+	if(icon_state in icons_to_ignore_at_floor_init) //so damaged/burned tiles or plating icons aren't saved as the default
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
@@ -53,13 +51,13 @@
 	if(severity != 1 && shielded && target != src)
 		return
 	if(target == src)
-		ScrapeAway()
+		src.ChangeTurf(src.baseturf)
 	if(target != null)
 		severity = 3
 
 	switch(severity)
 		if(1)
-			ScrapeAway()
+			src.ChangeTurf(src.baseturf)
 		if(2)
 			switch(pick(1,2;75,3))
 				if(1)
@@ -67,7 +65,7 @@
 					if(prob(33))
 						new /obj/item/stack/sheet/metal(src)
 				if(2)
-					ScrapeAway()
+					src.ChangeTurf(src.baseturf)
 				if(3)
 					if(prob(80))
 						src.break_tile_to_plating()
@@ -121,7 +119,7 @@
 /turf/open/floor/proc/make_plating()
 	return ChangeTurf(/turf/open/floor/plating)
 
-/turf/open/floor/ChangeTurf(path, new_baseturf, flags)
+/turf/open/floor/ChangeTurf(path, new_baseturf, defer_change = FALSE, ignore_air = FALSE, forceop = FALSE)
 	if(!isfloorturf(src))
 		return ..() //fucking turfs switch the fucking src of the fucking running procs
 	if(!ispath(path, /turf/open/floor))
@@ -204,7 +202,7 @@
 		ChangeTurf(/turf/open/floor/clockwork)
 
 /turf/open/floor/acid_melt()
-	ScrapeAway()
+	ChangeTurf(baseturf)
 
 /turf/open/floor/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
 	switch(the_rcd.mode)
@@ -225,7 +223,7 @@
 	switch(passed_mode)
 		if(RCD_FLOORWALL)
 			to_chat(user, "<span class='notice'>You build a wall.</span>")
-			PlaceOnTop(/turf/closed/wall)
+			ChangeTurf(/turf/closed/wall)
 			return TRUE
 		if(RCD_AIRLOCK)
 			if(locate(/obj/machinery/door/airlock) in src)
@@ -246,9 +244,10 @@
 			A.autoclose = TRUE
 			return TRUE
 		if(RCD_DECONSTRUCT)
-			if(ScrapeAway() == src)
+			if(istype(src, baseturf))
 				return FALSE
 			to_chat(user, "<span class='notice'>You deconstruct [src].</span>")
+			ChangeTurf(baseturf)
 			return TRUE
 		if(RCD_WINDOWGRILLE)
 			if(locate(/obj/structure/grille) in src)

@@ -68,7 +68,7 @@
 		if(materials.materials[href_list["choose"]])
 			chosen = href_list["choose"]
 	if(href_list["chooseAmt"])
-		coinsToProduce = CLAMP(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
+		coinsToProduce = Clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
 	if(href_list["makeCoins"])
 		var/temp_coins = coinsToProduce
 		processing = TRUE
@@ -100,4 +100,4 @@
 		if(!M)
 			M = new /obj/item/storage/bag/money(src)
 			unload_mineral(M)
-		O.forceMove(M)
+		O.loc = M

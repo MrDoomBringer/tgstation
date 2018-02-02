@@ -23,7 +23,7 @@
 	var/widenet = 0 //is this scrubber acting on the 3x3 area around it.
 	var/list/turf/adjacent_turfs = list()
 
-	var/frequency = FREQ_ATMOS_CONTROL
+	var/frequency = 1439
 	var/datum/radio_frequency/radio_connection
 	var/radio_filter_out
 	var/radio_filter_in
@@ -34,10 +34,6 @@
 	..()
 	if(!id_tag)
 		id_tag = assign_uid_vents()
-	for(var/f in filter_types)
-		if(istext(f))
-			filter_types -= f
-			filter_types += gas_id2path(f)
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on
 	on = TRUE
@@ -81,11 +77,11 @@
 		icon_state = "scrub_welded"
 		return
 
-	if(!nodes[1] || !on || !is_operational())
+	if(!NODE1 || !on || !is_operational())
 		icon_state = "scrub_off"
 		return
 
-	if(scrubbing & SCRUBBING)
+	if(scrubbing & SCRUBBING)	
 		if(widenet)
 			icon_state = "scrub_wide"
 		else
@@ -102,12 +98,16 @@
 	if(!radio_connection)
 		return FALSE
 
+	var/datum/signal/signal = new
+	signal.transmission_method = 1 //radio signal
+	signal.source = src
+
 	var/list/f_types = list()
 	for(var/path in GLOB.meta_gas_info)
 		var/list/gas = GLOB.meta_gas_info[path]
 		f_types += list(list("gas_id" = gas[META_GAS_ID], "gas_name" = gas[META_GAS_NAME], "enabled" = (path in filter_types)))
 
-	var/datum/signal/signal = new(list(
+	signal.data = list(
 		"tag" = id_tag,
 		"frequency" = frequency,
 		"device" = "VS",
@@ -117,7 +117,7 @@
 		"widenet" = widenet,
 		"filter_types" = f_types,
 		"sigtype" = "status"
-	))
+	)
 
 	var/area/A = get_area(src)
 	if(!A.air_scrub_names[id_tag])
@@ -130,8 +130,8 @@
 	return TRUE
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/atmosinit()
-	radio_filter_in = frequency==initial(frequency)?(RADIO_FROM_AIRALARM):null
-	radio_filter_out = frequency==initial(frequency)?(RADIO_TO_AIRALARM):null
+	radio_filter_in = frequency==initial(frequency)?(GLOB.RADIO_FROM_AIRALARM):null
+	radio_filter_out = frequency==initial(frequency)?(GLOB.RADIO_TO_AIRALARM):null
 	if(frequency)
 		set_frequency(frequency)
 	broadcast_status()
@@ -142,7 +142,7 @@
 	..()
 	if(welded || !is_operational())
 		return FALSE
-	if(!nodes[1] || !on)
+	if(!NODE1 || !on)
 		on = FALSE
 		return FALSE
 	scrub(loc)
@@ -156,7 +156,7 @@
 		return FALSE
 
 	var/datum/gas_mixture/environment = tile.return_air()
-	var/datum/gas_mixture/air_contents = airs[1]
+	var/datum/gas_mixture/air_contents = AIR1
 	var/list/env_gases = environment.gases
 
 	if(air_contents.return_pressure() >= 50*ONE_ATMOSPHERE)
@@ -179,7 +179,7 @@
 			filtered_out.temperature = removed.temperature
 
 			for(var/gas in filter_types & removed_gases)
-				filtered_out.add_gas(gas)
+				ADD_GAS(gas, filtered_gases)
 				filtered_gases[gas][MOLES] = removed_gases[gas][MOLES]
 				removed_gases[gas][MOLES] = 0
 
@@ -241,11 +241,6 @@
 
 	if("toggle_filter" in signal.data)
 		filter_types ^= gas_id2path(signal.data["toggle_filter"])
-
-	if("set_filters" in signal.data)
-		filter_types = list()
-		for(var/gas in signal.data["set_filters"])
-			filter_types += gas_id2path(gas)
 
 	if("init" in signal.data)
 		name = signal.data["init"]

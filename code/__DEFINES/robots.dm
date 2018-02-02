@@ -46,6 +46,3 @@
 //Assembly defines
 #define ASSEMBLY_FIRST_STEP 	0
 #define ASSEMBLY_SECOND_STEP 	1
-#define ASSEMBLY_THIRD_STEP     2
-#define ASSEMBLY_FOURTH_STEP    3
-#define ASSEMBLY_FIFTH_STEP     4

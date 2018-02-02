@@ -5,11 +5,11 @@
 "ab" = (
 /obj/structure/grille,
 /turf/template_noop,
-/area/space/nearstation)
+/area/template_noop)
 "ac" = (
 /obj/structure/lattice,
 /turf/template_noop,
-/area/space/nearstation)
+/area/template_noop)
 "ad" = (
 /obj/machinery/power/solar,
 /obj/structure/cable/yellow{
@@ -83,32 +83,48 @@
 /area/ruin/space/has_grav/hotel)
 "an" = (
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "ao" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "ap" = (
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aq" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "ar" = (
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "as" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "at" = (
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "au" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "av" = (
 /obj/effect/decal/cleanable/cobweb,
 /turf/open/floor/plating,
@@ -122,7 +138,9 @@
 	},
 /obj/item/soap,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "ay" = (
 /obj/structure/window{
 	icon_state = "window";
@@ -130,40 +148,56 @@
 	},
 /obj/structure/toilet,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "az" = (
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "aA" = (
 /obj/machinery/door/airlock{
 	name = "Bathroom"
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "aB" = (
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "aC" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "aD" = (
 /obj/item/twohanded/required/kirbyplants{
 	icon_state = "plant-02"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "aE" = (
 /obj/structure/dresser,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "aF" = (
 /obj/machinery/shower{
 	dir = 4
 	},
 /obj/item/soap,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aG" = (
 /obj/structure/window{
 	icon_state = "window";
@@ -171,40 +205,56 @@
 	},
 /obj/structure/toilet,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aH" = (
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aI" = (
 /obj/machinery/door/airlock{
 	name = "Bathroom"
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aJ" = (
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aK" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aL" = (
 /obj/item/twohanded/required/kirbyplants{
 	icon_state = "plant-16"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aM" = (
 /obj/structure/dresser,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "aN" = (
 /obj/machinery/shower{
 	dir = 4
 	},
 /obj/item/soap,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "aO" = (
 /obj/structure/window{
 	icon_state = "window";
@@ -212,40 +262,56 @@
 	},
 /obj/structure/toilet,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "aP" = (
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "aQ" = (
 /obj/machinery/door/airlock{
 	name = "Bathroom"
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "aR" = (
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "aS" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "aT" = (
 /obj/item/twohanded/required/kirbyplants{
 	icon_state = "plant-16"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "aU" = (
 /obj/structure/dresser,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "aV" = (
 /obj/machinery/shower{
 	dir = 4
 	},
 /obj/item/soap,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "aW" = (
 /obj/structure/window{
 	icon_state = "window";
@@ -253,33 +319,47 @@
 	},
 /obj/structure/toilet,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "aX" = (
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "aY" = (
 /obj/machinery/door/airlock{
 	name = "Bathroom"
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "aZ" = (
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "ba" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bb" = (
 /obj/item/twohanded/required/kirbyplants{
 	icon_state = "plant-18"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bc" = (
 /obj/structure/dresser,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bd" = (
 /obj/machinery/power/solar,
 /obj/structure/cable/yellow,
@@ -291,128 +371,176 @@
 	dir = 8
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bf" = (
 /obj/machinery/light/small{
 	dir = 4
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bg" = (
 /obj/structure/table/wood,
 /obj/item/paper_bin,
 /obj/item/pen,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bh" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bi" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bj" = (
 /obj/structure/bed,
 /obj/item/bedsheet/red,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bk" = (
 /obj/structure/window{
 	icon_state = "window";
 	dir = 8
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bl" = (
 /obj/machinery/light/small{
 	dir = 4
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bm" = (
 /obj/structure/table/wood,
 /obj/item/paper_bin,
 /obj/item/pen,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bn" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bo" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bp" = (
 /obj/structure/bed,
 /obj/item/bedsheet/blue,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bq" = (
 /obj/structure/window{
 	icon_state = "window";
 	dir = 8
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "br" = (
 /obj/machinery/light/small{
 	dir = 4
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "bs" = (
 /obj/structure/table/wood,
 /obj/item/paper_bin,
 /obj/item/pen,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "bt" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "bu" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "bv" = (
 /obj/structure/bed,
 /obj/item/bedsheet/black,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "bw" = (
 /obj/structure/window{
 	icon_state = "window";
 	dir = 8
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bx" = (
 /obj/machinery/light/small{
 	dir = 4
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "by" = (
 /obj/structure/table/wood,
 /obj/item/paper_bin,
 /obj/item/pen,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bz" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bA" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bB" = (
 /obj/structure/bed,
 /obj/item/bedsheet/purple,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bC" = (
 /obj/item/clothing/head/cone,
 /turf/open/floor/plating,
@@ -423,56 +551,72 @@
 	},
 /obj/structure/table/wood,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bE" = (
 /obj/structure/chair{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bF" = (
 /obj/machinery/light{
 	dir = 8
 	},
 /obj/structure/table/wood,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bG" = (
 /obj/structure/chair{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bH" = (
 /obj/machinery/light{
 	dir = 8
 	},
 /obj/structure/table/wood,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "bI" = (
 /obj/structure/chair{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "bJ" = (
 /obj/machinery/light{
 	dir = 8
 	},
 /obj/structure/table/wood,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bK" = (
 /obj/structure/chair{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "bL" = (
 /obj/structure/reagent_dispensers/watertank,
 /turf/open/floor/plating,
@@ -486,7 +630,9 @@
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bN" = (
 /obj/machinery/power/apc/highcap/five_k{
 	dir = 2;
@@ -497,14 +643,18 @@
 	icon_state = "0-4"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bO" = (
 /obj/structure/cable{
 	icon_state = "2-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bP" = (
 /obj/machinery/button/door{
 	id = "a3";
@@ -513,18 +663,24 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bQ" = (
 /obj/machinery/light_switch{
 	pixel_y = -24
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bR" = (
 /obj/structure/table/wood,
 /obj/item/clothing/head/sombrero,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "bS" = (
 /obj/structure/sink{
 	dir = 4;
@@ -534,7 +690,9 @@
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bT" = (
 /obj/machinery/power/apc/highcap/five_k{
 	dir = 2;
@@ -545,14 +703,18 @@
 	icon_state = "0-4"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bU" = (
 /obj/structure/cable{
 	icon_state = "2-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bV" = (
 /obj/machinery/button/door{
 	id = "a4";
@@ -561,18 +723,24 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bW" = (
 /obj/machinery/light_switch{
 	pixel_y = -24
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bX" = (
 /obj/structure/table/wood,
 /obj/item/lipstick,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "bY" = (
 /obj/structure/sink{
 	dir = 4;
@@ -582,7 +750,9 @@
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "bZ" = (
 /obj/machinery/power/apc/highcap/five_k{
 	dir = 2;
@@ -593,14 +763,18 @@
 	icon_state = "0-4"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "ca" = (
 /obj/structure/cable{
 	icon_state = "2-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "cb" = (
 /obj/machinery/button/door{
 	id = "a5";
@@ -609,18 +783,24 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "cc" = (
 /obj/machinery/light_switch{
 	pixel_y = -24
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "cd" = (
 /obj/structure/table/wood,
 /obj/item/clothing/head/collectable/kitty,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "ce" = (
 /obj/structure/sink{
 	dir = 4;
@@ -630,7 +810,9 @@
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "cf" = (
 /obj/machinery/power/apc/highcap/five_k{
 	dir = 2;
@@ -641,14 +823,18 @@
 	icon_state = "0-4"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "cg" = (
 /obj/structure/cable{
 	icon_state = "2-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "ch" = (
 /obj/machinery/button/door{
 	id = "a6";
@@ -657,17 +843,23 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "ci" = (
 /obj/machinery/light_switch{
 	pixel_y = -24
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "cj" = (
 /obj/structure/table/wood,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "ck" = (
 /obj/structure/grille,
 /turf/open/floor/plating,
@@ -682,11 +874,15 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "cm" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_3)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 3"
+	})
 "cn" = (
 /obj/machinery/door/airlock{
 	id_tag = "a4";
@@ -697,11 +893,15 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "co" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_4)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 4"
+	})
 "cp" = (
 /obj/machinery/door/airlock{
 	id_tag = "a5";
@@ -712,11 +912,15 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "cq" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_5)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 5"
+	})
 "cr" = (
 /obj/machinery/door/airlock{
 	id_tag = "a6";
@@ -727,11 +931,15 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "cs" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_6)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 6"
+	})
 "ct" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 6
@@ -774,7 +982,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "cz" = (
-/obj/structure/sign/warning/fire{
+/obj/structure/sign/fire{
 	desc = "A sign that states the labeled room's number.";
 	dir = 4;
 	icon_state = "roomnum";
@@ -785,7 +993,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "cA" = (
-/obj/structure/sign/warning/fire{
+/obj/structure/sign/fire{
 	desc = "A sign that states the labeled room's number.";
 	dir = 8;
 	icon_state = "roomnum";
@@ -802,7 +1010,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "cC" = (
-/obj/structure/sign/warning/fire{
+/obj/structure/sign/fire{
 	desc = "A sign that states the labeled room's number.";
 	dir = 6;
 	icon_state = "roomnum";
@@ -822,7 +1030,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "cE" = (
-/obj/structure/sign/warning/fire{
+/obj/structure/sign/fire{
 	desc = "A sign that states the labeled room's number.";
 	dir = 10;
 	icon_state = "roomnum";
@@ -946,7 +1154,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "cT" = (
-/obj/structure/sign/warning/fire{
+/obj/structure/sign/fire{
 	desc = "A sign that states the labeled room's number.";
 	dir = 1;
 	icon_state = "roomnum";
@@ -963,7 +1171,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "cV" = (
-/obj/structure/sign/warning/fire{
+/obj/structure/sign/fire{
 	desc = "A sign that states the labeled room's number.";
 	icon_state = "roomnum";
 	name = "Room Number 1";
@@ -987,7 +1195,9 @@
 /area/ruin/space/has_grav/hotel)
 "cZ" = (
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "da" = (
 /obj/machinery/door/airlock{
 	id_tag = "a2";
@@ -998,14 +1208,20 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "db" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dc" = (
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dd" = (
 /obj/machinery/door/airlock{
 	id_tag = "a1";
@@ -1016,18 +1232,22 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "de" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/closed/wall,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "df" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /obj/machinery/door/firedoor,
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "dg" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/carpet,
@@ -1056,7 +1276,9 @@
 	},
 /obj/item/soap,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dl" = (
 /obj/structure/window{
 	icon_state = "window";
@@ -1064,7 +1286,9 @@
 	},
 /obj/structure/toilet,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dm" = (
 /obj/structure/sink{
 	dir = 4;
@@ -1074,7 +1298,9 @@
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dn" = (
 /obj/machinery/power/apc/highcap/five_k{
 	dir = 1;
@@ -1085,14 +1311,18 @@
 	icon_state = "0-4"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "do" = (
 /obj/structure/cable{
 	icon_state = "1-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dp" = (
 /obj/machinery/button/door{
 	id = "a2";
@@ -1101,24 +1331,32 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dq" = (
 /obj/item/twohanded/required/kirbyplants{
 	icon_state = "plant-21"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dr" = (
 /obj/structure/dresser,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "ds" = (
 /obj/machinery/shower{
 	dir = 4
 	},
 /obj/item/soap,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dt" = (
 /obj/structure/window{
 	icon_state = "window";
@@ -1126,7 +1364,9 @@
 	},
 /obj/structure/toilet,
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "du" = (
 /obj/structure/sink{
 	dir = 4;
@@ -1136,7 +1376,9 @@
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dv" = (
 /obj/machinery/power/apc/highcap/five_k{
 	dir = 1;
@@ -1147,14 +1389,18 @@
 	icon_state = "0-4"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dw" = (
 /obj/structure/cable{
 	icon_state = "1-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dx" = (
 /obj/machinery/button/door{
 	id = "a1";
@@ -1163,17 +1409,23 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dy" = (
 /obj/item/twohanded/required/kirbyplants{
 	icon_state = "plant-14"
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dz" = (
 /obj/structure/dresser,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dA" = (
 /obj/machinery/airalarm{
 	pixel_y = 24
@@ -1215,68 +1467,96 @@
 /area/ruin/space/has_grav/hotel/workroom)
 "dH" = (
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dI" = (
 /obj/structure/window{
 	icon_state = "window";
 	dir = 8
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dJ" = (
 /obj/structure/table/wood,
 /obj/item/paper_bin,
 /obj/item/pen,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dK" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dL" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dM" = (
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dN" = (
 /obj/structure/bed,
 /obj/item/bedsheet/yellow,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "dO" = (
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dP" = (
 /obj/structure/window{
 	icon_state = "window";
 	dir = 8
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dQ" = (
 /obj/structure/table/wood,
 /obj/item/paper_bin,
 /obj/item/pen,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dR" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dS" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dT" = (
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dU" = (
 /obj/structure/bed,
 /obj/item/bedsheet/ian,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "dV" = (
 /turf/open/floor/plasteel/white,
 /area/ruin/space/has_grav/hotel/workroom)
@@ -1340,53 +1620,69 @@
 	dir = 4
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "ef" = (
 /obj/machinery/light{
 	dir = 8
 	},
 /obj/structure/table/wood,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "eg" = (
 /obj/structure/chair{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "eh" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on{
 	dir = 1
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "ei" = (
 /obj/machinery/light/small{
 	dir = 4
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "ej" = (
 /obj/machinery/light{
 	dir = 8
 	},
 /obj/structure/table/wood,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "ek" = (
 /obj/structure/chair{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "el" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on{
 	dir = 1
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "em" = (
 /obj/machinery/light{
 	dir = 8
@@ -1432,34 +1728,46 @@
 	name = "Bathroom"
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "et" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on{
 	dir = 1
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "eu" = (
 /obj/structure/table/wood,
 /obj/item/storage/pill_bottle/dice,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_2)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 2"
+	})
 "ev" = (
 /obj/machinery/door/airlock{
 	name = "Bathroom"
 	},
 /turf/open/floor/plasteel/showroomfloor,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "ew" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on{
 	dir = 1
 	},
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "ex" = (
 /obj/structure/table/wood,
 /turf/open/floor/wood,
-/area/ruin/space/has_grav/hotel/guestroom/room_1)
+/area/ruin/space/has_grav/hotel/guestroom{
+	name = "Hotel Guest Room 1"
+	})
 "ey" = (
 /obj/structure/closet/wardrobe/mixed,
 /turf/open/floor/plasteel/white,
@@ -1920,7 +2228,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "fW" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -1975,7 +2283,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "gf" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /obj/machinery/door/firedoor,
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel/dock)
@@ -2172,7 +2480,7 @@
 "gL" = (
 /obj/structure/table,
 /obj/item/storage/box/donkpockets,
-/obj/structure/sign/warning/nosmoking/circle{
+/obj/structure/sign/nosmoking_1{
 	pixel_y = 32
 	},
 /turf/open/floor/plasteel/dark,
@@ -2715,7 +3023,7 @@
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
 "il" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /obj/structure/cable{
 	icon_state = "4-8"
 	},
@@ -2784,7 +3092,7 @@
 /obj/structure/cable{
 	icon_state = "4-8"
 	},
-/obj/structure/sign/warning/fire{
+/obj/structure/sign/fire{
 	desc = "A poster designed to remind the reader to wear appropriate insulation and head protection when working with material.";
 	icon_state = "safety";
 	name = "Safety Poster";
@@ -3139,7 +3447,7 @@
 /turf/closed/wall,
 /area/ruin/space/has_grav/hotel/security)
 "jq" = (
-/obj/machinery/door/airlock/security/glass{
+/obj/machinery/door/airlock/glass_security{
 	name = "Hotel Security Checkpoint";
 	req_access_txt = "203"
 	},
@@ -3167,7 +3475,7 @@
 /turf/closed/wall,
 /area/ruin/space/has_grav/hotel/pool)
 "ju" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -3183,7 +3491,7 @@
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/hotel/pool)
 "jw" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -3344,7 +3652,7 @@
 /turf/open/floor/wood,
 /area/ruin/space/has_grav/hotel/pool)
 "jZ" = (
-/obj/structure/sign/warning/nosmoking{
+/obj/structure/sign/nosmoking_2{
 	pixel_y = 32
 	},
 /turf/open/floor/plasteel,
@@ -3464,7 +3772,7 @@
 /obj/structure/cable{
 	icon_state = "0-8"
 	},
-/obj/structure/sign/warning/electricshock{
+/obj/structure/sign/electricshock{
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel/yellow/side,
@@ -3499,7 +3807,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
 	},
-/obj/structure/sign/warning/vacuum{
+/obj/structure/sign/vacuum{
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel/yellow/side,
@@ -3585,7 +3893,7 @@
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/hotel/power)
 "kJ" = (
-/obj/machinery/door/airlock/external/glass,
+/obj/machinery/door/airlock/glass_external,
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
 	},
@@ -3678,7 +3986,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
 	},
-/obj/structure/sign/plaques/atmos{
+/obj/structure/sign/atmosplaque{
 	pixel_y = 32
 	},
 /turf/open/floor/plating,
@@ -3705,7 +4013,7 @@
 "lb" = (
 /obj/structure/table,
 /obj/machinery/recharger,
-/obj/structure/sign/plaques/golden{
+/obj/structure/sign/goldenplaque{
 	pixel_x = -32
 	},
 /turf/open/floor/plasteel/red/side{
@@ -3751,10 +4059,14 @@
 /area/ruin/space/has_grav/hotel/pool)
 "li" = (
 /obj/effect/light_emitter,
-/turf/open/floor/plating/beach/water,
+/turf/open/floor/plating/beach/water{
+	baseturf = /turf/open/space
+	},
 /area/ruin/space/has_grav/hotel/pool)
 "lj" = (
-/turf/open/floor/plating/beach/water,
+/turf/open/floor/plating/beach/water{
+	baseturf = /turf/open/space
+	},
 /area/ruin/space/has_grav/hotel/pool)
 "lk" = (
 /obj/structure/chair{
@@ -3889,7 +4201,7 @@
 /turf/open/floor/plating/airless,
 /area/ruin/unpowered/no_grav)
 "lF" = (
-/obj/machinery/door/airlock/security/glass{
+/obj/machinery/door/airlock/glass_security{
 	name = "Hotel Security Checkpoint";
 	req_access_txt = "203"
 	},
@@ -3962,7 +4274,9 @@
 /area/ruin/space/has_grav/hotel/security)
 "lP" = (
 /obj/item/bikehorn/rubberducky,
-/turf/open/floor/plating/beach/water,
+/turf/open/floor/plating/beach/water{
+	baseturf = /turf/open/space
+	},
 /area/ruin/space/has_grav/hotel/pool)
 "lQ" = (
 /obj/structure/table,
@@ -4341,10 +4655,6 @@
 	},
 /turf/open/floor/carpet,
 /area/ruin/space/has_grav/hotel)
-"mW" = (
-/obj/effect/baseturf_helper/space,
-/turf/closed/wall,
-/area/ruin/space/has_grav/hotel/pool)
 
 (1,1,1) = {"
 aa
@@ -4401,18 +4711,25 @@ aa
 aa
 aa
 aa
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 aa
 aa
 "}
@@ -4468,22 +4785,29 @@ aa
 aa
 aa
 aa
-ab
-ab
-ab
-aa
-ac
 aa
 aa
-ac
 aa
 aa
-ac
 aa
 aa
-ac
 aa
-ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 aa
 "}
 (3,1,1) = {"
@@ -4537,23 +4861,30 @@ aa
 aa
 aa
 aa
-ab
-aa
-ac
 aa
 aa
-lV
 aa
 aa
-lV
 aa
 aa
-lV
 aa
 aa
-lV
 aa
-ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 aa
 "}
 (4,1,1) = {"
@@ -4583,6 +4914,239 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(5,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+aa
+ac
+aa
+aa
+ac
+aa
+aa
+ac
+aa
+aa
+ac
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(6,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+aa
+ac
+aa
+aa
+lV
+aa
+aa
+lV
+aa
+aa
+lV
+aa
+aa
+lV
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(7,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 ab
 ab
 ab
@@ -4625,8 +5189,15 @@ lW
 aa
 ab
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(5,1,1) = {"
+(8,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -4695,8 +5266,15 @@ lW
 aa
 ab
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(6,1,1) = {"
+(9,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -4765,8 +5343,15 @@ lW
 aa
 ab
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(7,1,1) = {"
+(10,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -4835,8 +5420,15 @@ lW
 aa
 aa
 ab
+aa
+aa
+aa
+aa
+aa
 "}
-(8,1,1) = {"
+(11,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -4905,8 +5497,15 @@ aj
 mO
 ac
 ab
+aa
+aa
+aa
+aa
+aa
 "}
-(9,1,1) = {"
+(12,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -4975,8 +5574,15 @@ lY
 aa
 aa
 ab
+aa
+aa
+aa
+aa
+aa
 "}
-(10,1,1) = {"
+(13,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5045,8 +5651,15 @@ lY
 aa
 ab
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(11,1,1) = {"
+(14,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5115,8 +5728,15 @@ lY
 aa
 ab
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(12,1,1) = {"
+(15,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5185,8 +5805,15 @@ lY
 aa
 ab
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(13,1,1) = {"
+(16,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5255,8 +5882,15 @@ lZ
 aa
 ab
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(14,1,1) = {"
+(17,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5325,8 +5959,15 @@ ac
 aa
 ab
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(15,1,1) = {"
+(18,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5395,8 +6036,15 @@ ab
 ab
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(16,1,1) = {"
+(19,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5465,8 +6113,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(17,1,1) = {"
+(20,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5535,8 +6190,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(18,1,1) = {"
+(21,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5605,8 +6267,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(19,1,1) = {"
+(22,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5675,8 +6344,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(20,1,1) = {"
+(23,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5745,8 +6421,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(21,1,1) = {"
+(24,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5815,8 +6498,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(22,1,1) = {"
+(25,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5885,8 +6575,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(23,1,1) = {"
+(26,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -5955,8 +6652,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(24,1,1) = {"
+(27,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6025,8 +6729,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(25,1,1) = {"
+(28,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6095,8 +6806,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(26,1,1) = {"
+(29,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6165,8 +6883,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(27,1,1) = {"
+(30,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6235,8 +6960,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(28,1,1) = {"
+(31,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6305,8 +7037,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(29,1,1) = {"
+(32,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6351,7 +7090,7 @@ ih
 fi
 cJ
 jt
-mW
+jQ
 jQ
 jQ
 jQ
@@ -6375,8 +7114,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(30,1,1) = {"
+(33,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6445,8 +7191,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(31,1,1) = {"
+(34,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6515,8 +7268,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(32,1,1) = {"
+(35,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6585,8 +7345,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(33,1,1) = {"
+(36,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6655,8 +7422,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(34,1,1) = {"
+(37,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6725,8 +7499,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(35,1,1) = {"
+(38,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6795,8 +7576,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(36,1,1) = {"
+(39,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6865,8 +7653,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(37,1,1) = {"
+(40,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -6935,8 +7730,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(38,1,1) = {"
+(41,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7005,8 +7807,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(39,1,1) = {"
+(42,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7075,8 +7884,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(40,1,1) = {"
+(43,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7145,8 +7961,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(41,1,1) = {"
+(44,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7215,8 +8038,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(42,1,1) = {"
+(45,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7285,8 +8115,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(43,1,1) = {"
+(46,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7355,8 +8192,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(44,1,1) = {"
+(47,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7425,8 +8269,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(45,1,1) = {"
+(48,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7495,8 +8346,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(46,1,1) = {"
+(49,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7565,8 +8423,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(47,1,1) = {"
+(50,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7635,8 +8500,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(48,1,1) = {"
+(51,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7705,8 +8577,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(49,1,1) = {"
+(52,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7775,8 +8654,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(50,1,1) = {"
+(53,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -7845,8 +8731,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(51,1,1) = {"
+(54,1,1) = {"
+aa
+aa
 aa
 aa
 ab
@@ -7915,8 +8808,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(52,1,1) = {"
+(55,1,1) = {"
+aa
+aa
 aa
 ab
 aa
@@ -7985,8 +8885,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(53,1,1) = {"
+(56,1,1) = {"
+aa
+aa
 ab
 aa
 aa
@@ -8055,8 +8962,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(54,1,1) = {"
+(57,1,1) = {"
+aa
+aa
 ab
 ac
 ac
@@ -8125,8 +9039,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(55,1,1) = {"
+(58,1,1) = {"
+aa
+aa
 ab
 aa
 aa
@@ -8195,8 +9116,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(56,1,1) = {"
+(59,1,1) = {"
+aa
+aa
 ab
 aa
 aa
@@ -8265,8 +9193,15 @@ ab
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(57,1,1) = {"
+(60,1,1) = {"
+aa
+aa
 ab
 ac
 ac
@@ -8335,211 +9270,6 @@ ab
 aa
 aa
 aa
-"}
-(58,1,1) = {"
-ab
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ag
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ab
-aa
-aa
-aa
-aa
-aa
-aa
-ab
-ac
-ac
-eG
-eG
-fv
-fv
-fv
-eG
-fv
-fv
-fv
-fv
-fv
-fv
-eG
-fv
-fv
-fv
-eG
-eG
-aa
-aa
-aa
-ac
-aa
-aa
-aa
-aa
-ac
-aa
-aa
-aa
-aa
-aa
-ac
-aa
-aa
-aa
-aa
-aa
-ab
-aa
-aa
-aa
-"}
-(59,1,1) = {"
-ab
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ag
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ab
-aa
-aa
-aa
-aa
-aa
-aa
-ab
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ac
-aa
-aa
-aa
-aa
-aa
-aa
-ac
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ac
-aa
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-aa
-aa
-aa
-aa
-"}
-(60,1,1) = {"
-ab
-ac
-ac
-ad
-ae
-ae
-ae
-ae
-ah
-ak
-ak
-ak
-ak
-bd
-ac
-ac
-ab
-aa
-aa
-aa
-aa
-aa
-aa
-ab
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ac
-aa
-aa
-aa
-aa
-aa
-aa
-ac
-aa
-aa
-aa
-aa
-aa
-aa
-ab
-ab
-ab
-ab
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
 aa
 aa
 aa
@@ -8547,6 +9277,8 @@ aa
 aa
 "}
 (61,1,1) = {"
+aa
+aa
 ab
 aa
 aa
@@ -8570,43 +9302,48 @@ aa
 aa
 aa
 aa
-aa
 ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
-aa
+ac
+ac
+eG
+eG
+fv
+fv
+fv
+eG
+fv
+fv
+fv
+fv
+fv
+fv
+eG
+fv
+fv
+fv
+eG
+eG
 aa
 aa
 aa
-aa
+ac
 aa
 aa
 aa
 aa
-aa
+ac
 aa
 aa
 aa
 aa
 aa
+ac
+aa
+aa
+aa
+aa
+aa
+ab
 aa
 aa
 aa
@@ -8617,6 +9354,8 @@ aa
 aa
 "}
 (62,1,1) = {"
+aa
+aa
 ab
 aa
 aa
@@ -8640,6 +9379,22 @@ aa
 aa
 aa
 aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ac
+aa
+aa
+aa
+aa
+aa
+aa
+ac
 aa
 aa
 aa
@@ -8648,34 +9403,23 @@ aa
 aa
 aa
 aa
+ac
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
 aa
 aa
 aa
@@ -8687,6 +9431,8 @@ aa
 aa
 "}
 (63,1,1) = {"
+aa
+aa
 ab
 ac
 ac
@@ -8710,6 +9456,7 @@ aa
 aa
 aa
 aa
+ab
 aa
 aa
 aa
@@ -8717,20 +9464,24 @@ aa
 aa
 aa
 aa
+ac
 aa
 aa
 aa
 aa
 aa
 aa
+ac
 aa
 aa
 aa
 aa
 aa
 aa
-aa
-aa
+ab
+ab
+ab
+ab
 aa
 aa
 aa
@@ -8757,6 +9508,239 @@ aa
 aa
 "}
 (64,1,1) = {"
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ag
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(65,1,1) = {"
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ag
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(66,1,1) = {"
+aa
+aa
+ab
+ac
+ac
+ad
+ae
+ae
+ae
+ae
+ah
+ak
+ak
+ak
+ak
+bd
+ac
+ac
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(67,1,1) = {"
+aa
+aa
 ab
 aa
 aa
@@ -8825,8 +9809,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(65,1,1) = {"
+(68,1,1) = {"
+aa
+aa
 aa
 ab
 aa
@@ -8895,8 +9886,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(66,1,1) = {"
+(69,1,1) = {"
+aa
+aa
 aa
 aa
 ab
@@ -8965,8 +9963,15 @@ aa
 aa
 aa
 aa
+aa
+aa
+aa
+aa
+aa
 "}
-(67,1,1) = {"
+(70,1,1) = {"
+aa
+aa
 aa
 aa
 aa
@@ -8976,6 +9981,396 @@ aa
 aa
 aa
 ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(71,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(72,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(73,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(74,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(75,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 aa
 aa
 aa

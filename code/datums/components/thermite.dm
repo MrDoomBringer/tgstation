@@ -1,5 +1,5 @@
 /datum/component/thermite
-	dupe_mode = COMPONENT_DUPE_UNIQUE_PASSARGS
+	dupe_mode = COMPONENT_DUPE_UNIQUE
 	var/amount
 	var/overlay
 
@@ -46,13 +46,10 @@
 	master.cut_overlay(overlay)
 	return ..()
 
-/datum/component/thermite/InheritComponent(datum/component/thermite/newC, i_am_original, list/arguments)
+/datum/component/thermite/InheritComponent(datum/component/thermite/newC, i_am_original)
 	if(!i_am_original)
 		return
-	if(newC)
-		amount += newC.amount
-	else
-		amount += arguments[1]
+	amount += newC.amount
 
 /datum/component/thermite/proc/thermite_melt(mob/user)
 	var/turf/master = parent
@@ -63,7 +60,7 @@
 
 	if(amount >= 50)
 		var/burning_time = max(100, 100-amount)
-		master = master.ScrapeAway()
+		master = master.ChangeTurf(master.baseturf)
 		master.burn_tile()
 		if(user)
 			master.add_hiddenprint(user)

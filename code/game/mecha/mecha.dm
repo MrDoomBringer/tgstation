@@ -24,7 +24,7 @@
 	infra_luminosity = 15 //byond implementation is bugged.
 	force = 5
 	flags_1 = HEAR_1
-	var/can_move = 0 //time of next allowed movement
+	var/can_move = 1
 	var/mob/living/carbon/occupant = null
 	var/step_in = 10 //make a step in step_in/10 sec.
 	var/dir_in = 2//What direction will the mech face when entered/powered on? Defaults to South.
@@ -215,7 +215,7 @@
 		step_energy_drain = normal_step_energy_drain
 		qdel(SM)
 	if(CP)
-		armor = armor.modifyRating(energy = (CP.rating * 10)) //Each level of capacitor protects the mech against emp by 10%
+		armor["energy"] += (CP.rating * 10) //Each level of capacitor protects the mech against emp by 10%
 		qdel(CP)
 
 ////////////////////////
@@ -231,7 +231,9 @@
 		C.forceMove(src)
 		cell = C
 		return
-	cell = new /obj/item/stock_parts/cell/high/plus(src)
+	cell = new(src)
+	cell.charge = 15000
+	cell.maxcharge = 15000
 
 /obj/mecha/proc/add_cabin()
 	cabin_air = new
@@ -247,7 +249,7 @@
 	radio.name = "[src] radio"
 	radio.icon = icon
 	radio.icon_state = icon_state
-	radio.subspace_transmission = TRUE
+	radio.subspace_transmission = 1
 
 /obj/mecha/proc/can_use(mob/user)
 	if(user != occupant)
@@ -502,7 +504,7 @@
 	return domove(direction)
 
 /obj/mecha/proc/domove(direction)
-	if(can_move >= world.time)
+	if(!can_move)
 		return 0
 	if(!Process_Spacemove(direction))
 		return 0
@@ -520,18 +522,20 @@
 		return 0
 
 	var/move_result = 0
-	var/oldloc = loc
 	if(internal_damage & MECHA_INT_CONTROL_LOST)
 		move_result = mechsteprand()
 	else if(dir != direction && !strafe)
 		move_result = mechturn(direction)
 	else
 		move_result = mechstep(direction)
-	if(move_result || loc != oldloc)// halfway done diagonal move still returns false
+	if(move_result)
 		use_power(step_energy_drain)
-		can_move = world.time + step_in
+		can_move = 0
+		spawn(step_in)
+			can_move = 1
 		return 1
 	return 0
+
 
 /obj/mecha/proc/mechturn(direction)
 	setDir(direction)
@@ -571,9 +575,9 @@
 		if(bumpsmash && occupant) //Need a pilot to push the PUNCH button.
 			if(nextsmash < world.time)
 				obstacle.mech_melee_attack(src)
-				nextsmash = world.time + smashcooldown
-				if(!obstacle || obstacle.CanPass(src,get_step(src,dir)))
+				if(!obstacle || !obstacle.density)
 					step(src,dir)
+				nextsmash = world.time + smashcooldown
 		if(isobj(obstacle))
 			var/obj/O = obstacle
 			if(!O.anchored)
@@ -746,7 +750,7 @@
 		icon_state = initial(icon_state)
 		occupant = pilot_mob
 		pilot_mob.mecha = src
-		pilot_mob.forceMove(src)
+		pilot_mob.loc = src
 		GrantActions(pilot_mob)//needed for checks, and incase a badmin puts somebody in the mob
 
 /obj/mecha/proc/aimob_exit_mech(mob/living/simple_animal/hostile/syndicate/mecha_pilot/pilot_mob)
@@ -957,7 +961,7 @@
 		if(istype(mob_container, /obj/item/device/mmi))
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
-				L.forceMove(mmi)
+				L.loc = mmi
 				L.reset_perspective()
 			mmi.mecha = null
 			mmi.update_icon()
@@ -966,7 +970,7 @@
 		setDir(dir_in)
 
 	if(L && L.client)
-		L.client.change_view(CONFIG_GET(string/default_view))
+		L.client.change_view(world.view)
 		zoom_mode = 0
 
 /////////////////////////

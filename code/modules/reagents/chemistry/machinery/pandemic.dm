@@ -25,12 +25,6 @@
 	QDEL_NULL(beaker)
 	return ..()
 
-/obj/machinery/computer/pandemic/handle_atom_del(atom/A)
-	. = ..()
-	if(A == beaker)
-		beaker = null
-		update_icon()
-
 /obj/machinery/computer/pandemic/proc/get_by_index(thing, index)
 	if(!beaker || !beaker.reagents)
 		return
@@ -127,10 +121,9 @@
 		add_overlay("waitlight")
 
 /obj/machinery/computer/pandemic/proc/eject_beaker()
-	if(beaker)
-		beaker.forceMove(drop_location())
-		beaker = null
-		update_icon()
+	beaker.forceMove(drop_location())
+	beaker = null
+	update_icon()
 
 /obj/machinery/computer/pandemic/ui_interact(mob/user, ui_key = "main", datum/tgui/ui, force_open = FALSE, datum/tgui/master_ui, datum/ui_state/state = GLOB.default_state)
 	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
@@ -166,7 +159,8 @@
 		return
 	switch(action)
 		if("eject_beaker")
-			eject_beaker()
+			if(beaker)
+				eject_beaker()
 			. = TRUE
 		if("empty_beaker")
 			if(beaker)
@@ -225,7 +219,7 @@
 
 
 /obj/machinery/computer/pandemic/attackby(obj/item/I, mob/user, params)
-	if(istype(I, /obj/item/reagent_containers) && !(I.flags_1 & ABSTRACT_1) && I.is_open_container())
+	if(istype(I, /obj/item/reagent_containers) && (I.container_type & OPENCONTAINER_1))
 		. = TRUE //no afterattack
 		if(stat & (NOPOWER|BROKEN))
 			return
@@ -242,5 +236,7 @@
 		return ..()
 
 /obj/machinery/computer/pandemic/on_deconstruction()
-	eject_beaker()
+	if(beaker)
+		beaker.forceMove(drop_location())
+		beaker = null
 	. = ..()

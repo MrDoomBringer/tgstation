@@ -7,7 +7,9 @@
 	dir = 8
 	},
 /turf/open/space,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "c" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 8
@@ -16,77 +18,149 @@
 	dir = 4
 	},
 /turf/open/floor/plating/airless,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "d" = (
 /turf/closed/wall/mineral/plastitanium,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
+"e" = (
+/turf/closed/wall/mineral/plastitanium{
+	dir = 1;
+	icon_state = "diagonalWall3"
+	},
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "f" = (
+/turf/closed/wall/mineral/plastitanium{
+	dir = 4;
+	icon_state = "diagonalWall3"
+	},
 /turf/closed/wall/mineral/titanium,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
+"g" = (
+/turf/closed/wall/mineral/titanium,
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "h" = (
-/obj/machinery/door/airlock/external/glass,
+/obj/machinery/door/airlock/glass_external,
 /turf/open/floor/plating,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "i" = (
 /turf/closed/wall/mineral/titanium/overspace,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "j" = (
 /turf/open/floor/plasteel/dark,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "k" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/plasteel/dark,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "l" = (
 /obj/structure/table,
 /obj/item/storage/firstaid/regular,
 /turf/open/floor/plasteel/darkblue,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "m" = (
 /obj/machinery/sleeper,
 /turf/open/floor/plasteel/darkblue,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "n" = (
 /turf/open/floor/plasteel,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "o" = (
-/obj/machinery/door/airlock/public/glass,
+/obj/machinery/door/airlock/glass,
 /turf/open/floor/plasteel,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "p" = (
 /turf/open/floor/plasteel/darkblue,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "q" = (
 /turf/open/floor/plasteel/darkyellow,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "r" = (
 /obj/structure/table/reinforced,
 /turf/open/floor/plasteel/darkyellow,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "s" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "t" = (
 /obj/machinery/power/smes/magical,
 /turf/open/floor/plasteel,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "u" = (
 /obj/effect/spawner/structure/window/shuttle,
 /turf/open/floor/plating,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "v" = (
 /obj/structure/chair/comfy{
 	dir = 4
 	},
 /turf/open/floor/plasteel/darkyellow,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 "w" = (
 /obj/structure/shuttle/engine/propulsion/burst/right{
 	dir = 8
 	},
 /turf/open/space,
-/area/ruin/powered/shuttle/medium_1)
+/area/ruin/powered{
+	name = "Shuttle"
+	})
+"x" = (
+/turf/closed/wall/mineral/plastitanium{
+	dir = 1;
+	icon_state = "diagonalWall3"
+	},
+/turf/closed/wall/mineral/titanium,
+/area/ruin/powered{
+	name = "Shuttle"
+	})
+"y" = (
+/turf/closed/wall/mineral/plastitanium{
+	dir = 4;
+	icon_state = "diagonalWall3"
+	},
+/area/ruin/powered{
+	name = "Shuttle"
+	})
 
 (1,1,1) = {"
 a
@@ -96,7 +170,7 @@ a
 a
 i
 h
-f
+g
 h
 i
 a
@@ -111,11 +185,11 @@ a
 a
 a
 a
-f
+g
 n
 n
 n
-f
+g
 a
 a
 a
@@ -127,13 +201,13 @@ a
 a
 a
 i
-f
-f
+g
+g
 o
-f
+g
 o
-f
-f
+g
+g
 i
 a
 a
@@ -143,15 +217,15 @@ a
 b
 b
 b
-f
+g
 j
-f
+g
 n
 n
 n
-f
+g
 j
-f
+g
 w
 w
 w
@@ -160,7 +234,7 @@ w
 c
 c
 c
-f
+g
 j
 k
 n
@@ -168,7 +242,7 @@ t
 n
 k
 j
-f
+g
 c
 c
 c
@@ -177,40 +251,40 @@ c
 d
 d
 f
-f
+g
 k
-f
-f
-f
-f
-f
+g
+g
+g
+g
+g
 k
-f
-f
+g
+x
 d
 d
 "}
 (7,1,1) = {"
 d
 d
-f
+g
 j
 j
-f
+g
 j
 j
 j
-f
+g
 j
 j
-f
+g
 d
 d
 "}
 (8,1,1) = {"
 d
 d
-f
+g
 j
 j
 k
@@ -220,41 +294,41 @@ j
 k
 j
 j
-f
+g
 d
-d
+y
 "}
 (9,1,1) = {"
+e
 d
-d
-f
+g
 j
 j
-f
+g
 j
 j
 j
-f
+g
 j
 j
-f
-d
+g
+y
 a
 "}
 (10,1,1) = {"
 a
-d
-f
-f
-f
-f
+e
+g
+g
+g
+g
 k
-f
+g
 k
-f
-f
-f
-f
+g
+g
+g
+g
 a
 a
 "}
@@ -280,13 +354,13 @@ a
 a
 h
 j
-f
+g
 j
 j
 u
 j
 j
-f
+g
 j
 h
 a
@@ -296,15 +370,15 @@ a
 a
 a
 i
-f
-f
-f
+g
+g
+g
 k
-f
+g
 k
-f
-f
-f
+g
+g
+g
 i
 a
 a
@@ -314,13 +388,13 @@ a
 a
 a
 a
-f
+g
 l
 p
 u
 j
 j
-f
+g
 a
 a
 a
@@ -331,13 +405,13 @@ a
 a
 a
 a
-f
+g
 m
 p
 u
 j
 j
-f
+g
 a
 a
 a
@@ -348,13 +422,13 @@ a
 a
 a
 a
-f
-f
+g
+g
 k
-f
+g
 k
-f
-f
+g
+g
 a
 a
 a
@@ -365,13 +439,13 @@ a
 a
 a
 a
-f
+g
 j
 j
-f
+g
 j
 j
-f
+g
 a
 a
 a
@@ -382,13 +456,13 @@ a
 a
 a
 a
-f
+g
 j
 j
-f
+g
 j
 j
-f
+g
 a
 a
 a
@@ -400,11 +474,11 @@ a
 a
 a
 i
-f
+g
 k
-f
+g
 k
-f
+g
 i
 a
 a
@@ -417,11 +491,11 @@ a
 a
 a
 a
-f
+g
 q
 q
 q
-f
+g
 a
 a
 a
@@ -434,11 +508,11 @@ a
 a
 a
 a
-f
+g
 q
 v
 q
-f
+g
 a
 a
 a
@@ -451,11 +525,11 @@ a
 a
 a
 a
-f
+g
 r
 r
 r
-f
+g
 a
 a
 a

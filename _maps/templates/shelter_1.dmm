@@ -61,7 +61,7 @@
 /area/survivalpod)
 "n" = (
 /obj/structure/fans/tiny,
-/obj/machinery/door/airlock/survival_pod/glass,
+/obj/machinery/door/airlock/survival_pod,
 /turf/open/floor/pod,
 /area/survivalpod)
 "o" = (

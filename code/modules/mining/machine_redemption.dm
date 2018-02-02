@@ -82,7 +82,7 @@
 		if(!M || !redemption_mat)
 			return FALSE
 
-		var/smeltable_sheets = FLOOR(redemption_mat.amount / M, 1)
+		var/smeltable_sheets = Floor(redemption_mat.amount / M)
 
 		if(!smeltable_sheets)
 			return FALSE
@@ -102,7 +102,7 @@
 		smelt_ore(ore)
 
 /obj/machinery/mineral/ore_redemption/proc/send_console_message()
-	if(!is_station_level(z))
+	if(!(z in GLOB.station_z_levels))
 		return
 	message_sent = TRUE
 	var/area/A = get_area(src)
@@ -257,8 +257,9 @@
 		if("Release")
 
 			if(check_access(inserted_id) || allowed(usr)) //Check the ID inside, otherwise check the user
+				var/out = get_step(src, output_dir)
 				if(params["id"] == "all")
-					materials.retrieve_all(get_step(src, output_dir))
+					materials.retrieve_all(out)
 				else
 					var/mat_id = params["id"]
 					if(!materials.materials[mat_id])
@@ -276,7 +277,7 @@
 						desired = input("How many sheets?", "How many sheets would you like to smelt?", 1) as null|num
 
 					var/sheets_to_remove = round(min(desired,50,stored_amount))
-					materials.retrieve_sheets(sheets_to_remove, mat_id, get_step(src, output_dir))
+					materials.retrieve_sheets(sheets_to_remove, mat_id, out)
 
 			else
 				to_chat(usr, "<span class='warning'>Required access not found.</span>")

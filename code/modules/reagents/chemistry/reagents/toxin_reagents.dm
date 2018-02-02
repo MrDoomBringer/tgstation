@@ -73,13 +73,11 @@
 /datum/reagent/toxin/plasma/reaction_obj(obj/O, reac_volume)
 	if((!O) || (!reac_volume))
 		return 0
-	var/temp = holder ? holder.chem_temp : T20C
-	O.atmos_spawn_air("plasma=[reac_volume];TEMP=[temp]")
+	O.atmos_spawn_air("plasma=[reac_volume];TEMP=[T20C]")
 
 /datum/reagent/toxin/plasma/reaction_turf(turf/open/T, reac_volume)
 	if(istype(T))
-		var/temp = holder ? holder.chem_temp : T20C
-		T.atmos_spawn_air("plasma=[reac_volume];TEMP=[temp]")
+		T.atmos_spawn_air("plasma=[reac_volume];TEMP=[T20C]")
 	return
 
 /datum/reagent/toxin/plasma/reaction_mob(mob/living/M, method=TOUCH, reac_volume)//Splashing people with plasma is stronger than fuel!
@@ -143,7 +141,7 @@
 	taste_description = "mint"
 
 /datum/reagent/toxin/minttoxin/on_mob_life(mob/living/M)
-	if(M.has_trait(TRAIT_FAT))
+	if(M.disabilities & FAT)
 		M.gib()
 	return ..()
 
@@ -164,22 +162,18 @@
 	toxpwr = 0.5
 	taste_description = "death"
 
-/datum/reagent/toxin/zombiepowder/on_mob_add(mob/M)
-	..()
-	if(isliving(M))
-		var/mob/living/L = M
-		L.fakedeath(id)
-
-/datum/reagent/toxin/zombiepowder/on_mob_delete(mob/M)
-	if(isliving(M))
-		var/mob/living/L = M
-		L.cure_fakedeath(id)
-	..()
-
 /datum/reagent/toxin/zombiepowder/on_mob_life(mob/living/carbon/M)
+	M.status_flags |= FAKEDEATH
 	M.adjustOxyLoss(0.5*REM, 0)
+	M.Knockdown(100, 0)
+	M.silent = max(M.silent, 5)
+	M.tod = worldtime2text()
 	..()
 	. = 1
+
+/datum/reagent/toxin/zombiepowder/on_mob_delete(mob/M)
+	M.status_flags &= ~FAKEDEATH
+	..()
 
 /datum/reagent/toxin/mindbreaker
 	name = "Mindbreaker Toxin"
@@ -248,10 +242,8 @@
 	toxpwr = 1
 
 /datum/reagent/toxin/spore/on_mob_life(mob/living/M)
-	if(iscarbon(M))
-		var/mob/living/carbon/C = M
-		C.damageoverlaytemp = 60
-		C.update_damage_hud()
+	M.damageoverlaytemp = 60
+	M.update_damage_hud()
 	M.blur_eyes(3)
 	return ..()
 
@@ -858,9 +850,9 @@
 
 /datum/reagent/toxin/peaceborg/confuse/on_mob_life(mob/living/M)
 	if(M.confused < 6)
-		M.confused = CLAMP(M.confused + 3, 0, 5)
+		M.confused = Clamp(M.confused + 3, 0, 5)
 	if(M.dizziness < 6)
-		M.dizziness = CLAMP(M.dizziness + 3, 0, 5)
+		M.dizziness = Clamp(M.dizziness + 3, 0, 5)
 	if(prob(20))
 		to_chat(M, "You feel confused and disorientated.")
 	..()

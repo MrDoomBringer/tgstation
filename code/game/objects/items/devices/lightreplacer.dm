@@ -149,7 +149,7 @@
 		to_chat(user, "<span class='notice'>You fill \the [src] with lights from \the [S]. " + status_string() + "</span>")
 
 /obj/item/device/lightreplacer/emag_act()
-	if(obj_flags & EMAGGED)
+	if(emagged)
 		return
 	Emag()
 
@@ -157,7 +157,7 @@
 	to_chat(user, status_string())
 
 /obj/item/device/lightreplacer/update_icon()
-	icon_state = "lightreplacer[(obj_flags & EMAGGED ? 1 : 0)]"
+	icon_state = "lightreplacer[emagged]"
 
 /obj/item/device/lightreplacer/proc/status_string()
 	return "It has [uses] light\s remaining (plus [bulb_shards] fragment\s)."
@@ -169,7 +169,7 @@
 
 // Negative numbers will subtract
 /obj/item/device/lightreplacer/proc/AddUses(amount = 1)
-	uses = CLAMP(uses + amount, 0, max_uses)
+	uses = Clamp(uses + amount, 0, max_uses)
 
 /obj/item/device/lightreplacer/proc/AddShards(amount = 1, user)
 	bulb_shards += amount
@@ -205,7 +205,7 @@
 
 			target.status = L2.status
 			target.switchcount = L2.switchcount
-			target.rigged = (obj_flags & EMAGGED ? 1 : 0)
+			target.rigged = emagged
 			target.brightness = L2.brightness
 			target.on = target.has_power()
 			target.update()
@@ -223,9 +223,9 @@
 		return
 
 /obj/item/device/lightreplacer/proc/Emag()
-	obj_flags ^= EMAGGED
+	emagged = !emagged
 	playsound(src.loc, "sparks", 100, 1)
-	if(obj_flags & EMAGGED)
+	if(emagged)
 		name = "shortcircuited [initial(name)]"
 	else
 		name = initial(name)
