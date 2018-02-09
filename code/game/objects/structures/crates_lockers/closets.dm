@@ -30,10 +30,10 @@
 	var/open_sound = 'sound/machines/click.ogg'
 	var/close_sound = 'sound/machines/click.ogg'
 	var/material_drop = /obj/item/stack/sheet/metal
-	var/material_drop_amount = 2
+	var/material_drop_amount = 6
 	var/delivery_icon = "deliverycloset" //which icon to use when packagewrapped. null to be unwrappable.
 	var/anchorable = TRUE
-
+	var/max_w_class = WEIGHT_CLASS_GIGANTIC
 
 /obj/structure/closet/Initialize(mapload)
 	if(mapload && !opened)		// if closed, any item at the crate's loc is put in the contents
@@ -124,6 +124,10 @@
 /obj/structure/closet/proc/take_contents()
 	var/atom/L = drop_location()
 	for(var/atom/movable/AM in L)
+		if (istype(AM, /obj/item))
+			var/obj/item/I = AM
+			if (I.w_class > max_w_class)
+				break
 		if(AM != src && insert(AM) == -1) // limit reached
 			break
 
