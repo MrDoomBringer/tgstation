@@ -34,15 +34,19 @@ GLOBAL_LIST_EMPTY(conveyors_by_id)
 		log_game("### MAPPING ERROR: [src] at [AREACOORD(src)] spawned without using a diagonal dir. Please replace with a normal version.")
 
 // Auto conveyour is always on unless unpowered
+/obj/machinery/conveyor/auto/
+	icon_state = "conveyor_auto0"
+
 
 /obj/machinery/conveyor/auto/Initialize(mapload, newdir)
 	. = ..()
 	operating = TRUE
 	update_move_direction()
+	
 
 /obj/machinery/conveyor/auto/update()
 	if(stat & BROKEN)
-		icon_state = "conveyor-broken"
+		icon_state = "conveyor_auto-broken"
 		operating = FALSE
 		return
 	else if(!operable)
@@ -51,7 +55,7 @@ GLOBAL_LIST_EMPTY(conveyors_by_id)
 		operating = FALSE
 	else
 		operating = TRUE
-	icon_state = "conveyor[operating * verted]"
+	icon_state = "auto_conveyor[operating * verted]"
 
 // create a conveyor
 /obj/machinery/conveyor/Initialize(mapload, newdir, newid)
