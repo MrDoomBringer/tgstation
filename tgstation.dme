@@ -1380,6 +1380,7 @@
 #include "code\modules\cargo\factory\factory_converter.dm"
 #include "code\modules\cargo\factory\factory_input.dm"
 #include "code\modules\cargo\factory\factory_mover.dm"
+#include "code\modules\cargo\factory\factory_splitter.dm"
 #include "code\modules\chatter\chatter.dm"
 #include "code\modules\client\asset_cache.dm"
 #include "code\modules\client\client_colour.dm"

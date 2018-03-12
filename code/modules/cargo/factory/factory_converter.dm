@@ -1,6 +1,3 @@
-/**********************Ore Redemption Unit**************************/
-//Turns all the various mining machines into a single unit to speed up mining and establish a point system
-
 /obj/machinery/cargo/factory_converter
 	name = "crate upgrader"
 	desc = "A machine that accepts small crates and transforms them into large crates"
@@ -33,10 +30,18 @@
 		tryConvert()
 
 /obj/machinery/cargo/factory_converter/proc/tryConvert()
-	var/mob/living/M = convertee
-	if (M.resting || istype(convertee,/obj/structure/closet/crate/small))
-		return FALSE
-	M.Stun(20)
+	if (istype(convertee, /mob/living))
+		var/mob/living/M = convertee
+		if (M.resting)
+			M.Stun(20)
+			convert()
+			return TRUE
+	else if (istype(convertee, /obj/structure/closet/crate/small))
+		convert()
+		return TRUE
+	return FALSE
+
+/obj/machinery/cargo/factory_converter/proc/convert()
 	converting = TRUE
 	update_icon()
 	playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)
@@ -46,21 +51,20 @@
 	converting = FALSE
 	playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)
 	if (istype(convertee, /mob/living))
-		var/mob/living/B = convertee
-		B.gib()
+		var/mob/living/M = convertee
+		M.gib()
 	else if (istype(convertee, /obj/structure/closet/crate/small))
+		qdel(convertee)
 		new /obj/structure/closet/crate(loc)
 	update_icon()
 
 /obj/machinery/cargo/factory_converter/CanPass(atom/movable/mover, turf/target)
 	var/mob/living/M = mover
-	if (istype(M) && !M.resting)
-		return FALSE//mobs cant go in if they arent resting
-	if (converting)
-		return FALSE//things cant go in if converting
+	if ((istype(M) && !M.resting) || converting)
+		return FALSE//mobs cant go in if they arent resting, and things cant go in if converting
 	return get_dir(loc, target) == dir || get_dir(loc, target) == turn(dir, 180)//allows things to enter via front/back, but not sides
 				
 /obj/machinery/cargo/factory_converter/CheckExit(atom/movable/O as mob|obj, target)	
-	if(get_dir(O.loc, target) == dir || get_dir(O.loc, target) == turn(dir, 180))//allows things to leave via front/back, but not sides
-		return TRUE
-	return FALSE
+	if(converting)//cant leave while converting 
+		return FALSE
+	return (get_dir(O.loc, target) == dir || get_dir(O.loc, target) == turn(dir, 180))//allows things to leave via front/back, but not sides
