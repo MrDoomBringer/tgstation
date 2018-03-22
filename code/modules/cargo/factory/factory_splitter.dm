@@ -11,13 +11,18 @@
 	var/splitting = FALSE
 	var/lightIcon = "splitter_green"
 	var/flipped = FALSE
-	var/output_dir = NORTH//default, overridden in canPass
+	var/output_dir
+
+/obj/machinery/cargo/factory_splitter/Initialize()
+	. = ..()
+	update_icon()
 
 /obj/machinery/cargo/factory_splitter/attack_hand(mob/living/user)
 	active = !active
 	update_icon()
+	return
 
-/obj/machinery/cargo/factory_splitter/screwdriver_act(mob/living/user, obj/item/tool)
+/obj/machinery/cargo/factory_splitter/multitool_act(mob/living/user, obj/item/tool)
 	flipped = !flipped
 	to_chat(user, "<span class='notice'>You flip the output direction.</span>")
 
@@ -25,19 +30,20 @@
 	cut_overlays()
 	if (active)
 		add_overlay("splitter_green")
-	add_overlay("puck")
 
 /obj/machinery/cargo/factory_splitter/CanPass(atom/movable/mover, turf/target)
 	var/mob/living/M = mover
-	if (istype(M) && !M.resting)
-		return FALSE//mobs cant go in if they arent resting
-	output_dir = turn(get_dir(loc, target), (flipped ? 90 : -90))
+	if (istype(M) && !M.lying)//mobs cant go in if they arent lying down
+		return FALSE
+
+	if (splitting && active)
+		output_dir = turn(get_dir(loc, target), (flipped ? 90 : -90))
+	else
+		output_dir = get_dir(loc, target)
 	return TRUE
 
-/obj/machinery/cargo/factory_splitter/Crossed(atom/movable/AM)
-	if(step(AM, output_dir))
-		cut_overlays()
-		add_overlay("puck[output_dir]")
+/obj/machinery/cargo/factory_splitter/Crossed(atom/movable/AM)	
+	if (splitting)
+		AM.ConveyorMove(output_dir)
 		playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)
-		update_icon()
-	to_chat(user, "<span class='notice'>direction = [output_dir]</span>")
+	splitting = !splitting	

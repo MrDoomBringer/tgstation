@@ -60,7 +60,7 @@
 
 /obj/machinery/cargo/factory_converter/CanPass(atom/movable/mover, turf/target)
 	var/mob/living/M = mover
-	if ((istype(M) && !M.resting) || converting)
+	if ((istype(M) && !M.lying) || converting)
 		return FALSE//mobs cant go in if they arent resting, and things cant go in if converting
 	return get_dir(loc, target) == dir || get_dir(loc, target) == turn(dir, 180)//allows things to enter via front/back, but not sides
 				
