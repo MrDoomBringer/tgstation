@@ -10,7 +10,7 @@
 	anchored = TRUE
 	var/output_dir = SOUTH
 	var/on = FALSE
-	var/input_dir = SOUTH
+
 	var/valuebuffer
 	var/production_rate = 50
 	var/efficiency = 2
