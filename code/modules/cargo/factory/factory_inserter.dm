@@ -12,7 +12,6 @@
 	active_power_usage = 50
 	circuit = /obj/item/circuitboard/machine/processor
 	var/machinery/cargo_factory/linked_machine
-	var/input_dir = SOUTH
 
 /obj/machinery/inserter/update_icon()
 	cut_overlays()
@@ -23,10 +22,14 @@
 	. = ..()
 	AddComponent(/datum/component/simple_rotation,ROTATION_ALTCLICK | ROTATION_FLIP ,null,CALLBACK(src, .proc/can_be_rotated))
 
-/obj/machinery/mateinserter/proc/link()
+/obj/machinery/inserter/attack_hand(mob/living/user)
+	src.add_fingerprint(user)
+	link()
+
+/obj/machinery/inserter/proc/link()
 	if(panel_open || !powered())
 		return
-	var/atom/T = get_step(src, input_dir)
+	var/atom/T = get_step(src, dir)
 	for (var/machinery/cargo_factory/M in T)
 		linked_machine=M
 	update_icon()
