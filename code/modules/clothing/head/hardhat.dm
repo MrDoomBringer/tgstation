@@ -62,20 +62,6 @@
 	cold_protection = HEAD
 	min_cold_protection_temperature = FIRE_HELM_MIN_TEMP_PROTECT
 	dog_fashion = /datum/dog_fashion/head
-	name = "welding helmet"
-	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
-	icon_state = "welding"
-	flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
-	item_state = "welding"
-	materials = list(MAT_METAL=1750, MAT_GLASS=400)
-	flash_protect = 2
-	tint = 2
-	armor = list("melee" = 10, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 60)
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
-	actions_types = list(/datum/action/item_action/toggle)
-	visor_flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
-	visor_flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
-	resistance_flags = FIRE_PROOF
 
 /obj/item/clothing/head/welding/attack_self(mob/user)
 	weldingvisortoggle(user)
@@ -100,3 +86,29 @@
 	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT
 	cold_protection = HEAD
 	min_cold_protection_temperature = FIRE_HELM_MIN_TEMP_PROTECT
+
+/obj/item/clothing/head/hardhat/weldhat/white
+	icon_state = "hardhat0_white"
+	item_state = "hardhat0_white"
+	item_color = "white"
+	clothing_flags = STOPSPRESSUREDAMAGE
+	heat_protection = HEAD
+	max_heat_protection_temperature = FIRE_HELM_MAX_TEMP_PROTECT
+	cold_protection = HEAD
+	min_cold_protection_temperature = FIRE_HELM_MIN_TEMP_PROTECT
+	dog_fashion = /datum/dog_fashion/head
+	name = "welding hardhat"
+	desc = "A hat-mounted face cover designed to protect the wearer completely from space-arc eye."
+	icon_state = "welding"
+	flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
+	item_state = "welding"
+	materials = list(MAT_METAL=1750, MAT_GLASS=400)
+	flash_protect = 2
+	tint = 2
+	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+	actions_types = list(/datum/action/item_action/toggle)
+	visor_flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+	visor_flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
+	resistance_flags = FIRE_PROOF
+/obj/item/clothing/head/hardhat/weldhat/white/AltClick(mob/user)
+	weldingvisortoggle(user)
