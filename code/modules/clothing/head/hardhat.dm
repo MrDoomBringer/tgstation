@@ -104,26 +104,26 @@
 		icon_state = "weldhat[on]_[item_color]up"
 		item_state = "weldhat[on]_[item_color]up"
 		user.update_inv_head()	
-	
-		if(on)
-			turn_on(user)
-		else
-			turn_off(user)
-		for(var/X in actions)
-			var/datum/action/A = X
-			A.UpdateButtonIcon()
 	else
 		icon_state = "weldhat[on]_[item_color]"
 		item_state = "weldhat[on]_[item_color]"
 		user.update_inv_head()	
 	
-		if(on)
-			turn_on(user)
-		else
-			turn_off(user)
-		for(var/X in actions)
-			var/datum/action/A = X
-			A.UpdateButtonIcon()
+	if(on)
+		turn_on(user)
+	else
+		turn_off(user)
+	for(var/X in actions)
+		var/datum/action/A = X
+		A.UpdateButtonIcon()
 
 /obj/item/clothing/head/hardhat/weldhat/AltClick(mob/user)
 	weldingvisortoggle(user)
+	if(on)
+		if(up)
+			icon_state = "weldhat1_[item_color]up"
+			item_state = "weldhat1_[item_color]up"
+		else
+			icon_state = "weldhat1_[item_color]"
+			item_state = "weldhat1_[item_color]"
+	user.update_inv_head()
