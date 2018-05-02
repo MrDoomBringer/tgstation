@@ -63,10 +63,6 @@
 	min_cold_protection_temperature = FIRE_HELM_MIN_TEMP_PROTECT
 	dog_fashion = /datum/dog_fashion/head
 
-/obj/item/clothing/head/welding/attack_self(mob/user)
-	weldingvisortoggle(user)
-
-
 /obj/item/clothing/head/hardhat/dblue
 	icon_state = "hardhat0_dblue"
 	item_state = "hardhat0_dblue"
@@ -93,7 +89,7 @@
 	icon_state = "weldhat0_white"
 	item_state = "weldhat0_white"
 	item_color = "white"
-	actions_types = list(/datum/action/item_action/toggle)
+	actions_types = list(/datum/action/item_action/toggle_helmet_light, /datum/action/item_action/toggle)
 	flash_protect = 2
 	tint = 2
 	flags_inv = HIDEEYES
@@ -107,7 +103,7 @@
 	if(up)
 		icon_state = "weldhat[on]_[item_color]up"
 		item_state = "weldhat[on]_[item_color]up"
-		user.update_inv_head()	//so our mob-overlays update
+		user.update_inv_head()	
 	
 		if(on)
 			turn_on(user)
@@ -119,7 +115,7 @@
 	else
 		icon_state = "weldhat[on]_[item_color]"
 		item_state = "weldhat[on]_[item_color]"
-		user.update_inv_head()	//so our mob-overlays update
+		user.update_inv_head()	
 	
 		if(on)
 			turn_on(user)
