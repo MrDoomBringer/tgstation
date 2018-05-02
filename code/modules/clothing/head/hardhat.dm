@@ -90,14 +90,44 @@
 /obj/item/clothing/head/hardhat/weldhat/
 	name = "welding hard hat"
 	desc = "A piece of headgear used in dangerous working conditions to protect the head. Comes with a built-in flashlight and welding shield."
-	icon_state = "weldhat0_yellow"
-	item_state = "weldhat0_yellow"
+	icon_state = "weldhat0_white"
+	item_state = "weldhat0_white"
+	item_color = "white"
 	actions_types = list(/datum/action/item_action/toggle)
 	flash_protect = 2
 	tint = 2
+	flags_inv = HIDEEYES
+	flags_cover = HEADCOVERSEYES
 	visor_vars_to_toggle = VISOR_FLASHPROTECT | VISOR_TINT
 	visor_flags_inv = HIDEEYES 
 	visor_flags_cover = HEADCOVERSEYES
+
+/obj/item/clothing/head/hardhat/weldhat/attack_self(mob/user)
+	on = !on
+	if(up)
+		icon_state = "weldhat[on]_[item_color]up"
+		item_state = "weldhat[on]_[item_color]up"
+		user.update_inv_head()	//so our mob-overlays update
+	
+		if(on)
+			turn_on(user)
+		else
+			turn_off(user)
+		for(var/X in actions)
+			var/datum/action/A = X
+			A.UpdateButtonIcon()
+	else
+		icon_state = "weldhat[on]_[item_color]"
+		item_state = "weldhat[on]_[item_color]"
+		user.update_inv_head()	//so our mob-overlays update
+	
+		if(on)
+			turn_on(user)
+		else
+			turn_off(user)
+		for(var/X in actions)
+			var/datum/action/A = X
+			A.UpdateButtonIcon()
 
 /obj/item/clothing/head/hardhat/weldhat/AltClick(mob/user)
 	weldingvisortoggle(user)
