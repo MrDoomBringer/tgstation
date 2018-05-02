@@ -87,28 +87,17 @@
 	cold_protection = HEAD
 	min_cold_protection_temperature = FIRE_HELM_MIN_TEMP_PROTECT
 
-/obj/item/clothing/head/hardhat/weldhat/white
-	icon_state = "hardhat0_white"
-	item_state = "hardhat0_white"
-	item_color = "white"
-	clothing_flags = STOPSPRESSUREDAMAGE
-	heat_protection = HEAD
-	max_heat_protection_temperature = FIRE_HELM_MAX_TEMP_PROTECT
-	cold_protection = HEAD
-	min_cold_protection_temperature = FIRE_HELM_MIN_TEMP_PROTECT
-	dog_fashion = /datum/dog_fashion/head
-	name = "welding hardhat"
-	desc = "A hat-mounted face cover designed to protect the wearer completely from space-arc eye."
-	icon_state = "welding"
-	flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
-	item_state = "welding"
-	materials = list(MAT_METAL=1750, MAT_GLASS=400)
+/obj/item/clothing/head/hardhat/weldhat/
+	name = "welding hard hat"
+	desc = "A piece of headgear used in dangerous working conditions to protect the head. Comes with a built-in flashlight and welding shield."
+	icon_state = "weldhat0_yellow"
+	item_state = "weldhat0_yellow"
+	actions_types = list(/datum/action/item_action/toggle)
 	flash_protect = 2
 	tint = 2
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
-	actions_types = list(/datum/action/item_action/toggle)
-	visor_flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
-	visor_flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
-	resistance_flags = FIRE_PROOF
-/obj/item/clothing/head/hardhat/weldhat/white/AltClick(mob/user)
+	visor_vars_to_toggle = VISOR_FLASHPROTECT | VISOR_TINT
+	visor_flags_inv = HIDEEYES 
+	visor_flags_cover = HEADCOVERSEYES
+
+/obj/item/clothing/head/hardhat/weldhat/AltClick(mob/user)
 	weldingvisortoggle(user)
