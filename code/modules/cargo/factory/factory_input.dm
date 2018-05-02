@@ -42,5 +42,5 @@
 
 	if (valuebuffer - production_rate > 0)
 		valuebuffer -= production_rate
-		new /obj/structure/closet/crate/hydroponics(loc)
+		new /obj/item/crate_essence(loc)
 
