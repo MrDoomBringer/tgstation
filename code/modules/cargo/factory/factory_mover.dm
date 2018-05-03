@@ -6,7 +6,5 @@
 	density = TRUE
 	anchored = TRUE
 	var/input_dir = WEST
-	var/output_dir = EAST4
-
-/obj/machinery/cargo_factory/factory_mover
+	var/output_dir = EAST
 	

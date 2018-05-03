@@ -44,6 +44,9 @@
 		target.forceMove(src)
 		sleep(insert_speed)
 		if (linked_machine)
-			target.foceMove(linked_machine)
+			if (linked_machine.max_contents > linked_machine.contents.len)
+				target.foceMove(linked_machine)
+			else
+				return
 		else
 			target.ConveyorMove(output_dir)

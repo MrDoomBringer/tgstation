@@ -6,12 +6,19 @@
 	density = TRUE
 	anchored = TRUE
 	layer = ABOVE_MOB_LAYER
+	var/active = TRUE
 	density = TRUE
-	var/active = FALSE
 	var/converting = FALSE
 	var/lightIcon = "green"
-	var/atom/movable/convertee
 	var/convert_sound = 'sound/machines/click.ogg'
+	var/max_n_contents = 1
+	var/obj/structure/closet/crate/input_type
+	var/list/required_materials = list()
+	var/list/craftBuffer = list()
+
+/obj/machinery/cargo_factory/converter/Initialize()
+	..()
+	required_materials = typecacheof(list(/obj/structure/closet/crate, /obj/cratanium))
 
 /obj/machinery/cargo_factory/converter/attack_hand(mob/living/user)
 	active = !active
@@ -21,47 +28,23 @@
 	cut_overlays()
 	icon_state = "[name][converting]"
 
-/obj/machinery/cargo_factory/converter/Crossed(atom/movable/AM)
-	convertee = AM
-	if(active)
-		tryConvert()
+/obj/machinery/cargo_factory/converter/process()
+	attempt_upgrade()
 
-/obj/machinery/cargo_factory/converter/proc/tryConvert()
-	if (istype(convertee, /mob/living))
-		var/mob/living/M = convertee
-		if (M.resting)
-			M.Stun(20)
-			convert()
-			return TRUE
-	else if (istype(convertee, /obj/structure/closet/crate/small))
-		convert()
-		return TRUE
-	return FALSE
+/obj/machinery/cargo_factory/converter/proc/attempt_insert()
 
-/obj/machinery/cargo_factory/converter/proc/convert()
-	converting = TRUE
-	update_icon()
-	playsound(loc, convert_sound, 15, 1, -3)
-	addtimer(CALLBACK(src, .proc/endConvert), 20)
-
-/obj/machinery/cargo_factory/converter/proc/endConvert()
-	converting = FALSE
-	playsound(loc, convert_sound, 15, 1, -3)
-	if (istype(convertee, /mob/living))
-		var/mob/living/M = convertee
-		M.gib()
-	else if (istype(convertee, /obj/structure/closet/crate/small))
-		qdel(convertee)
-		new /obj/structure/closet/crate(loc)
-	update_icon()
-
-/obj/machinery/cargo_factory/converter/CanPass(atom/movable/mover, turf/target)
-	var/mob/living/M = mover
-	if ((istype(M) && !M.lying) || converting)
-		return FALSE//mobs cant go in if they arent resting, and things cant go in if converting
-	return get_dir(loc, target) == dir || get_dir(loc, target) == turn(dir, 180)//allows things to enter via front/back, but not sides
-
-/obj/machinery/cargo_factory/converter/CheckExit(atom/movable/O as mob|obj, target)	
-	if(converting)//cant leave while converting 
-		return FALSE
-	return (get_dir(O.loc, target) == dir || get_dir(O.loc, target) == turn(dir, 180))//allows things to leave via front/back, but not sides
+/obj/machinery/cargo_factory/converter/proc/attempt_upgrade()
+	var/list/index_list = list()
+	var/oldLen
+	for(var/i in 1 to required_materials.len)
+		oldLen = index_list.len
+		for (var/j in 1 to contents.len)	
+			if(istype(contents[j], required_materials[i]))
+				index_list.Add(j)
+				break
+		if (oldLen == index_list.len)
+			return FALSE
+		if (index_list.len == required_materials.len)
+			for(var/k in 1 to index_list.len)
+				qdel(contents[index_list[k]])
+			new /obj/structure/closet/crate(loc)

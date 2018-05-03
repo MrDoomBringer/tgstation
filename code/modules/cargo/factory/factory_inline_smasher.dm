@@ -1,4 +1,4 @@
-/obj/machinery/cargo_factory/converter/smasher
+/obj/machinery/cargo_factory/smasher
 	name = "crate upgrader"
 	desc = "A machine that accepts small crates and transforms them into large crates"
 	icon = 'icons/obj/machines/cargo.dmi'
@@ -12,11 +12,11 @@
 	var/lightIcon = "green"
 	var/atom/movable/convertee
 
-/obj/machinery/cargo_factory/converter/smasher/attack_hand(mob/living/user)
+/obj/machinery/cargo_factory/smasher/attack_hand(mob/living/user)
 	active = !active
 	update_icon()
 
-/obj/machinery/cargo_factory/converter/smasher/update_icon()
+/obj/machinery/cargo_factory/smasher/update_icon()
 	cut_overlays()
 	icon_state = "[name][converting]"
 	if (active && converting)
@@ -24,12 +24,12 @@
 	else if (active)
 		add_overlay("green_front")
 
-/obj/machinery/cargo_factory/converter/smasher/Crossed(atom/movable/AM)
+/obj/machinery/cargo_factory/smasher/Crossed(atom/movable/AM)
 	convertee = AM
 	if(active)
 		tryConvert()
 
-/obj/machinery/cargo_factory/converter/smasher/proc/tryConvert()
+/obj/machinery/cargo_factory/smasher/proc/tryConvert()
 	if (istype(convertee, /mob/living))
 		var/mob/living/M = convertee
 		if (M.resting)
@@ -41,13 +41,13 @@
 		return TRUE
 	return FALSE
 
-/obj/machinery/cargo_factory/converter/smasher/proc/convert()
+/obj/machinery/cargo_factory/smasher/proc/convert()
 	converting = TRUE
 	update_icon()
 	playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)
 	addtimer(CALLBACK(src, .proc/endConvert), 20)
 
-/obj/machinery/cargo_factory/converter/smasher/proc/endConvert()
+/obj/machinery/cargo_factory/smasher/proc/endConvert()
 	converting = FALSE
 	playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)
 	if (istype(convertee, /mob/living))
@@ -58,13 +58,13 @@
 		new /obj/structure/closet/crate(loc)
 	update_icon()
 
-/obj/machinery/cargo_factory/converter/smasher/CanPass(atom/movable/mover, turf/target)
+/obj/machinery/cargo_factory/smasher/CanPass(atom/movable/mover, turf/target)
 	var/mob/living/M = mover
 	if ((istype(M) && !M.lying) || converting)
 		return FALSE//mobs cant go in if they arent resting, and things cant go in if converting
 	return get_dir(loc, target) == dir || get_dir(loc, target) == turn(dir, 180)//allows things to enter via front/back, but not sides
 				
-/obj/machinery/cargo_factory/converter/smasher/CheckExit(atom/movable/O as mob|obj, target)	
+/obj/machinery/cargo_factory/smasher/CheckExit(atom/movable/O as mob|obj, target)	
 	if(converting)//cant leave while converting 
 		return FALSE
 	return (get_dir(O.loc, target) == dir || get_dir(O.loc, target) == turn(dir, 180))//allows things to leave via front/back, but not sides

@@ -32,7 +32,7 @@
 /obj/machinery/cargo_factory/factory_input/process()
 	if(panel_open || !powered())
 		return
-	var/atom/T = get_step(src, input_dir)
+	var/atom/T = get_step(src, dir)
 	for (var/AM in T)
 		var/value = 0
 		value += export_item_and_contents(AM,TRUE, TRUE, dry_run = TRUE)
