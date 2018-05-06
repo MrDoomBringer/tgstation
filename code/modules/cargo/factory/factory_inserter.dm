@@ -12,7 +12,6 @@
 	active_power_usage = 50
 	circuit = /obj/item/circuitboard/machine/processor
 	var/machinery/cargo_factory/linked_machine
-	var/max_n_of_items = 1
 	var/output_dir = EAST
 	var/insert_speed = 10//in deciseconds
 
@@ -39,14 +38,18 @@
 	update_icon()
 
 /obj/machinery/inserter/Process()	
-	if (contents.len < max_n_of_items)
-		var/obj/structure/closet/crate/target = locate() in input
-		target.forceMove(src)
-		sleep(insert_speed)
-		if (linked_machine)
+	if (linked_machine)
+		var/atom/input = get_step(src, dir)
+		var/atom/movable/AM = locate() in input
+		if (linked_machine.can_insert(AM))
+			target.forceMove(src)
+			addtimer(CALLBACK(src, .proc/insertMaterial, AM), insert_speed)
+
+/obj/machinery/inserter/proc/insertMaterial(atom/movable/AM)
+	if (linked_machine)
 			if (linked_machine.max_contents > linked_machine.contents.len)
-				target.foceMove(linked_machine)
+				AM.foceMove(linked_machine)
 			else
 				return
 		else
-			target.ConveyorMove(output_dir)
+			AM.ConveyorMove(output_dir)

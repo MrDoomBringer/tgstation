@@ -12,14 +12,15 @@
 	var/lightIcon = "green"
 	var/convert_sound = 'sound/machines/click.ogg'
 	var/max_n_contents = 1
-	var/obj/structure/closet/crate/input_type
-	var/list/required_materials = list()
-	var/list/craftBuffer = list()
+	var/list/reqs = list()
 
 /obj/machinery/cargo_factory/converter/Initialize()
 	..()
-	required_materials = typecacheof(list(/obj/structure/closet/crate, /obj/cratanium))
-
+	reqs = list(
+		/obj/structure/closet/crate,
+		/obj/structure/closet/crate,
+		/obj/item/crate_essence
+		)
 /obj/machinery/cargo_factory/converter/attack_hand(mob/living/user)
 	active = !active
 	update_icon()
@@ -31,20 +32,11 @@
 /obj/machinery/cargo_factory/converter/process()
 	attempt_upgrade()
 
-/obj/machinery/cargo_factory/converter/proc/attempt_insert()
+/obj/machinery/cargo_factory/converter/proc/can_insert(/atom/movable/AM)
+	if (AM.Find(reqs) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
+		return TRUE
+	return FALSE
 
 /obj/machinery/cargo_factory/converter/proc/attempt_upgrade()
-	var/list/index_list = list()
-	var/oldLen
-	for(var/i in 1 to required_materials.len)
-		oldLen = index_list.len
-		for (var/j in 1 to contents.len)	
-			if(istype(contents[j], required_materials[i]))
-				index_list.Add(j)
-				break
-		if (oldLen == index_list.len)
-			return FALSE
-		if (index_list.len == required_materials.len)
-			for(var/k in 1 to index_list.len)
-				qdel(contents[index_list[k]])
+
 			new /obj/structure/closet/crate(loc)
