@@ -12,12 +12,9 @@
 	active_power_usage = 50
 	circuit = /obj/item/circuitboard/machine/processor
 	var/obj/machinery/cargo_factory/converter/linked_machine
-	var/insert_speed = 10//in deciseconds
 
 /obj/machinery/cargo_factory/inserter/update_icon()
 	cut_overlays()
-	//if(linked_machine)
-		//add_overlay("link[get_dir(src,linked_machine)]")
 
 /obj/machinery/cargo_factory/inserter/ComponentInitialize()
 	. = ..()
@@ -33,28 +30,18 @@
 	src.add_fingerprint(user)
 	link_machine()
 
-/obj/machinery/cargo_factory/inserter/proc/link_machine()
+/obj/machinery/cargo_factory/inserter/proc/check_for_machine()
 	if(panel_open || !powered())
 		return
 	var/atom/T = get_step(src, turn(dir,180))
-	for (var/obj/machinery/cargo_factory/M in T)
-		linked_machine=M
-	update_icon()
+	var/obj/machinery/cargo_factory/linked_machine = locate() in T
+	return (linked_machine != null)
 
 
 /obj/machinery/cargo_factory/inserter/process()	
-	if (linked_machine)
+	if (check_for_machine())
 		var/atom/input = get_step(src, dir)
 		var/atom/movable/AM = locate() in input
-		if (linked_machine.can_insert(AM))
-			AM.forceMove(src)
-			addtimer(CALLBACK(src, .proc/insertMaterial, AM), insert_speed)
-
-/obj/machinery/cargo_factory/inserter/proc/insertMaterial(atom/movable/AM)
-	if (linked_machine)
-		if (linked_machine.max_n_contents > linked_machine.contents.len)
-			AM.forceMove(linked_machine)
-		else
-			return
-	else
-		AM.ConveyorMove(output_dir)
+		if (linked_machine.attempt_insert(AM))
+			new /obj/effect/temp_visual/emp(input)
+			playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)

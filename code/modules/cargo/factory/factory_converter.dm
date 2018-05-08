@@ -21,6 +21,7 @@
 		/obj/structure/closet/crate,
 		/obj/item/crate_essence
 		)
+
 /obj/machinery/cargo_factory/converter/attack_hand(mob/living/user)
 	active = !active
 	update_icon()
@@ -32,10 +33,14 @@
 ///obj/machinery/cargo_factory/converter/process()
 	//attempt_upgrade()
 
-/obj/machinery/cargo_factory/converter/proc/can_insert(atom/movable/AM)
+/obj/machinery/cargo_factory/converter/proc/attempt_insert(atom/movable/AM)
 	if (reqs.Find(AM) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
+		AM.forceMove(src)
 		return TRUE
 	return FALSE
 
-/obj/machinery/cargo_factory/converter/proc/attempt_upgrade()
-	new /obj/structure/closet/crate(loc)
+/obj/machinery/cargo_factory/converter/process()
+	if (contents.len >= reqs.len)//reqs is filled, its time to do this shit
+		contents = list()//wipe all inventory
+		new /obj/structure/closet/crate/armory
+
