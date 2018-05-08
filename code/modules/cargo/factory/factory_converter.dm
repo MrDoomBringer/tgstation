@@ -1,19 +1,18 @@
 /obj/machinery/cargo_factory/converter
 	name = "crate upgrader"
-	desc = "A machine that accepts small crates and transforms them into large crates"
+	desc = "A machine that accepts cratres and improves them"
 	icon = 'icons/obj/machines/cargo.dmi'
-	icon_state = "converter0"
+	icon_state = "generic_factory"
 	density = TRUE
 	anchored = TRUE
 	layer = ABOVE_MOB_LAYER
 	var/active = TRUE
 	density = TRUE
 	var/converting = FALSE
-	var/lightIcon = "green"
 	var/convert_sound = 'sound/machines/click.ogg'
-	var/max_n_contents = 1
 	var/list/reqs = list()
 	var/list/output_buffer = list()
+	var/converting = FALSE
 
 /obj/machinery/cargo_factory/converter/Initialize()
 	..()
@@ -31,9 +30,6 @@
 	cut_overlays()
 	icon_state = "[name][converting]"
 
-///obj/machinery/cargo_factory/converter/process()
-	//attempt_upgrade()
-
 /obj/machinery/cargo_factory/converter/proc/attempt_insert(atom/movable/AM)
 	if (reqs.Find(AM) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
 		AM.forceMove(src)
@@ -41,6 +37,17 @@
 	return FALSE
 
 /obj/machinery/cargo_factory/converter/process()
+	if (converting)
+		return FALSE
+	start_convert()
+
+/obj/machinery/cargo_factory/converter/proc/start_convert()
+	converting  = TRUE
 	if (contents.len >= reqs.len)//reqs is filled, its time to do this shit
 		contents = list()//wipe all inventory
 		output_buffer.Add(new /obj/structure/closet/crate/engineering(src))
+	addtimer(CALLBACK(src, .proc/end_convert), 20)
+
+/obj/machinery/cargo_factory/converter/proc/end_convert()
+	converting = FALSE
+	
