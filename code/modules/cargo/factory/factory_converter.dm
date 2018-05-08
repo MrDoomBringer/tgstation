@@ -13,6 +13,7 @@
 	var/convert_sound = 'sound/machines/click.ogg'
 	var/max_n_contents = 1
 	var/list/reqs = list()
+	var/list/output_buffer = list()
 
 /obj/machinery/cargo_factory/converter/Initialize()
 	..()
@@ -42,5 +43,4 @@
 /obj/machinery/cargo_factory/converter/process()
 	if (contents.len >= reqs.len)//reqs is filled, its time to do this shit
 		contents = list()//wipe all inventory
-		new /obj/structure/closet/crate/armory
-
+		output_buffer.Add(new /obj/structure/closet/crate/engineering(src))

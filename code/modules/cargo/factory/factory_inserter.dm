@@ -28,7 +28,6 @@
 
 /obj/machinery/cargo_factory/inserter/attack_hand(mob/living/user)
 	src.add_fingerprint(user)
-	link_machine()
 
 /obj/machinery/cargo_factory/inserter/proc/check_for_machine()
 	if(panel_open || !powered())
@@ -39,6 +38,7 @@
 
 
 /obj/machinery/cargo_factory/inserter/process()	
+	..()
 	if (check_for_machine())
 		var/atom/input = get_step(src, dir)
 		var/atom/movable/AM = locate() in input
