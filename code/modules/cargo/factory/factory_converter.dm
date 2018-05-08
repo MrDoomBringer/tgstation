@@ -29,14 +29,13 @@
 	cut_overlays()
 	icon_state = "[name][converting]"
 
-/obj/machinery/cargo_factory/converter/process()
-	attempt_upgrade()
+///obj/machinery/cargo_factory/converter/process()
+	//attempt_upgrade()
 
-/obj/machinery/cargo_factory/converter/proc/can_insert(/atom/movable/AM)
-	if (AM.Find(reqs) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
+/obj/machinery/cargo_factory/converter/proc/can_insert(atom/movable/AM)
+	if (reqs.Find(AM) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
 		return TRUE
 	return FALSE
 
 /obj/machinery/cargo_factory/converter/proc/attempt_upgrade()
-
-			new /obj/structure/closet/crate(loc)
+	new /obj/structure/closet/crate(loc)

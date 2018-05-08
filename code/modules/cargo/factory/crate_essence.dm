@@ -5,5 +5,5 @@
 	name = "Crate Essence"
 	desc = "the raw embodyment of crates"
 	icon = 'icons/obj/machines/cargo.dmi'
-	icon_state = "essence"
+	icon_state = "crate_essence"
 	density = TRUE
