@@ -35,21 +35,24 @@
 	if(panel_open || !powered())
 		return
 
-	var/atom/movable/AM = locate() in get_step(src,dir)
-	var/obj/machinery/cargo_factory/converter/C = locate() in get_step(src,dir)
-	if (AM)
-		input = AM
-	if (C)
-		input = C
-	AM = locate() in get_step(src, turn(dir,180))
-	C = locate() in get_step(src, turn(dir,180))
-	if (AM)
-		output = AM
-	if (C)
-		output = C
+	var/obj/machinery/cargo_factory/converter/C1 = locate() in get_step(src,dir)
+	var/obj/machinery/cargo_factory/converter/C2 = locate() in get_step(src,dir)
+	input = C1
+	output = C2
+	inputMachine = istype(input, /obj/machinery/cargo_factory/converter)
+	outputMachine = istype(output, /obj/machinery/cargo_factory/converter)
+
+	if (!inputMachine && !outputMachine)
+		return FALSE
+	if (!inputMachine)
+		for(var/atom/movable/target in input)
+			if(output.reqs.Find(target))
+				input = target
+				return
+		return
+
 	
-	inputMachine = istype(input, /obj/machinery/cargo_factory/converter)  ? input : null
-	outputMachine = istype(output, /obj/machinery/cargo_factory/converter) ? output : null
+	
 	message_admins("input and output: [input] and [output], and [inputMachine] | [outputMachine]")
 	return (inputMachine || outputMachine)//at least one of these must be a factory converter
 
@@ -61,12 +64,12 @@
 		if (inputMachine)//if the input zone is a converter, then
 			if (outputMachine)
 				
-				outputMachine.attempt_insert(inputMachine.converted_buffer[0])
+				outputMachine.attempt_insert(input.converted_buffer[0])
 				message_admins("1")
 			else
-				inputMachine.converted_buffer[0].ConveyorMove(turn(dir,180))
+				input.converted_buffer[0].ConveyorMove(turn(dir,180))
 				message_admins("2")
-			inputMachine.converted_buffer.Remove(inputMachine.converted_buffer[0])
+			input.converted_buffer.Remove(input.converted_buffer[0])
 		else//if input is not a converter, then output must be a converter
 			if (input)
 				message_admins("3")
