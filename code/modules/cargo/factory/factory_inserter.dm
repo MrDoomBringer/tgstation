@@ -48,8 +48,7 @@
 	if ((inputMachine && inputMachine.converting) || (outputMachine && outputMachine.converting))
 		message_admins("at least one of the two machines were converting!")
 		return FALSE
-	if (outputMachine)
-		if (outputMachine.converted_buffer.len <= outputMachine.converted_buffer_size)
+
 	if (inputMachine)
 		if (inputMachine.converted_buffer.len > 0)
 			input = inputMachine.converted_buffer[0]
@@ -61,18 +60,21 @@
 				if(istype(target, thing))
 					input = target
 					message_admins("we found a target: [target], and the input is [input]")
-					return TRUE
+					break
+	if (!input)
 		return FALSE
 
-	
+	if (outputMachine)
+		if (count_by_type(outputMachine.contents, input) >= count_by_type(outputMachine.reqs, input))//if it is the right type AND we dont already have enough
+			return FALSE
+		if (outputMachine.converted_buffer.len >= outputMachine.converted_buffer_size)
+			return FALSE
 	
 	message_admins("input and output: [input] and [output], and [inputMachine] | [outputMachine]")
 	return TRUE//at least one of these must be a factory converter
 
 /obj/machinery/cargo_factory/inserter/process()	
 	..()
-	if ( && reqs.Find(AM) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
-
 	if (check_for_machine())
 		playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)
 		new /obj/effect/temp_visual/emp/pulse(input.loc)
@@ -81,7 +83,7 @@
 				outputMachine.attempt_insert(input)
 				message_admins("1")
 			else
-				input.ConveyorMove(turn(dir,180))
+				step(input, turn(dir,180))
 				message_admins("2")
 			inputMachine.converted_buffer.Remove(input)
 		else//if input is not a converter, then output must be a converter
