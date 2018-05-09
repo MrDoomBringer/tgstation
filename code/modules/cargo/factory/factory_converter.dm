@@ -31,7 +31,7 @@
 	update_icon()
 
 /obj/machinery/cargo_factory/converter/proc/attempt_insert(atom/movable/AM)
-	if (!converting && converted_buffer.len <= converted_buffer_size && reqs.Find(AM) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
+	message_admins("[!converting] && [converted_buffer.len] <= [converted_buffer_size] && re")
 		AM.forceMove(src)
 		return TRUE
 	return FALSE

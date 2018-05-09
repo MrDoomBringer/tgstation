@@ -48,9 +48,16 @@
 	if ((inputMachine && inputMachine.converting) || (outputMachine && outputMachine.converting))
 		message_admins("at least one of the two machines were converting!")
 		return FALSE
+	if (outputMachine)
+		if (outputMachine.converted_buffer.len <= outputMachine.converted_buffer_size)
+	if (inputMachine)
+		if (inputMachine.converted_buffer.len > 0)
+			input = inputMachine.converted_buffer[0]
+		else
+			return FALSE
 	if (!inputMachine)
 		for(var/atom/movable/target in get_step(src,dir))
-			for(var/atom/movable/thing in outputMachine.reqs)
+			for(var/thing in outputMachine.reqs)
 				if(istype(target, thing))
 					input = target
 					message_admins("we found a target: [target], and the input is [input]")
@@ -64,17 +71,19 @@
 
 /obj/machinery/cargo_factory/inserter/process()	
 	..()
+	if ( && reqs.Find(AM) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
+
 	if (check_for_machine())
 		playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)
 		new /obj/effect/temp_visual/emp/pulse(input.loc)
-		if (inputMachine && inputMachine.converted_buffer.len > 0)//if the input zone is a converter, then
+		if (inputMachine)//if the input zone is a converter, then
 			if (outputMachine)
-				outputMachine.attempt_insert(inputMachine.converted_buffer[0])
+				outputMachine.attempt_insert(input)
 				message_admins("1")
 			else
-				inputMachine.converted_buffer[0].ConveyorMove(turn(dir,180))
+				input.ConveyorMove(turn(dir,180))
 				message_admins("2")
-			inputMachine.converted_buffer.Remove(inputMachine.converted_buffer[0])
+			inputMachine.converted_buffer.Remove(input)
 		else//if input is not a converter, then output must be a converter
 			if (input)
 				message_admins("3")
