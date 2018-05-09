@@ -30,10 +30,6 @@
 	active = !active
 	update_icon()
 
-/obj/machinery/cargo_factory/converter/proc/attempt_insert(atom/movable/AM)
-	message_admins("[!converting] && [converted_buffer.len] <= [converted_buffer_size] && re")
-	AM.forceMove(src)
-
 /obj/machinery/cargo_factory/converter/process()
 	if (converting)
 		return FALSE

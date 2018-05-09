@@ -62,12 +62,15 @@
 					message_admins("we found a target: [target], and the input is [input]")
 					break
 	if (!input)
+		message_admins("no input (false)")
 		return FALSE
 
 	if (outputMachine)
 		if (count_by_type(outputMachine.contents, input) >= count_by_type(outputMachine.reqs, input))//if it is the right type AND we dont already have enough
+			message_admins("count content by type >= count type reqs")
 			return FALSE
 		if (outputMachine.converted_buffer.len >= outputMachine.converted_buffer_size)
+			message_admins("converted_len >= converted buffer")
 			return FALSE
 	
 	message_admins("input and output: [input] and [output], and [inputMachine] | [outputMachine]")
@@ -80,7 +83,7 @@
 		new /obj/effect/temp_visual/emp/pulse(input.loc)
 		if (inputMachine)//if the input zone is a converter, then
 			if (outputMachine)
-				outputMachine.attempt_insert(input)
+				outputMachine.forceMove(input)
 				message_admins("1")
 			else
 				step(input, turn(dir,180))
@@ -89,6 +92,6 @@
 		else//if input is not a converter, then output must be a converter
 			if (input)
 				message_admins("3")
-				outputMachine.attempt_insert(input) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
+				outputMachine.forceMove(input) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
 	else
 		message_admins("nope")
