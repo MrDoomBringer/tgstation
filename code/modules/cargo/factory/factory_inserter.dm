@@ -36,34 +36,39 @@
 		return
 
 	var/obj/machinery/cargo_factory/converter/C1 = locate() in get_step(src,dir)
-	var/obj/machinery/cargo_factory/converter/C2 = locate() in get_step(src,dir)
+	var/obj/machinery/cargo_factory/converter/C2 = locate() in get_step(src,turn(dir,180))
 	input = C1
 	output = C2
 	inputMachine = istype(input, /obj/machinery/cargo_factory/converter) ? input : null
-	outputMachine = istype(output, /obj/machinery/cargo_factory/converter) ? input : null
+	outputMachine = istype(output, /obj/machinery/cargo_factory/converter) ? output : null
 
 	if (!inputMachine && !outputMachine)
+		message_admins("failed machine check!")
+		return FALSE
+	if ((inputMachine && inputMachine.converting) || (outputMachine && outputMachine.converting))
+		message_admins("at least one of the two machines were converting!")
 		return FALSE
 	if (!inputMachine)
-		for(var/atom/movable/target in input)
-			if(outputMachine.reqs.Find(target))
-				input = target
-				return
-		return
+		for(var/atom/movable/target in get_step(src,dir))
+			for(var/atom/movable/thing in outputMachine.reqs)
+				if(istype(target, thing))
+					input = target
+					message_admins("we found a target: [target], and the input is [input]")
+					return TRUE
+		return FALSE
 
 	
 	
 	message_admins("input and output: [input] and [output], and [inputMachine] | [outputMachine]")
-	return (inputMachine || outputMachine)//at least one of these must be a factory converter
+	return TRUE//at least one of these must be a factory converter
 
 /obj/machinery/cargo_factory/inserter/process()	
 	..()
 	if (check_for_machine())
 		playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)
-		new /obj/effect/temp_visual/emp(input.loc)
-		if (inputMachine)//if the input zone is a converter, then
+		new /obj/effect/temp_visual/emp/pulse(input.loc)
+		if (inputMachine && inputMachine.converted_buffer.len > 0)//if the input zone is a converter, then
 			if (outputMachine)
-				
 				outputMachine.attempt_insert(inputMachine.converted_buffer[0])
 				message_admins("1")
 			else
@@ -73,6 +78,6 @@
 		else//if input is not a converter, then output must be a converter
 			if (input)
 				message_admins("3")
-				output.attempt_insert(input) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
+				outputMachine.attempt_insert(input) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
 	else
-		message_admins("failed check for machines")
+		message_admins("nope")
