@@ -12,6 +12,8 @@
 	var/convert_sound = 'sound/machines/click.ogg'
 	var/list/reqs = list()
 	var/list/output_buffer = list()
+	var/converting = FALSE
+	var/output_buffer_size = 3
 
 /obj/machinery/cargo_factory/converter/Initialize()
 	..()
@@ -21,16 +23,15 @@
 		/obj/item/crate_essence
 		)
 
+/obj/machinery/cargo_factory/converter/update_icon()
+	icon_state =  "generic_factory[converting]"
+
 /obj/machinery/cargo_factory/converter/attack_hand(mob/living/user)
 	active = !active
 	update_icon()
 
-/obj/machinery/cargo_factory/converter/update_icon()
-	cut_overlays()
-	icon_state = "[name][converting]"
-
 /obj/machinery/cargo_factory/converter/proc/attempt_insert(atom/movable/AM)
-	if (reqs.Find(AM) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
+	if (!converting && output_buffer.len <= output_buffer_size && reqs.Find(AM) && count_by_type(contents, AM) < count_by_type(reqs, AM))//if it is the right type AND we dont already have enough
 		AM.forceMove(src)
 		return TRUE
 	return FALSE
@@ -38,15 +39,17 @@
 /obj/machinery/cargo_factory/converter/process()
 	if (converting)
 		return FALSE
-	start_convert()
+	if (contents.len >= reqs.len)
+		start_convert()//requirements are met, its time to do this shit
 
 /obj/machinery/cargo_factory/converter/proc/start_convert()
 	converting  = TRUE
-	if (contents.len >= reqs.len)//reqs is filled, its time to do this shit
-		contents = list()//wipe all inventory
-		output_buffer.Add(new /obj/structure/closet/crate/engineering(src))
+	contents = list()//wipe all inventory
+	output_buffer.Add(new /obj/structure/closet/crate/engineering(src))//add the result to the output buffer
 	addtimer(CALLBACK(src, .proc/end_convert), 20)
+	update_icon()
 
 /obj/machinery/cargo_factory/converter/proc/end_convert()
 	converting = FALSE
+	update_icon()
 	
