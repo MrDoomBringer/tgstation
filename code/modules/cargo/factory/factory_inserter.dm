@@ -1,4 +1,3 @@
-
 /obj/machinery/cargo_factory/inserter
 	name = "insert"
 	desc = "An industrial input device used to do the thing."
@@ -11,7 +10,7 @@
 	idle_power_usage = 5
 	active_power_usage = 50
 	circuit = /obj/item/circuitboard/machine/processor
-	var/obj/machinery/cargo_factory/converter/linked_machine
+	var/target
 
 /obj/machinery/cargo_factory/inserter/update_icon()
 	cut_overlays()
@@ -32,16 +31,20 @@
 /obj/machinery/cargo_factory/inserter/proc/check_for_machine()
 	if(panel_open || !powered())
 		return
-	var/atom/T = get_step(src, turn(dir,180))
-	var/obj/machinery/cargo_factory/linked_machine = locate() in T
-	return (linked_machine != null)
+	var/atom/input = get_step(src,dir)
+	var/atom/output = get_step(src, turn(dir,180))
 
+	var/obj/machinery/cargo_factory/converter/machine = locate() in input
+	if (machine)
+		input = machine
+	machine = locate() in output
+	if (machine)
+		output = machine
+	return (machine)//at least one of these must be a machine
 
 /obj/machinery/cargo_factory/inserter/process()	
 	..()
 	if (check_for_machine())
-		var/atom/input = get_step(src, dir)
-		var/atom/movable/AM = locate() in input
 		if (linked_machine.attempt_insert(AM))
 			new /obj/effect/temp_visual/emp(input)
 			playsound(loc, 'sound/machines/click.ogg', 15, 1, -3)

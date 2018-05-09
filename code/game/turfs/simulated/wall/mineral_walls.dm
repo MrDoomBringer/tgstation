@@ -187,7 +187,7 @@
 /turf/closed/wall/mineral/titanium //has to use this path due to how building walls works
 	name = "wall"
 	desc = "A light-weight titanium wall used in shuttles."
-	icon = 'icons/turf/walls/salt_wall.dmi'
+	icon = 'icons/turf/walls/shuttle_wall.dmi'
 	icon_state = "map-shuttle"
 	explosion_block = 3
 	flags_1 = CAN_BE_DIRTY_1 | CHECK_RICOCHET_1

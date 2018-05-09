@@ -12,7 +12,6 @@
 	var/convert_sound = 'sound/machines/click.ogg'
 	var/list/reqs = list()
 	var/list/output_buffer = list()
-	var/converting = FALSE
 
 /obj/machinery/cargo_factory/converter/Initialize()
 	..()
