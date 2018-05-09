@@ -39,14 +39,14 @@
 	var/obj/machinery/cargo_factory/converter/C2 = locate() in get_step(src,dir)
 	input = C1
 	output = C2
-	inputMachine = istype(input, /obj/machinery/cargo_factory/converter)
-	outputMachine = istype(output, /obj/machinery/cargo_factory/converter)
+	inputMachine = istype(input, /obj/machinery/cargo_factory/converter) ? input : null
+	outputMachine = istype(output, /obj/machinery/cargo_factory/converter) ? input : null
 
 	if (!inputMachine && !outputMachine)
 		return FALSE
 	if (!inputMachine)
 		for(var/atom/movable/target in input)
-			if(output.reqs.Find(target))
+			if(outputMachine.reqs.Find(target))
 				input = target
 				return
 		return
@@ -64,15 +64,15 @@
 		if (inputMachine)//if the input zone is a converter, then
 			if (outputMachine)
 				
-				outputMachine.attempt_insert(input.converted_buffer[0])
+				outputMachine.attempt_insert(inputMachine.converted_buffer[0])
 				message_admins("1")
 			else
-				input.converted_buffer[0].ConveyorMove(turn(dir,180))
+				inputMachine.converted_buffer[0].ConveyorMove(turn(dir,180))
 				message_admins("2")
-			input.converted_buffer.Remove(input.converted_buffer[0])
+			inputMachine.converted_buffer.Remove(inputMachine.converted_buffer[0])
 		else//if input is not a converter, then output must be a converter
 			if (input)
 				message_admins("3")
-				outputMachine.attempt_insert(input) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
+				output.attempt_insert(input) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
 	else
 		message_admins("failed check for machines")
