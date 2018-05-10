@@ -87,15 +87,17 @@
 		new /obj/effect/temp_visual/emp/pulse(input.loc)
 		if (inputMachine)//if the input zone is a converter, then
 			if (outputMachine)
-				input.forceMove(outputMachine)
+				outputMachine.attempt_insert(input)
 				message_admins("1")
 			else
+				var/atom/movable/AM = input
+				AM.forceMove(loc)
 				step(input, turn(dir,180))
 				message_admins("2")
 			inputMachine.converted_buffer.Remove(input)
 		else//if input is not a converter, then output must be a converter
 			if (input)
 				message_admins("3")
-				input.forceMove(outputMachine) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
+				outputMachine.attempt_insert(input) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
 	else
 		message_admins("nope")

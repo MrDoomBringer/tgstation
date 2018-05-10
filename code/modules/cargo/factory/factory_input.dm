@@ -12,7 +12,7 @@
 	var/on = FALSE
 
 	var/valuebuffer
-	var/production_rate = 50
+	var/production_rate = 500
 	var/efficiency = 2
 
 /obj/machinery/cargo_factory/factory_input/attack_hand(mob/living/user)
@@ -30,7 +30,7 @@
 		icon_state = initial(icon_state)
 
 /obj/machinery/cargo_factory/factory_input/process()
-	if(panel_open || !powered())
+	if(panel_open || !powered() || !on)
 		return
 	var/atom/T = get_step(src, dir)
 	for (var/AM in T)
@@ -40,7 +40,7 @@
 			qdel(AM)
 		valuebuffer += value*efficiency
 
-	if (valuebuffer - production_rate > 0)
+	if (valuebuffer - production_rate >= 0)
 		valuebuffer -= production_rate
 		new /obj/item/crate_essence(loc)
 

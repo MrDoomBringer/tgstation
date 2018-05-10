@@ -24,11 +24,15 @@
 		)
 
 /obj/machinery/cargo_factory/converter/update_icon()
+	cut_overlays()
 	icon_state =  "generic_factory_[converting]"
+	add_overlay("conv")
 
 /obj/machinery/cargo_factory/converter/attack_hand(mob/living/user)
 	active = !active
 	update_icon()
+/obj/machinery/cargo_factory/converter/proc/attempt_insert(var/atom/movable/AM)
+	AM.forceMove(src)
 
 /obj/machinery/cargo_factory/converter/process()
 	if (converting)
