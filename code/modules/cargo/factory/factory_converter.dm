@@ -18,9 +18,9 @@
 /obj/machinery/cargo_factory/converter/Initialize()
 	..()
 	reqs = list(
-		/obj/structure/closet/crate,
-		/obj/structure/closet/crate,
-		/obj/item/crate_essence
+		new /obj/structure/closet/crate(),
+		new /obj/structure/closet/crate(),
+		new /obj/item/crate_essence()
 		)
 
 /obj/machinery/cargo_factory/converter/update_icon()

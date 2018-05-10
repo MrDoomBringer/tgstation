@@ -51,23 +51,27 @@
 
 	if (inputMachine)
 		if (inputMachine.converted_buffer.len > 0)
-			input = inputMachine.converted_buffer[0]
+			input = inputMachine.converted_buffer[1]
 		else
 			return FALSE
 	if (!inputMachine)
+		var/done = FALSE
 		for(var/atom/movable/target in get_step(src,dir))
 			for(var/thing in outputMachine.reqs)
 				if(istype(target, thing))
 					input = target
 					message_admins("we found a target: [target], and the input is [input]")
+					done = TRUE
 					break
+			if(done)
+				break
 	if (!input)
 		message_admins("no input (false)")
 		return FALSE
 
 	if (outputMachine)
 		if (count_by_type(outputMachine.contents, input) >= count_by_type(outputMachine.reqs, input))//if it is the right type AND we dont already have enough
-			message_admins("count content by type >= count type reqs")
+			message_admins("[input], [input.type],[outputMachine[1]],[outputMachine[2]],[outputMachine[3]] | count_by_type(outputMachine.reqs, input.type)]")
 			return FALSE
 		if (outputMachine.converted_buffer.len >= outputMachine.converted_buffer_size)
 			message_admins("converted_len >= converted buffer")
@@ -83,7 +87,7 @@
 		new /obj/effect/temp_visual/emp/pulse(input.loc)
 		if (inputMachine)//if the input zone is a converter, then
 			if (outputMachine)
-				outputMachine.forceMove(input)
+				input.forceMove(outputMachine)
 				message_admins("1")
 			else
 				step(input, turn(dir,180))
@@ -92,6 +96,6 @@
 		else//if input is not a converter, then output must be a converter
 			if (input)
 				message_admins("3")
-				outputMachine.forceMove(input) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
+				input.forceMove(outputMachine) //try to insert the input into the output (output will be a converter). We can do this because by check_for_machine(), one of these two vars must be a converter
 	else
 		message_admins("nope")
