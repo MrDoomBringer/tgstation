@@ -20,13 +20,13 @@
 
 /obj/machinery/cargo_factory/inserter/ComponentInitialize()
 	. = ..()
-	AddComponent(/datum/component/simple_rotation,ROTATION_ALTCLICK | ROTATION_FLIP ,null,CALLBACK(src, .proc/can_be_rotated))
+	AddComponent(/datum/component/simple_rotation,ROTATION_ALTCLICK | ROTATION_CLOCKWISE ,null,null)
 
-/obj/machinery/cargo_factory/inserter/proc/can_be_rotated(mob/user,rotation_type)
-	if (anchored)
-		to_chat(user, "<span class='warning'>It is fastened to the floor!</span>")
-		return FALSE
-	return TRUE
+/obj/machinery/cargo_factory/inserter/wrench_act(mob/user, obj/item/tool)
+	if(converting)
+		to_chat(user, "<span class='warning'>\The [src] must finish converting first!</span>")
+		return
+	default_wrench_act(user, tool, 2)
 
 /obj/machinery/cargo_factory/inserter/attack_hand(mob/living/user)
 	src.add_fingerprint(user)
