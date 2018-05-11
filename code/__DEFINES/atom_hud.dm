@@ -18,7 +18,7 @@
 #define DIAG_TRACK_HUD	"14"// Mech/Silicon tracking beacon, Circutry long range icon
 #define DIAG_AIRLOCK_HUD "15"//Airlock shock overlay
 #define DIAG_PATH_HUD "16"//Bot path indicators
-#define CARGO_HUD "17"
+#define SUPPLY_HUD "17"
 #define GLAND_HUD "18"//Gland indicators for abductors
 #define SENTIENT_DISEASE_HUD	"19"
 //for antag huds. these are used at the /mob level
@@ -36,7 +36,7 @@
 #define DATA_HUD_MEDICAL_ADVANCED		4
 #define DATA_HUD_DIAGNOSTIC_BASIC		5
 #define DATA_HUD_DIAGNOSTIC_ADVANCED	6
-#define DATA_HUD_CARGO                  7
+#define DATA_HUD_SUPPLY                 7
 #define DATA_HUD_ABDUCTOR				8
 #define DATA_HUD_SENTIENT_DISEASE		9
 

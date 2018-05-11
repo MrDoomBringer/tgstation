@@ -27,7 +27,8 @@
 	var/req_access_txt = "0"
 	var/list/req_one_access
 	var/req_one_access_txt = "0"
-	
+	hud_possible = list(SUPPLY_HUD)
+
 /obj/vv_edit_var(vname, vval)
 	switch(vname)
 		if("obj_flags")

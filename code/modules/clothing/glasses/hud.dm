@@ -70,6 +70,13 @@
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 	glass_colour_type = /datum/client_colour/glass_colour/green
 
+/obj/item/clothing/glasses/hud/cargo
+	name = "supply HUD"
+	desc = "A heads-up display that scans the objects in view and provides data about their cost."
+	icon_state = "supplyhud"
+	hud_type = DATA_HUD_SUPPLY
+	glass_colour_type = /datum/client_colour/glass_colour/lightorange
+
 /obj/item/clothing/glasses/hud/security
 	name = "security HUD"
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their ID status and security records."

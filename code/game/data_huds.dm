@@ -60,8 +60,8 @@
 /datum/atom_hud/data/bot_path
 	hud_icons = list(DIAG_PATH_HUD)
 
-/datum/atom_hud/data/cargo
-	hud_icons = list (CARGO_HUD)
+/datum/atom_hud/data/supply
+	hud_icons = list (SUPPLY_HUD)
 
 /datum/atom_hud/abductor
 	hud_icons = list(GLAND_HUD)
@@ -484,12 +484,12 @@
 /*~~~~~~~~~~~~
 	Cargo Exports!
 ~~~~~~~~~~~~~*/
-/datum/export/proc/cargo_hud_set_value()
-	var/image/holder = hud_list[CARGO_HUD]
+/datum/export/proc/supply_hud_set_value(var/weakref)
+	var/image/holder = hud_list[SUPPLY_HUD]
 	var/icon/I = icon(icon, icon_state, dir)
 	holder.pixel_y = I.Height() - world.icon_size
 	if(!isturf(loc)) //if not on the ground don't show overlay
 		holder.icon_state = null
-	var/value = export_item_and_contents(src, FALSE, FALSE, dry_run=TRUE)
+	var/value = export_item_and_contents(weakref, FALSE, FALSE, dry_run=TRUE)
 	if(value)
-		holder.icon_state = "hudcargo"
+		holder.icon_state = "hudsupply"

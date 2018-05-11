@@ -66,7 +66,6 @@ Credit dupes that require a lot of manual work shouldn't be removed, unless they
 	var/list/export_types = list()	// Type of the exported object. If none, the export datum is considered base type.
 	var/include_subtypes = TRUE		// Set to FALSE to make the datum apply only to a strict type.
 	var/list/exclude_types = list()	// Types excluded from export
-
 	// Used by print-out
 	var/total_cost = 0
 	var/total_amount = 0
@@ -78,7 +77,7 @@ Credit dupes that require a lot of manual work shouldn't be removed, unless they
 	init_cost = cost
 	export_types = typecacheof(export_types)
 	exclude_types = typecacheof(exclude_types)
-	cargo_hud_set_value(cost)
+	supply_hud_set_value(weakref)
 
 
 /datum/export/Destroy()
