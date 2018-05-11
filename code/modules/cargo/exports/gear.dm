@@ -1,6 +1,8 @@
 // Armor, gloves, space suits - it all goes here
 
 /datum/export/gear
+	hud_possible = list(CARGO_HUD)
+
 
 // Security gear
 /datum/export/gear/sec_helmet

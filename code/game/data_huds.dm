@@ -60,6 +60,9 @@
 /datum/atom_hud/data/bot_path
 	hud_icons = list(DIAG_PATH_HUD)
 
+/datum/atom_hud/data/cargo
+	hud_icons = list (CARGO_HUD)
+
 /datum/atom_hud/abductor
 	hud_icons = list(GLAND_HUD)
 
@@ -477,3 +480,16 @@
 		holder.icon_state = "electrified"
 	else
 		holder.icon_state = ""
+
+/*~~~~~~~~~~~~
+	Cargo Exports!
+~~~~~~~~~~~~~*/
+/datum/export/proc/cargo_hud_set_value()
+	var/image/holder = hud_list[CARGO_HUD]
+	var/icon/I = icon(icon, icon_state, dir)
+	holder.pixel_y = I.Height() - world.icon_size
+	if(!isturf(loc)) //if not on the ground don't show overlay
+		holder.icon_state = null
+	var/value = export_item_and_contents(src, FALSE, FALSE, dry_run=TRUE)
+	if(value)
+		holder.icon_state = "hudcargo"
