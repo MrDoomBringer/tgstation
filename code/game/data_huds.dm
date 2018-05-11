@@ -484,7 +484,7 @@
 /*~~~~~~~~~~~~
 	Cargo Exports!
 ~~~~~~~~~~~~~*/
-/datum/export/proc/supply_hud_set_value(var/weakref)
+/obj/proc/supply_hud_set_value(var/weakref)
 	var/image/holder = hud_list[SUPPLY_HUD]
 	var/icon/I = icon(icon, icon_state, dir)
 	holder.pixel_y = I.Height() - world.icon_size

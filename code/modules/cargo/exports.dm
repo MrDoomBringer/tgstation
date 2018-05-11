@@ -77,8 +77,6 @@ Credit dupes that require a lot of manual work shouldn't be removed, unless they
 	init_cost = cost
 	export_types = typecacheof(export_types)
 	exclude_types = typecacheof(exclude_types)
-	supply_hud_set_value(weakref)
-
 
 /datum/export/Destroy()
 	SSprocessing.processing -= src

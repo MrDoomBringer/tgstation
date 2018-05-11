@@ -63,6 +63,14 @@
 	if((obj_flags & ON_BLUEPRINTS) && isturf(loc))
 		var/turf/T = loc
 		T.add_blueprints_preround(src)
+	
+	var/price = export_item_and_contents(src, FALSE, FALSE, dry_run=TRUE)
+	if (price != 0)
+		prepare_huds()
+		for(var/datum/atom_hud/data/supply/supply_hud in GLOB.huds)
+			supply_hud.add_to_hud(src)
+		supply_hud_set_value(src)
+
 
 
 /obj/Destroy(force=FALSE)
