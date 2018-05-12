@@ -484,12 +484,19 @@
 /*~~~~~~~~~~~~
 	Cargo Exports!
 ~~~~~~~~~~~~~*/
-/obj/proc/supply_hud_set_value(var/weakref)
+/obj/proc/supply_hud_set_value(var/value)
 	var/image/holder = hud_list[SUPPLY_HUD]
 	var/icon/I = icon(icon, icon_state, dir)
 	holder.pixel_y = I.Height() - world.icon_size
 	if(!isturf(loc)) //if not on the ground don't show overlay
 		holder.icon_state = null
-	var/value = export_item_and_contents(weakref, FALSE, FALSE, dry_run=TRUE)
-	if(value)
-		holder.icon_state = "hudsupply"
+	if(value <50)
+		holder.icon_state = "hudsupply0"
+	else if(value <=100)
+		holder.icon_state = "hudsupply1"
+	else if(value <=500)
+		holder.icon_state = "hudsupply2"
+	else if(value <=900)
+		holder.icon_state = "hudsupply3"
+	else if(value >900)
+		holder.icon_state = "hudsupply4"

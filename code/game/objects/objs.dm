@@ -69,7 +69,7 @@
 		prepare_huds()
 		for(var/datum/atom_hud/data/supply/supply_hud in GLOB.huds)
 			supply_hud.add_to_hud(src)
-		supply_hud_set_value(src)
+		supply_hud_set_value(price)
 
 
 
