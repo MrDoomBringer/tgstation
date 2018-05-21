@@ -23,16 +23,13 @@
 	AddComponent(/datum/component/simple_rotation,ROTATION_ALTCLICK | ROTATION_CLOCKWISE ,null,null)
 
 /obj/machinery/cargo_factory/inserter/wrench_act(mob/user, obj/item/tool)
-	if(converting)
-		to_chat(user, "<span class='warning'>\The [src] must finish converting first!</span>")
-		return
-	default_wrench_act(user, tool, 2)
+	default_unfasten_wrench(user, tool, 2)
 
 /obj/machinery/cargo_factory/inserter/attack_hand(mob/living/user)
 	src.add_fingerprint(user)
 
 /obj/machinery/cargo_factory/inserter/proc/check_for_machine()
-	if(panel_open || !powered())
+	if(panel_open || !anchored || !powered())
 		return
 
 	var/obj/machinery/cargo_factory/converter/C1 = locate() in get_step(src,dir)
