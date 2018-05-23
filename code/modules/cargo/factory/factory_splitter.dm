@@ -11,7 +11,7 @@
 	var/splitting = FALSE
 	var/lightIcon = "splitter_green"
 	var/flipped = FALSE
-	var/output_dir
+	var/output_dir = dir
 
 /obj/machinery/cargo_factory/factory_splitter/Initialize()
 	. = ..()
@@ -32,14 +32,14 @@
 		add_overlay("splitter_green")
 
 /obj/machinery/cargo_factory/factory_splitter/CanPass(atom/movable/mover, turf/target)
+	if (!active)
+		return TRUE
 	var/mob/living/M = mover
 	if (istype(M) && !M.lying)//mobs cant go in if they arent lying down
 		return FALSE
 
 	if (splitting && active)
-		output_dir = turn(get_dir(loc, target), (flipped ? 90 : -90))
-	else
-		output_dir = get_dir(loc, target)
+		output_dir = turn(dir, (flipped ? 90 : -90))
 	return TRUE
 
 /obj/machinery/cargo_factory/factory_splitter/Crossed(atom/movable/AM)	
