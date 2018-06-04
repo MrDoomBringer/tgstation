@@ -1,0 +1,52 @@
+"a" = (/turf/closed/indestructible/riveted,/area/awaymission/vr/murderdome)
+"b" = (/turf/open/space/basic,/area/awaymission/vr/murderdome)
+"c" = (/turf/open/indestructible,/area/awaymission/vr/murderdome)
+"d" = (/turf/closed/indestructible/fakeglass,/area/awaymission/vr/murderdome)
+"e" = (/turf/closed/indestructible/fakedoor{name = "CentCom"},/area/awaymission/vr/murderdome)
+"f" = (/turf/closed/indestructible/opshuttle,/area/awaymission/vr/murderdome)
+"g" = (/obj/effect/turf_decal/stripes/line{dir = 9},/turf/open/indestructible,/area/awaymission/vr/murderdome)
+"h" = (/obj/effect/turf_decal/stripes/line{dir = 1},/turf/open/indestructible,/area/awaymission/vr/murderdome)
+"i" = (/obj/effect/turf_decal/stripes/line{dir = 5},/turf/open/indestructible,/area/awaymission/vr/murderdome)
+"j" = (/obj/effect/turf_decal/stripes/line{dir = 8},/turf/open/indestructible,/area/awaymission/vr/murderdome)
+"k" = (/obj/effect/turf_decal/stripes/line{dir = 4},/turf/open/indestructible,/area/awaymission/vr/murderdome)
+"l" = (/obj/effect/turf_decal/stripes/line{dir = 10},/turf/open/indestructible,/area/awaymission/vr/murderdome)
+"m" = (/obj/effect/turf_decal/stripes/line,/turf/open/indestructible,/area/awaymission/vr/murderdome)
+"n" = (/obj/effect/turf_decal/stripes/line{dir = 6},/turf/open/indestructible,/area/awaymission/vr/murderdome)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaabbbbbaaaaaaaaaaaaaaa
+acccccccccccccabbbbbaccccccccccccca
+accaccccccccccdbbbbbdccccccccccacca
+aaaaccccccccccdbbbbbdccccccccccaaaa
+acccccccccccccdbbbbbdccccccccccccca
+accaccccccccccdbbbbbdccccccccccacca
+aaaaccccccccccdbbbbbdccccccccccaaaa
+acccccccccccccdbaeabdccccccccccccca
+accaccccccccccdbdcdbdccccccccccacca
+aaaaccccccccccadaeadaccccccccccaaaa
+accccccccccccccccccccccccccccccccca
+acccccccccccccccfffccccccccccccccca
+acccccccccccccccfffccccccccccccccca
+accccccccccccccccccccccccccccccccca
+acccccccccccccffdcdffccccccccccccca
+acccccccccccccfghhhifccccccccccccca
+acccccccccccccdjccckdccccccccccccca
+accccccccccccccjccckcccccccccccccca
+acccccccccccccdjccckdccccccccccccca
+acccccccccccccflmmmnfccccccccccccca
+acccccccccccccffdcdffccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccca
+accccccccccccccccccccccccccccccccaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}
