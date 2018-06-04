@@ -14,6 +14,8 @@
 
 // BEGIN_INCLUDE
 #include "_maps\_basemap.dm"
+#include "_maps\RandomZLevels\VR\doombringer_dome.dm"
+#include "_maps\RandomZLevels\VR\doombringer_dome.dmm"
 #include "code\_compile_options.dm"
 #include "code\world.dm"
 #include "code\__DEFINES\_globals.dm"
