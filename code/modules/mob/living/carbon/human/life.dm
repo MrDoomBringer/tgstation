@@ -23,12 +23,7 @@
 	if (notransform)
 		return
 
-	. = ..()
-
-	if (QDELETED(src))
-		return 0
-
-	if(.) //not dead
+	if(..()) //not dead
 		handle_active_genes()
 
 	if(stat != DEAD)
@@ -89,7 +84,7 @@
 	var/L = getorganslot(ORGAN_SLOT_LUNGS)
 
 	if(!L)
-		if(health >= crit_threshold)
+		if(health >= HEALTH_THRESHOLD_CRIT)
 			adjustOxyLoss(HUMAN_MAX_OXYLOSS + 1)
 		else if(!has_trait(TRAIT_NOCRITDAMAGE))
 			adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
@@ -305,9 +300,17 @@
 		HM.on_life(src)
 
 /mob/living/carbon/human/proc/handle_heart()
+	if(!can_heartattack())
+		return
+
 	var/we_breath = !has_trait(TRAIT_NOBREATH, SPECIES_TRAIT)
 
+
 	if(!undergoing_cardiac_arrest())
+		return
+
+	// Cardiac arrest, unless heart is stabilized
+	if(has_trait(TRAIT_STABLEHEART))
 		return
 
 	if(we_breath)

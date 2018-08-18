@@ -64,7 +64,7 @@
 	pocket_storage_component_path = /datum/component/storage/concrete/pockets/small/detective
 	dog_fashion = /datum/dog_fashion/head/detective
 
-/obj/item/clothing/head/fedora/det_hat/Initialize()
+/obj/item/clothing/head/fedora/Initialize()
 	. = ..()
 	new /obj/item/reagent_containers/food/drinks/flask/det(src)
 

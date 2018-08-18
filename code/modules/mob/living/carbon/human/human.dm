@@ -28,7 +28,7 @@
 
 	. = ..()
 
-	AddComponent(/datum/component/redirect, list(COMSIG_COMPONENT_CLEAN_ACT = CALLBACK(src, .proc/clean_blood)))
+	AddComponent(/datum/component/redirect, list(COMSIG_COMPONENT_CLEAN_ACT), CALLBACK(src, .proc/clean_blood))
 
 
 /mob/living/carbon/human/ComponentInitialize()
@@ -656,13 +656,13 @@
 		var/they_breathe = !C.has_trait(TRAIT_NOBREATH)
 		var/they_lung = C.getorganslot(ORGAN_SLOT_LUNGS)
 
-		if(C.health > C.crit_threshold)
+		if(C.health > HEALTH_THRESHOLD_CRIT)
 			return
 
 		src.visible_message("[src] performs CPR on [C.name]!", "<span class='notice'>You perform CPR on [C.name].</span>")
 		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "perform_cpr", /datum/mood_event/perform_cpr)
 		C.cpr_time = world.time
-		log_combat(src, C, "CPRed")
+		add_logs(src, C, "CPRed")
 
 		if(they_breathe && they_lung)
 			var/suff = min(C.getOxyLoss(), 7)
@@ -791,8 +791,6 @@
 						hud_used.healthdoll.add_overlay(mutable_appearance('icons/mob/screen_gen.dmi', "[BP.body_zone][icon_num]"))
 				for(var/t in get_missing_limbs()) //Missing limbs
 					hud_used.healthdoll.add_overlay(mutable_appearance('icons/mob/screen_gen.dmi', "[t]6"))
-				for(var/t in get_disabled_limbs()) //Disabled limbs
-					hud_used.healthdoll.add_overlay(mutable_appearance('icons/mob/screen_gen.dmi', "[t]7"))
 			else
 				hud_used.healthdoll.icon_state = "healthdoll_DEAD"
 
@@ -833,6 +831,13 @@
 			Knockdown(200)
 		return 1
 	..()
+
+/mob/living/carbon/human/Collide(atom/A)
+	..()
+	var/crashdir = get_dir(src, A)
+	var/obj/item/flightpack/FP = get_flightpack()
+	if(FP)
+		FP.flight_impact(A, crashdir)
 
 /mob/living/carbon/human/vv_get_dropdown()
 	. = ..()

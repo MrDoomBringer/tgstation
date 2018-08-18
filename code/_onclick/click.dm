@@ -40,7 +40,7 @@
 */
 /atom/Click(location,control,params)
 	if(flags_1 & INITIALIZED_1)
-		SEND_SIGNAL(src, COMSIG_CLICK, location, control, params, usr)
+		SEND_SIGNAL(src, COMSIG_CLICK, location, control, params)
 		usr.ClickOn(src, params)
 
 /atom/DblClick(location,control,params)
@@ -70,9 +70,6 @@
 	next_click = world.time + 1
 
 	if(check_click_intercept(params,A))
-		return
-
-	if(notransform)
 		return
 
 	var/list/modifiers = params2list(params)
@@ -195,8 +192,17 @@
 
 			if (!target.loc)
 				continue
-
-			if(!(SEND_SIGNAL(target.loc, COMSIG_ATOM_CANREACH, next) & COMPONENT_BLOCK_REACH))
+			GET_COMPONENT_FROM(storage, /datum/component/storage, target.loc)
+			if (storage)
+				var/datum/component/storage/concrete/master = storage.master()
+				if (master)
+					next += master.parent
+					for(var/S in master.slaves)
+						var/datum/component/storage/slave = S
+						next += slave.parent
+				else
+					next += target.loc
+			else
 				next += target.loc
 
 		checking = next

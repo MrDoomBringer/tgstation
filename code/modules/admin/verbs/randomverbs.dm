@@ -48,12 +48,12 @@
 /client/proc/cmd_admin_headset_message(mob/M in GLOB.mob_list)
 	set category = "Special Verbs"
 	set name = "Headset Message"
-
+	
 	admin_headset_message(M)
 
 /client/proc/admin_headset_message(mob/M in GLOB.mob_list, sender = null)
 	var/mob/living/carbon/human/H = M
-
+	
 	if(!check_rights(R_ADMIN))
 		return
 
@@ -75,7 +75,7 @@
 		message_admins("[key_name_admin(src)] decided not to answer [key_name_admin(H)]'s [sender] request.")
 		return
 
-	log_directed_talk(src, H, input, LOG_ADMIN, "reply")
+	log_admin("[key_name(src)] replied to [key_name(H)]'s [sender] message with the message [input].")
 	message_admins("[key_name_admin(src)] replied to [key_name_admin(H)]'s [sender] message with: \"[input]\"")
 	to_chat(H, "You hear something crackle in your ears for a moment before a voice speaks.  \"Please stand by for a message from [sender == "Syndicate" ? "your benefactor" : "Central Command"].  Message as follows[sender == "Syndicate" ? ", agent." : ":"] <span class='bold'>[input].</span> Message ends.\"")
 
@@ -596,28 +596,16 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 /client/proc/admin_delete(datum/D)
 	var/atom/A = D
-	var/coords = ""
-	var/jmp_coords = ""
-	if(istype(A))
-		var/turf/T = get_turf(A)
-		if(T)
-			coords = "at [COORD(T)]"
-			jmp_coords = "at [ADMIN_COORDJMP(T)]"
-		else
-			jmp_coords = coords = "in nullspace"
-
-	if (alert(src, "Are you sure you want to delete:\n[D]\n[coords]?", "Confirmation", "Yes", "No") == "Yes")
-		log_admin("[key_name(usr)] deleted [D] [coords]")
-		message_admins("[key_name_admin(usr)] deleted [D] [jmp_coords]")
+	var/coords = istype(A) ? " at ([A.x], [A.y], [A.z])" : ""
+	if (alert(src, "Are you sure you want to delete:\n[D]\nat[coords]?", "Confirmation", "Yes", "No") == "Yes")
+		log_admin("[key_name(usr)] deleted [D][coords]")
+		message_admins("[key_name_admin(usr)] deleted [D][coords]")
 		SSblackbox.record_feedback("tally", "admin_verb", 1, "Delete") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		if(isturf(D))
 			var/turf/T = D
 			T.ScrapeAway()
 		else
-			vv_update_display(D, "deleted", VV_MSG_DELETED)
 			qdel(D)
-			if(!QDELETED(D))
-				vv_update_display(D, "deleted", "")
 
 /client/proc/cmd_admin_list_open_jobs()
 	set category = "Admin"
@@ -1213,6 +1201,82 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 	log_admin("[key_name(usr)] sent \"[input]\" as the Tip of the Round.")
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Show Tip")
 
+/proc/mass_purrbation()
+	for(var/M in GLOB.mob_list)
+		if(ishumanbasic(M))
+			purrbation_apply(M)
+		CHECK_TICK
+
+/proc/mass_remove_purrbation()
+	for(var/M in GLOB.mob_list)
+		if(ishumanbasic(M))
+			purrbation_remove(M)
+		CHECK_TICK
+
+/proc/purrbation_toggle(mob/living/carbon/human/H, silent = FALSE)
+	if(!ishumanbasic(H))
+		return
+	if(!iscatperson(H))
+		purrbation_apply(H, silent)
+		. = TRUE
+	else
+		purrbation_remove(H, silent)
+		. = FALSE
+
+/proc/purrbation_apply(mob/living/carbon/human/H, silent = FALSE)
+	if(!ishuman(H))
+		return
+	if(iscatperson(H))
+		return
+
+	var/obj/item/organ/ears/cat/ears = new
+	var/obj/item/organ/tail/cat/tail = new
+	ears.Insert(H, drop_if_replaced=FALSE)
+	tail.Insert(H, drop_if_replaced=FALSE)
+
+	if(!silent)
+		to_chat(H, "Something is nya~t right.")
+		playsound(get_turf(H), 'sound/effects/meow1.ogg', 50, 1, -1)
+
+/proc/purrbation_remove(mob/living/carbon/human/H, silent = FALSE)
+	if(!ishuman(H))
+		return
+	if(!iscatperson(H))
+		return
+
+	var/obj/item/organ/ears/cat/ears = H.getorgan(/obj/item/organ/ears/cat)
+	var/obj/item/organ/tail/cat/tail = H.getorgan(/obj/item/organ/tail/cat)
+
+	if(ears)
+		var/obj/item/organ/ears/NE
+		if(H.dna.species && H.dna.species.mutantears)
+			// Roundstart cat ears override H.dna.species.mutantears, reset it here.
+			H.dna.species.mutantears = initial(H.dna.species.mutantears)
+			if(H.dna.species.mutantears)
+				NE = new H.dna.species.mutantears()
+
+		if(!NE)
+			// Go with default ears
+			NE = new /obj/item/organ/ears()
+
+		NE.Insert(H, drop_if_replaced = FALSE)
+
+	if(tail)
+		var/obj/item/organ/tail/NT
+		if(H.dna.species && H.dna.species.mutanttail)
+			// Roundstart cat tail overrides H.dna.species.mutanttail, reset it here.
+			H.dna.species.mutanttail = initial(H.dna.species.mutanttail)
+			if(H.dna.species.mutanttail)
+				NT = new H.dna.species.mutanttail()
+
+		if(NT)
+			NT.Insert(H, drop_if_replaced = FALSE)
+		else
+			tail.Remove(H)
+
+	if(!silent)
+		to_chat(H, "You are no longer a cat.")
+
 /client/proc/modify_goals()
 	set category = "Debug"
 	set name = "Modify goals"
@@ -1246,10 +1310,10 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 /client/proc/smite(mob/living/carbon/human/target as mob)
 	set name = "Smite"
 	set category = "Fun"
-	if(!check_rights(R_ADMIN) || !check_rights(R_FUN))
+	if(!check_rights(R_ADMIN))
 		return
 
-	var/list/punishment_list = list(ADMIN_PUNISHMENT_LIGHTNING, ADMIN_PUNISHMENT_BRAINDAMAGE, ADMIN_PUNISHMENT_GIB, ADMIN_PUNISHMENT_BSA, ADMIN_PUNISHMENT_FIREBALL, ADMIN_PUNISHMENT_ROD, ADMIN_PUNISHMENT_SUPPLYPOD, ADMIN_PUNISHMENT_MAZING)
+	var/list/punishment_list = list(ADMIN_PUNISHMENT_LIGHTNING, ADMIN_PUNISHMENT_BRAINDAMAGE, ADMIN_PUNISHMENT_GIB, ADMIN_PUNISHMENT_BSA, ADMIN_PUNISHMENT_FIREBALL, ADMIN_PUNISHMENT_ROD, ADMIN_PUNISHMENT_SUPPLYPOD)
 
 	var/punishment = input("Choose a punishment", "DIVINE SMITING") as null|anything in punishment_list
 
@@ -1283,7 +1347,7 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 			if (isnull(target_path))
 				return
 			if (target_path == "empty")//if you type "empty", spawn an empty pod
-				new /obj/effect/DPtarget(get_turf(target), null, POD_CENTCOM)
+				new /obj/effect/DPtarget(get_turf(target), null, 2)
 				return
 			var/delivery = text2path(target_path)
 			if(!ispath(delivery))
@@ -1294,11 +1358,7 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 			//send the pod
 			if(iscarbon(target))
 				target.Stun(10)//takes 0.53 seconds for CentCom pod to land
-			new /obj/effect/DPtarget(get_turf(target), delivery, POD_CENTCOM)
-		if(ADMIN_PUNISHMENT_MAZING)
-			if(!puzzle_imprison(target))
-				to_chat(usr,"<span class='warning'>Imprisonment failed!</span>")
-				return
+			new /obj/effect/DPtarget(get_turf(target), delivery, 2)
 
 	var/msg = "[key_name_admin(usr)] punished [key_name_admin(target)] with [punishment]."
 	message_admins(msg)

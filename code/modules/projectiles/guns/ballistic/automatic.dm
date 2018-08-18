@@ -286,7 +286,6 @@
 	can_suppress = FALSE
 	burst_size = 3
 	fire_delay = 1
-	spread = 7
 	pin = /obj/item/firing_pin/implant/pindicate
 
 /obj/item/gun/ballistic/automatic/l6_saw/unrestricted

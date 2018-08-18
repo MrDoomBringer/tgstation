@@ -24,9 +24,6 @@
 	to_be_destroyed = FALSE
 	return src
 
-/turf/open/indestructible/singularity_act()
-	return
-
 /turf/open/indestructible/TerraformTurf(path, defer_change = FALSE, ignore_air = FALSE)
 	return
 

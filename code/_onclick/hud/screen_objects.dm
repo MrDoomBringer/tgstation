@@ -343,21 +343,17 @@
 /obj/screen/mov_intent/Click()
 	toggle(usr)
 
-/obj/screen/mov_intent/update_icon(mob/user)
-	if(!user && hud)
-		user = hud.mymob
-	if(!user)
-		return
-	switch(user.m_intent)
-		if(MOVE_INTENT_WALK)
-			icon_state = "walking"
-		if(MOVE_INTENT_RUN)
-			icon_state = "running"
-
 /obj/screen/mov_intent/proc/toggle(mob/user)
 	if(isobserver(user))
 		return
-	user.toggle_move_intent(user)
+	switch(user.m_intent)
+		if("run")
+			user.m_intent = MOVE_INTENT_WALK
+			icon_state = "walking"
+		if("walk")
+			user.m_intent = MOVE_INTENT_RUN
+			icon_state = "running"
+	user.update_icons()
 
 /obj/screen/pull
 	name = "stop pulling"
@@ -388,27 +384,6 @@
 	if(isliving(usr))
 		var/mob/living/L = usr
 		L.resist()
-
-/obj/screen/rest
-	name = "rest"
-	icon = 'icons/mob/screen_midnight.dmi'
-	icon_state = "act_rest"
-	layer = HUD_LAYER
-	plane = HUD_PLANE
-
-/obj/screen/rest/Click()
-	if(isliving(usr))
-		var/mob/living/L = usr
-		L.lay_down()
-
-/obj/screen/rest/update_icon(mob/mymob)
-	if(!isliving(mymob))
-		return
-	var/mob/living/L = mymob
-	if(!L.resting)
-		icon_state = "act_rest"
-	else
-		icon_state = "act_rest0"
 
 /obj/screen/storage
 	name = "storage"
@@ -616,6 +591,11 @@
 	name = "mood"
 	icon_state = "mood5"
 	screen_loc = ui_mood
+
+/obj/screen/mood/Click()
+	GET_COMPONENT_FROM(mood, /datum/component/mood, usr)
+	if(mood)
+		mood.print_mood()
 
 /obj/screen/splash
 	icon = 'icons/blank_title.png'

@@ -551,6 +551,10 @@
 	A.fire()
 	return A
 
+/obj/machinery/porta_turret/shuttleRotate(rotation)
+	if(wall_turret_direction)
+		wall_turret_direction = turn(wall_turret_direction,rotation)
+
 /obj/machinery/porta_turret/proc/setState(on, mode)
 	if(controllock)
 		return
@@ -621,7 +625,7 @@
 	if(!can_interact(caller))
 		remove_control()
 		return FALSE
-	log_combat(caller,A,"fired with manual turret control at")
+	add_logs(caller,A,"fired with manual turret control at")
 	target(A)
 	return TRUE
 

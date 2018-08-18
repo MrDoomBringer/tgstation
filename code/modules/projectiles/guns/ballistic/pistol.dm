@@ -9,9 +9,6 @@
 	fire_delay = 0
 	actions_types = list()
 
-/obj/item/gun/ballistic/automatic/pistol/no_mag
-	spawnwithmagazine = FALSE
-
 /obj/item/gun/ballistic/automatic/pistol/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][chambered ? "" : "-e"][suppressed ? "-suppressed" : ""]"
@@ -28,9 +25,6 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	mag_type = /obj/item/ammo_box/magazine/m45
 	can_suppress = FALSE
-
-/obj/item/gun/ballistic/automatic/pistol/m1911/no_mag
-	spawnwithmagazine = FALSE
 
 /obj/item/gun/ballistic/automatic/pistol/deagle
 	name = "\improper Desert Eagle"

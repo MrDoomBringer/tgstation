@@ -931,6 +931,15 @@ world
 	flat_icon.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
 	return flat_icon
 
+//For photo camera.
+/proc/build_composite_icon(atom/A)
+	var/icon/composite = icon(A.icon, A.icon_state, A.dir, 1)
+	for(var/O in A.overlays)
+		var/image/I = O
+		composite.Blend(icon(I.icon, I.icon_state, I.dir, 1), ICON_OVERLAY)
+	return composite
+
+
 //What the mob looks like as animated static
 //By vg's ComicIronic
 /proc/getStaticIcon(icon/A, safety = TRUE)
@@ -1027,17 +1036,15 @@ GLOBAL_LIST_EMPTY(friendly_animal_types)
 	return 0
 
 //For creating consistent icons for human looking simple animals
-/proc/get_flat_human_icon(icon_id, datum/job/J, datum/preferences/prefs, dummy_key, showDirs = GLOB.cardinals, outfit_override = null)
+/proc/get_flat_human_icon(icon_id, datum/job/J, datum/preferences/prefs, dummy_key, showDirs = GLOB.cardinals)
 	var/static/list/humanoid_icon_cache = list()
 	if(!icon_id || !humanoid_icon_cache[icon_id])
 		var/mob/living/carbon/human/dummy/body = generate_or_wait_for_human_dummy(dummy_key)
 
 		if(prefs)
-			prefs.copy_to(body,TRUE,FALSE)
+			prefs.copy_to(body)
 		if(J)
-			J.equip(body, TRUE, FALSE, outfit_override = outfit_override)
-		else if (outfit_override)
-			body.equipOutfit(outfit_override,visualsOnly = TRUE)
+			J.equip(body, TRUE, FALSE)
 
 
 		var/icon/out_icon = icon('icons/effects/effects.dmi', "nothing")

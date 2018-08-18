@@ -44,7 +44,7 @@
 	export_types = list(/obj/item/stack/sheet/animalhide/lizard)
 
 /datum/export/stack/skin/gondola
-	cost = 5000
+	cost = 500
 	unit_name = "gondola hide"
 	export_types = list(/obj/item/stack/sheet/animalhide/gondola)
 

@@ -59,8 +59,7 @@
 		C.remove(eyeobj)
 	if(user.client)
 		user.reset_perspective(null)
-		if(eyeobj.visible_icon && user.client)
-			user.client.images -= eyeobj.user_image
+		eyeobj.RemoveImages()
 	eyeobj.eye_user = null
 	user.remote_control = null
 
@@ -109,7 +108,7 @@
 	if(!eyeobj.eye_initialized)
 		var/camera_location
 		var/turf/myturf = get_turf(src)
-		if(eyeobj.use_static != USE_STATIC_NONE)
+		if(eyeobj.use_static)
 			if((!z_lock.len || (myturf.z in z_lock)) && GLOB.cameranet.checkTurfVis(myturf))
 				camera_location = myturf
 			else
@@ -152,7 +151,6 @@
 
 /mob/camera/aiEye/remote
 	name = "Inactive Camera Eye"
-	ai_detector_visible = FALSE
 	var/sprint = 10
 	var/cooldown = 0
 	var/acceleration = 1
@@ -168,9 +166,14 @@
 	user.see_in_dark = 2
 	return 1
 
+/mob/camera/aiEye/remote/RemoveImages()
+	..()
+	if(visible_icon)
+		var/client/C = GetViewerClient()
+		if(C)
+			C.images -= user_image
+
 /mob/camera/aiEye/remote/Destroy()
-	if(origin && eye_user)
-		origin.remove_eye_control(eye_user)
 	origin = null
 	. = ..()
 	eye_user = null
@@ -182,14 +185,15 @@
 
 /mob/camera/aiEye/remote/setLoc(T)
 	if(eye_user)
+		if(!isturf(eye_user.loc))
+			return
 		T = get_turf(T)
 		if (T)
 			forceMove(T)
 		else
 			moveToNullspace()
-		update_ai_detect_hud()
-		if(use_static != USE_STATIC_NONE)
-			GLOB.cameranet.visibility(src, GetViewerClient(), null, use_static)
+		if(use_static)
+			GLOB.cameranet.visibility(src, GetViewerClient())
 		if(visible_icon)
 			if(eye_user.client)
 				eye_user.client.images -= user_image

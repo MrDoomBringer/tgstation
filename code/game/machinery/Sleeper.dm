@@ -25,7 +25,6 @@
 	var/list/chem_buttons	//Used when emagged to scramble which chem is used, eg: antitoxin -> morphine
 	var/scrambled_chems = FALSE //Are chem buttons scrambled? used as a warning
 	var/enter_message = "<span class='notice'><b>You feel cool air surround you. You go numb as your senses turn inward.</b></span>"
-	occupant_typecache = list(/mob/living)
 
 /obj/machinery/sleeper/Initialize()
 	. = ..()
@@ -148,7 +147,7 @@
 		data["occupant"]["cloneLoss"] = mob_occupant.getCloneLoss()
 		data["occupant"]["brainLoss"] = mob_occupant.getBrainLoss()
 		data["occupant"]["reagents"] = list()
-		if(mob_occupant.reagents && mob_occupant.reagents.reagent_list.len)
+		if(occupant.reagents.reagent_list.len)
 			for(var/datum/reagent/R in mob_occupant.reagents.reagent_list)
 				data["occupant"]["reagents"] += list(list("name" = R.name, "volume" = R.volume))
 	return data
@@ -184,12 +183,12 @@
 	if((chem in available_chems) && chem_allowed(chem))
 		occupant.reagents.add_reagent(chem_buttons[chem], 10) //emag effect kicks in here so that the "intended" chem is used for all checks, for extra FUUU
 		if(user)
-			log_combat(user, occupant, "injected [chem] into", addition = "via [src]")
+			add_logs(user, occupant, "injected [chem] into", addition = "via [src]")
 		return TRUE
 
 /obj/machinery/sleeper/proc/chem_allowed(chem)
 	var/mob/living/mob_occupant = occupant
-	if(!mob_occupant || !mob_occupant.reagents)
+	if(!mob_occupant)
 		return
 	var/amount = mob_occupant.reagents.get_reagent_amount(chem) + 10 <= 20 * efficiency
 	var/occ_health = mob_occupant.health > min_health || chem == "epinephrine"
@@ -211,17 +210,6 @@
 /obj/machinery/sleeper/syndie
 	icon_state = "sleeper_s"
 	controls_inside = TRUE
-
-/obj/machinery/sleeper/syndie/fullupgrade/Initialize()
-	. = ..()
-	component_parts = list()
-	component_parts += new /obj/item/circuitboard/machine/sleeper(null)
-	component_parts += new /obj/item/stock_parts/matter_bin/bluespace(null)
-	component_parts += new /obj/item/stock_parts/manipulator/femto(null)
-	component_parts += new /obj/item/stack/sheet/glass(null)
-	component_parts += new /obj/item/stack/sheet/glass(null)
-	component_parts += new /obj/item/stack/cable_coil(null)
-	RefreshParts()
 
 /obj/machinery/sleeper/clockwork
 	name = "soothing sleeper"

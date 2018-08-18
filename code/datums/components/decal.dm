@@ -5,27 +5,19 @@
 	var/description
 	var/mutable_appearance/pic
 
-	var/first_dir // This only stores the dir arg from init
-
 /datum/component/decal/Initialize(_icon, _icon_state, _dir, _cleanable=CLEAN_GOD, _color, _layer=TURF_LAYER, _description)
 	if(!isatom(parent) || !generate_appearance(_icon, _icon_state, _dir, _layer, _color))
 		return COMPONENT_INCOMPATIBLE
-	first_dir = _dir
 	description = _description
 	cleanable = _cleanable
-	
-	apply()
 
-/datum/component/decal/RegisterWithParent()
-	if(first_dir)
+	if(_dir) // If no dir is assigned at start then it follows the atom's dir
 		RegisterSignal(parent, COMSIG_ATOM_DIR_CHANGE, .proc/rotate_react)
-	if(cleanable)
+	if(_cleanable)
 		RegisterSignal(parent, COMSIG_COMPONENT_CLEAN_ACT, .proc/clean_react)
-	if(description)
+	if(_description)
 		RegisterSignal(parent, COMSIG_PARENT_EXAMINE, .proc/examine)
-
-/datum/component/decal/UnregisterFromParent()
-	UnregisterSignal(parent, list(COMSIG_ATOM_DIR_CHANGE, COMSIG_COMPONENT_CLEAN_ACT, COMSIG_PARENT_EXAMINE))
+	apply()
 
 /datum/component/decal/Destroy()
 	remove()

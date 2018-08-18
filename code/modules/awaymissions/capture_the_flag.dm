@@ -555,7 +555,7 @@
 	anchored = TRUE
 	alpha = 255
 
-/obj/structure/trap/ctf/examine(mob/user)
+/obj/structure/trap/examine(mob/user)
 	return
 
 /obj/structure/trap/ctf/trap_effect(mob/living/L)
@@ -606,10 +606,10 @@
 /obj/effect/ctf/ammo/Crossed(atom/movable/AM)
 	reload(AM)
 
-/obj/effect/ctf/ammo/Bump(atom/movable/AM)
+/obj/effect/ctf/ammo/Collide(atom/movable/AM)
 	reload(AM)
 
-/obj/effect/ctf/ammo/Bumped(atom/movable/AM)
+/obj/effect/ctf/ammo/CollidedWith(atom/movable/AM)
 	reload(AM)
 
 /obj/effect/ctf/ammo/proc/reload(mob/living/M)

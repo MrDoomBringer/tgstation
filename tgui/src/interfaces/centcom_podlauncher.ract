@@ -1,0 +1,93 @@
+<ui-notice>
+    <span>To use this, simply spawn the atoms you want in one of the four Centcom Supplypod Bays. Items in the bay will then be launched inside your supplypod, one turf-full at a time! You can optionally use the following buttons to configure how the supplypod acts.</span>
+</ui-notice>
+
+<ui-display title='Centcom Pod Customization (to be used against helen weinstein)'>
+   <ui-section label = 'Which supplypod bay will you use?'>
+        <ui-button style='{{data.bay == 1 ? "selected" : null}}' action='bay1'>Bay #1</ui-button>
+        <ui-button style='{{data.bay == 2 ? "selected" : null}}' action='bay2'>Bay #2</ui-button>
+        <ui-button style='{{data.bay == 3 ? "selected" : null}}' action='bay3'>Bay #3</ui-button>
+        <ui-button style='{{data.bay == 4 ? "selected" : null}}' action='bay4'>Bay #4</ui-button>
+    </ui-section>
+
+    <ui-section label = 'Useful teleport tools!'>
+        <ui-button action='teleportCentcom'>Teleport to Centcom's Supplypod Loading Bay</ui-button>
+        <ui-button state='{{data.oldTurf ? null : "disabled"}}'action='teleportBack'>Teleport Back to {{data.oldTurf ? data.oldTurf : "where you were"}}</ui-button>
+    </ui-section>
+
+    <ui-section label='Keep stuff after launching?'>
+        <ui-button style='{{data.launchClone ? "selected" : null}}' action='launchClone' tooltip-side='left'
+        tooltip='Choosing this will create a duplicate of the item to be launched in Centcom, allowing you to send one type of item multiple times. Either way, the atoms are forceMoved into the supplypod after it lands (but before it opens).'>Clone and Launch</ui-button>
+    </ui-section>
+
+    <ui-section label='Launch all at once?'>
+        <ui-button style='{{data.launchChoice == 1 ? "selected" : null}}' action='launchOrdered' tooltip-side='left'
+        tooltip='Instead of launching everything in the bay at once, this will "scan" things (one turf-full at a time) in order, left to right and top to bottom. Refreshing will reset the "scanner" to the top-leftmost position.'>Ordered</ui-button>
+        <ui-button style='{{data.launchChoice == 2? "selected" : null}}' action='launchRandom' tooltip-side='left'
+        tooltip='Instead of launching everything in the bay at once, this will launch one random turf of items at a time.'>Random</ui-button>
+    </ui-section>
+
+    <ui-section label='Add an explosion?'>
+        <ui-button style='{{data.explosionChoice == 1? "selected" : null}}' action='explosionCustom' tooltip-side='left'
+        tooltip='This will cause an explosion of whatever size you like (including flame range) to occur as soon as the supplypod lands. Dont worry, supply-pods are explosion-proof!'>Custom Size</ui-button>
+        <ui-button style='{{data.explosionChoice == 2? "selected" : null}}' action='explosionBus' tooltip-side='left'
+        tooltip='This will cause a 5,10,20 explosion (with flame range of 30) to occur as soon as the supplypod lands. Dont worry, supply-pods are explosion-proof!'>Adminbus</ui-button>
+    </ui-section>
+
+    <ui-section label='Extra damage?' (default = None)>
+        <ui-button style='{{data.damageChoice == 1 ? "selected" : null}}' action='damageCustom' tooltip-side='left'
+        tooltip='Anyone caught under the pod when it lands will be dealt this amount of brute damage. Sucks to be them!'>Custom Damage</ui-button>
+        <ui-button style='{{data.damageChoice == 2 ? "selected" : null}}' action='damageGib' tooltip-side='left'
+        tooltip='This will attempt to gib any mob caught under the pod when it lands, as well as dealing a nice 5000 brute damage. Ya know, just to be sure!'>Gib</ui-button>
+    </ui-section>
+
+    <ui-section label='Extra effects?'>
+        <ui-button style='{{data.effectStun ? "selected" : null}}' action='effectStun' tooltip-side='left'
+        tooltip='Anyone who is on the turf when the supplypod is launched will be stunned until the supplypod lands. They cant get away that easy!'>Stun</ui-button>
+        <ui-button style='{{data.effectLimb ? "selected" : null}}' action='effectLimb' tooltip-side='left'
+        tooltip='This will cause anyone caught under the pod to lose a limb, excluding their head.'>Delimb</ui-button>
+        <ui-button style='{{data.effectBluespace ? "selected" : null}}' action='effectBluespace' tooltip-side='left'
+        tooltip='Gives the supplypod an advanced Bluespace Recyling Device. After opening, the supplypod will be warped directly to the surface of a nearby NT-designated trash planet (/r/ss13).'>Bluespace</ui-button>
+        <ui-button style='{{data.effectStealth ? "selected" : null}}' action='effectStealth' tooltip-side='left'
+        tooltip='This hides the red target icon from appearing when you launch the supplypod. Combos well with the "Invisible" style. Sneak attack, go!'>Stealth</ui-button>
+        <ui-button style='{{data.effectQuiet ? "selected" : null}}' action='effectQuiet' tooltip-side='left'
+        tooltip='This will keep the supplypod from making any explosion sounds.'>Quiet Landing</ui-button>
+        <ui-button style='{{data.effectReverse ? "selected" : null}}' action='effectReverse' tooltip-side='left'
+        tooltip='This pod will not send any items. Instead, after landing, the supplypod will close (similar to a normal closet closing), and then launch back to the right centcom bay to drop off any new contents.'>Reverse Mode</ui-button>
+    
+    </ui-section>
+
+    <ui-section label='Delay timers?'>
+        <ui-button style='{{data.landingDelay != 5 ? "selected" : null}}' action='landingDelay' tooltip-side='left'
+        tooltip='Choose the amount of time it takes for the supplypod to hit the station. By default this value is 0.5 seconds.'>Custom Landing Time</ui-button>
+         <ui-button style='{{data.openingDelay != 30 ? "selected" : null}}' action='openingDelay' tooltip-side='left'
+        tooltip='Choose the amount of time it takes for the supplypod to open after landing. Useful for giving whatevers inside the pod a nice dramatic entrance! By default this value is 3 seconds.'>Custom Opening Time</ui-button>
+    </ui-section>
+
+    <ui-section label='Style?'>
+        <ui-button style='{{data.styleChoice == "supplypod" ? "selected" : null}}' action='styleStandard' tooltip-side='left'
+        tooltip='Changes the pods style from the default Centcom color scheme to your standard Nanotrasen black and orange. Same color scheme as the normal station-used supplypods.'>Standard</ui-button>
+        <ui-button style='{{data.styleChoice == "bluespacepod" ? "selected" : null}}' action='styleBluespace' tooltip-side='left'
+        tooltip='Changes the pods style from the default Centcom color scheme to the same as the stations upgraded blue-and-white Bluespace Supplypods.'>Bluespace</ui-button>
+        <ui-button style='{{data.styleChoice == "syndiepod" ? "selected" : null}}' action='styleSyndie' tooltip-side='left'
+        tooltip='Changes the pods style from the default Centcom color scheme to a menacing black and blood-red. Great for sending meme-ops in style!'>Syndicate</ui-button>
+        <ui-button style='{{data.styleChoice == "honkpod" ? "selected" : null}}' action='styleHONK' tooltip-side='left'
+        tooltip='Changes the pods style from the default Centcom color scheme to a colorful, clown inspired look.'>HONK</ui-button>
+        <ui-button style='{{data.styleChoice== "" ? "selected" : null}}' action='styleInvisible' tooltip-side='left'
+        tooltip='Makes the supplypod invisible! Useful for when you want to use this feature with a gateway or something. Combos well with the "Stealth" and "Quiet Landing" effects.'>Invisible</ui-button>
+        <ui-button style='{{data.styleChoice == "gondolapod" ? "selected" : null}}' action='styleGondola' tooltip-side='left'
+        tooltip='this gondola can control when he wants to deliver his supplies if he has a smart enough mind, so offer up his body to ghosts for maximum enjoyment.'>Gondola (alive)</ui-button>
+    </ui-section>
+</ui-display>
+
+<ui-display>
+    <ui-section label = '{{data.numObjects}} atoms found in Bay #1'>
+        <ui-button action='refresh' tooltip-side='right'
+        tooltip='Manually refreshes the possible things to launch in the pod bay.'>Refresh Pod Bay</ui-button>
+    </ui-section>
+
+    <ui-section>
+        <ui-button style='{{data.giveLauncher ? "selected" : null}}' action='giveLauncher' tooltip-side='right'
+        tooltip='THE CODEX ASTARTES CALLS THIS MANEUVER: STEEL RAIN!!'>Enter Launch Mode</ui-button>
+    </ui-section>
+</ui-display>

@@ -112,7 +112,7 @@
 		limbs_to_dismember = arms + legs
 		if(holding_bodypart)
 			limbs_to_dismember += holding_bodypart
-
+		
 		var/speedbase = abs((4 SECONDS) / limbs_to_dismember.len)
 		for(bodypart in limbs_to_dismember)
 			i++
@@ -181,7 +181,7 @@
 					return
 			playsound(get_turf(src), 'sound/effects/woodhit.ogg', 75, 1, -1)
 			target.Knockdown(60)
-			log_combat(user, target, "stunned", src)
+			add_logs(user, target, "stunned", src)
 			src.add_fingerprint(user)
 			target.visible_message("<span class ='danger'>[user] has knocked down [target] with [src]!</span>", \
 				"<span class ='userdanger'>[user] has knocked down [target] with [src]!</span>")
@@ -317,13 +317,13 @@
 /obj/item/melee/supermatter_sword/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] touches [src]'s blade. It looks like [user.p_theyre()] tired of waiting for the radiation to kill [user.p_them()]!</span>")
 	user.dropItemToGround(src, TRUE)
-	shard.Bumped(user)
+	shard.CollidedWith(user)
 
 /obj/item/melee/supermatter_sword/proc/consume_everything(target)
 	if(isnull(target))
 		shard.Consume()
 	else if(!isturf(target))
-		shard.Bumped(target)
+		shard.CollidedWith(target)
 	else
 		consume_turf(target)
 
@@ -352,7 +352,7 @@
 	force = 15
 	w_class = WEIGHT_CLASS_NORMAL
 	attack_verb = list("flogged", "whipped", "lashed", "disciplined")
-	hitsound = 'sound/weapons/whip.ogg'
+	hitsound = 'sound/weapons/chainhit.ogg'
 
 /obj/item/melee/curator_whip/afterattack(target, mob/user, proximity_flag)
 	. = ..()
