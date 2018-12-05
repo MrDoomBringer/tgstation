@@ -1,6 +1,7 @@
 /obj/item/supplypod_beacon
 	name = "Supply Pod Beacon"
-	desc = "A device that can be linked to an Express Supply Console for precision supply pod deliveries."
+	desc = "A device that can be linked to an Express Supply Console for precision supply pod deliveries. \
+	It doesn't look very sturdy - it would be best to keep it from getting directly ote that the device cannot withstand much damage, c"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "supplypod_beacon"
 	item_state = "radio"

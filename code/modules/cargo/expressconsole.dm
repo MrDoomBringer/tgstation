@@ -1,5 +1,4 @@
 #define MAX_EMAG_ROCKETS 8
-#define BEACON_COST 1000
 #define SP_LINKED 1
 #define SP_READY 2
 #define SP_LAUNCH 3
@@ -101,11 +100,9 @@
 	data["beaconzone"] = beacon ? get_area(beacon) : ""//where is the beacon located? outputs in the tgui
 	data["usingBeacon"] = usingBeacon //is the mode set to deliver to the beacon or the cargobay?
 	data["canBeacon"] = !usingBeacon || canBeacon //is the mode set to beacon delivery, and is the beacon in a valid location?
-	data["canBuyBeacon"] = cooldown <= 0 && D.account_balance >= BEACON_COST
 	data["beaconError"] = usingBeacon && !canBeacon ? "(BEACON ERROR)" : ""//changes button text to include an error alert if necessary
 	data["hasBeacon"] = beacon != null//is there a linked beacon?
 	data["beaconName"] = beacon ? beacon.name : "No Beacon Found"
-	data["printMsg"] = cooldown > 0 ? "Print Beacon for [BEACON_COST] credits ([cooldown])" : "Print Beacon for [BEACON_COST] credits"//buttontext for printing beacons
 	data["supplies"] = list()
 	message = "Sales are near-instantaneous - please choose carefully."
 	if(SSshuttle.supplyBlocked)
@@ -135,16 +132,6 @@
 			usingBeacon = TRUE
 			if (beacon)
 				beacon.update_status(SP_READY) //turns on the beacon's ready light
-		if("printBeacon")
-			var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_CAR)
-			if(D)
-				if(D.adjust_money(-BEACON_COST))
-					cooldown = 10//a ~ten second cooldown for printing beacons to prevent spam
-					var/obj/item/supplypod_beacon/C = new /obj/item/supplypod_beacon(drop_location())
-					C.link_console(src, usr)//rather than in beacon's Initialize(), we can assign the computer to the beacon by reusing this proc)
-					printed_beacons++//printed_beacons starts at 0, so the first one out will be called beacon # 1
-					beacon.name = "Supply Pod Beacon #[printed_beacons]"
-
 
 		if("add")//Generate Supply Order first
 			var/id = text2path(params["id"])
