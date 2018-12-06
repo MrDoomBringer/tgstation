@@ -258,7 +258,7 @@
 		if("pillStyle")
 			var/id = text2num(params["id"])
 			chosenPillStyle = id
-				
+
 		if("createPatch")
 			var/many = params["many"]
 			if(reagents.total_volume == 0)
