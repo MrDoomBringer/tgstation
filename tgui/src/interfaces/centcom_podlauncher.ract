@@ -55,7 +55,7 @@
         <ui-button style='{{data.effectQuiet ? "selected" : null}}' action='effectQuiet' tooltip-side='left'
         tooltip='This will keep the supplypod from making any sounds, except for those specifically set by admins in the Sound section.'>Quiet Landing</ui-button>
         <ui-button style='{{data.effectReverse ? "selected" : null}}' action='effectReverse' tooltip-side='left'
-        tooltip='This pod will not send any items. Instead, after landing, the supplypod will close (similar to a normal closet closing), and then launch back to the right centcom bay to drop off any new contents.'>Reverse Mode</ui-button>
+        tooltip='This pod will not send any items. Instead, after landing, the supplypod will close (similar to a normal closet closing), and then launch back to the right centcom bay to drop off any new contents. Remember to turn on Bluespace mode if you dont want empty pods all over Centcom's Supply Bays.'>Reverse Mode</ui-button>
         <ui-button style='{{data.effectMissile ? "selected" : null}}' action='effectMissile' tooltip-side='left'
         tooltip='This pod will not send any items. Instead, it will immediatley delete after landing (Similar visually to setting openDelay & departDelay to 0, but this looks nicer). Useful if you just wanna fuck some shit up. Combos well with the Missile style.'>Missile Mode</ui-button>
         <ui-button style='{{data.effectCircle ? "selected" : null}}' action='effectCircle' tooltip-side='left'
