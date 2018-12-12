@@ -1,5 +1,6 @@
 /obj/item/etherealballdeployer
 	name = "Portable Ethereal Disco Ball"
+
 	desc = "Press the button for a deployment of slightly-unethical PARTY!"
 	icon = 'icons/obj/eth_disco.dmi'
 	icon_state = "ethdisco"
@@ -15,7 +16,9 @@
 /obj/structure/etherealball
 	name = "Ethereal Disco Ball"
 	desc = "The ethics of this discoball are questionable. Be sure to feed it snacks or else it might turn off!"
+
 	icon = 'icons/obj/eth_disco.dmi'
+
 	icon_state = "ethdisco_head_0"
 	anchored = TRUE
 	density = TRUE
@@ -55,13 +58,14 @@
 /obj/structure/etherealball/proc/TurnOn()
 	TurnedOn = TRUE //Same
 	DiscoFever()
+	anchored = TRUE
 
 /obj/structure/etherealball/proc/TurnOff()
 	TurnedOn = FALSE
 	set_light(0)
-
 	remove_atom_colour(TEMPORARY_COLOUR_PRIORITY)
 	update_icon()
+	anchored = FALSE
 
 /obj/structure/etherealball/proc/DiscoFever()
 	remove_atom_colour(TEMPORARY_COLOUR_PRIORITY)
