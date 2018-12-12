@@ -1,6 +1,5 @@
 /obj/item/etherealballdeployer
 	name = "Portable Ethereal Disco Ball"
-
 	desc = "Press the button for a deployment of slightly-unethical PARTY!"
 	icon = 'icons/obj/eth_disco.dmi'
 	icon_state = "ethdisco"
@@ -16,9 +15,7 @@
 /obj/structure/etherealball
 	name = "Ethereal Disco Ball"
 	desc = "The ethics of this discoball are questionable. Be sure to feed it snacks or else it might turn off!"
-
 	icon = 'icons/obj/eth_disco.dmi'
-
 	icon_state = "ethdisco_head_0"
 	anchored = TRUE
 	density = TRUE
@@ -34,7 +31,6 @@
 	. = ..()
 	var/mob/living/carbon/human/coolperson = user
 	if(!(coolperson.ckey == "qustinnus" || coolperson.ckey == "mrdoombringer"))
-
 		to_chat(user, "<span class='notice'>Hello buddy, sorry, only cool people can turn the Ethereal Ball 3000 on or off, you can feed it or give it water, though!</span>")
 		return
 	if(TurnedOn)
@@ -66,6 +62,8 @@
 	remove_atom_colour(TEMPORARY_COLOUR_PRIORITY)
 	update_icon()
 	anchored = FALSE
+	if(TimerID)
+		deltimer(TimerID)
 
 /obj/structure/etherealball/proc/DiscoFever()
 	remove_atom_colour(TEMPORARY_COLOUR_PRIORITY)
