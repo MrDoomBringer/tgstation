@@ -31,6 +31,7 @@
 	. = ..()
 	var/mob/living/carbon/human/coolperson = user
 	if(!(coolperson.ckey == "qustinnus" || coolperson.ckey == "mrdoombringer"))
+
 		to_chat(user, "<span class='notice'>Hello buddy, sorry, only cool people can turn the Ethereal Ball 3000 on or off, you can feed it or give it water, though!</span>")
 		return
 	if(TurnedOn)
@@ -58,16 +59,15 @@
 /obj/structure/etherealball/proc/TurnOff()
 	TurnedOn = FALSE
 	set_light(0)
-	remove_atom_colour(FIXED_COLOUR_PRIORITY)
+
+	remove_atom_colour(TEMPORARY_COLOUR_PRIORITY)
 	update_icon()
-	if(TimerID)
-		deltimer(TimerID)
 
 /obj/structure/etherealball/proc/DiscoFever()
 	remove_atom_colour(TEMPORARY_COLOUR_PRIORITY)
 	current_color = random_color()
 	set_light(4, 3, current_color)
-	add_atom_colour(current_color, FIXED_COLOUR_PRIORITY)
+	add_atom_colour("#[current_color]", FIXED_COLOUR_PRIORITY)
 	update_icon()
 	TimerID = addtimer(CALLBACK(src, .proc/DiscoFever), 5, TIMER_STOPPABLE)  //Call ourselves every 0.5 seconds to change colors
 
