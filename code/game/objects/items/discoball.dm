@@ -48,7 +48,8 @@
 	if(!(coolperson.ckey == "qustinnus" || coolperson.ckey == "mrdoombringer"))
 		to_chat(user, "<span class='notice'>Hello buddy, sorry, only cool people can pack up the Ethereal Ball 3000!</span>")
 		return
-	new /obj/item/etherealballdeployer(user.loc)
+	var/obj/item/etherealballdeployer/big_pp = new /obj/item/etherealballdeployer(user.loc)
+	user.put_in_hands(big_pp)
 	qdel(src)
 
 /obj/structure/etherealball/proc/TurnOn()
