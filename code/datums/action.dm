@@ -244,6 +244,12 @@
 /datum/action/item_action/toggle_helmet_light
 	name = "Toggle Helmet Light"
 
+/datum/action/item_action/toggle_welding_screen
+	name = "Toggle Welding Screen"
+
+/datum/action/item_action/toggle_welding_screen2
+	name = "Toggle Welding Screen"
+
 /datum/action/item_action/toggle_headphones
 	name = "Toggle Headphones"
 	desc = "UNTZ UNTZ UNTZ"

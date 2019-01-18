@@ -89,7 +89,7 @@
 	icon_state = "weldhat0_white"
 	item_state = "weldhat0_white"
 	item_color = "white"
-	actions_types = list(/datum/action/item_action/toggle_helmet_light, /datum/action/item_action/toggle)
+	actions_types = list(/datum/action/item_action/toggle_helmet_light, /datum/action/item_action/toggle_welding_screen)
 	flash_protect = 2
 	tint = 2
 	flags_inv = HIDEEYES
@@ -98,32 +98,110 @@
 	visor_flags_inv = HIDEEYES 
 	visor_flags_cover = HEADCOVERSEYES
 
+
 /obj/item/clothing/head/hardhat/weldhat/attack_self(mob/user)
+	toggle_helmet_light()
+
+/obj/item/clothing/head/hardhat/weldhat/AltClick(mob/user)
+	toggle_welding_screen()
+
+/obj/item/clothing/head/hardhat/weldhat/ui_action_click(mob/user, action)
+	if(istype(action, /datum/action/item_action/toggle_helmet_light))
+		toggle_helmet_light()
+	else
+		toggle_welding_screen()
+
+/obj/item/clothing/head/hardhat/weldhat/verb/toggle_helmet_light()
+	set name = "Toggle Helmet Light"
+	set src in usr
 	on = !on
 	if(up)
 		icon_state = "weldhat[on]_[item_color]up"
 		item_state = "weldhat[on]_[item_color]up"
-		user.update_inv_head()	
 	else
 		icon_state = "weldhat[on]_[item_color]"
 		item_state = "weldhat[on]_[item_color]"
-		user.update_inv_head()	
+	usr.update_inv_head()	
 	
 	if(on)
-		turn_on(user)
+		turn_on(usr)
 	else
-		turn_off(user)
+		turn_off(usr)
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.UpdateButtonIcon()
 
+/obj/item/clothing/head/hardhat/weldhat/verb/toggle_welding_screen()
+	set name = "Toggle Welding Screen"
+	set src in usr
+	weldingvisortoggle(usr)
+	if(up)
+		icon_state = "weldhat[on]_[item_color]up"
+		item_state = "weldhat[on]_[item_color]up"
+	else
+		icon_state = "weldhat[on]_[item_color]"
+		item_state = "weldhat[on]_[item_color]"
+	usr.update_inv_head()
+
+	
+
+
+
+
+
+
+
+
+/obj/item/clothing/head/hardhat/weldhat2/
+	name = "welding hard hat"
+	desc = "A piece of headgear used in dangerous working conditions to protect the head. Comes with a built-in flashlight and welding shield."
+	icon_state = "hardhat0_white"
+	item_state = "hardhat0_white"
+	item_color = "white"
+	actions_types = list(/datum/action/item_action/toggle_helmet_light, /datum/action/item_action/toggle_welding_screen)
+	flash_protect = 2
+	tint = 2
+	flags_inv = HIDEEYES
+	flags_cover = HEADCOVERSEYES
+	visor_vars_to_toggle = VISOR_FLASHPROTECT | VISOR_TINT
+	visor_flags_inv = HIDEEYES 
+	visor_flags_cover = HEADCOVERSEYES
+	
+
+/obj/item/clothing/head/hardhat/weldhat/attack_self(mob/user)
+	toggle_helmet_light2()
+
 /obj/item/clothing/head/hardhat/weldhat/AltClick(mob/user)
-	weldingvisortoggle(user)
+	toggle_welding_screen2()
+
+/obj/item/clothing/head/hardhat/weldhat/ui_action_click(mob/user, action)
+	if(istype(action, /datum/action/item_action/toggle_helmet_light))
+		toggle_helmet_light2()
+	else
+		toggle_welding_screen2()
+
+/obj/item/clothing/head/hardhat/weldhat/verb/toggle_helmet_light2()
+	set name = "Toggle Helmet Light"
+	set src in usr
+	on = !on
+	icon_state = "weldhat[on]_[item_color]up"
+	item_state = "weldhat[on]_[item_color]up"
+	usr.update_inv_head()	
+	
 	if(on)
-		if(up)
-			icon_state = "weldhat1_[item_color]up"
-			item_state = "weldhat1_[item_color]up"
-		else
-			icon_state = "weldhat1_[item_color]"
-			item_state = "weldhat1_[item_color]"
-	user.update_inv_head()
+		turn_on(usr)
+	else
+		turn_off(usr)
+	for(var/X in actions)
+		var/datum/action/A = X
+		A.UpdateButtonIcon()
+
+/obj/item/clothing/head/hardhat/weldhat/verb/toggle_welding_screen2()
+	set name = "Toggle Welding Screen"
+	set src in usr
+	var/mutable_appearance/screen_overlay = (icon, "weldvisor")
+	if(up)
+		add_overlay(screen_overlay)
+	else
+		cut_overlays()
+	usr.update_inv_head()
