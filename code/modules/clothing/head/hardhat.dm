@@ -168,37 +168,41 @@
 	visor_flags_cover = HEADCOVERSEYES
 	
 
-/obj/item/clothing/head/hardhat/weldhat/attack_self(mob/user)
+/obj/item/clothing/head/hardhat/weldhat2/attack_self(mob/user)
 	toggle_helmet_light2()
 
-/obj/item/clothing/head/hardhat/weldhat/AltClick(mob/user)
+/obj/item/clothing/head/hardhat/weldhat2/AltClick(mob/user)
 	toggle_welding_screen2()
 
-/obj/item/clothing/head/hardhat/weldhat/ui_action_click(mob/user, action)
+/obj/item/clothing/head/hardhat/weldhat2/ui_action_click(mob/user, action)
 	if(istype(action, /datum/action/item_action/toggle_helmet_light))
-		toggle_helmet_light2()
+		toggle_helmet_light2(user)
 	else
-		toggle_welding_screen2()
+		toggle_welding_screen2(user)
 
-/obj/item/clothing/head/hardhat/weldhat/proc/toggle_helmet_light2(mob/user)
+/obj/item/clothing/head/hardhat/weldhat2/proc/toggle_helmet_light2(mob/user)
 	on = !on	
 	if(on)
 		turn_on(user)
 	else
 		turn_off(user)
+	update_icon(user)
 
-
-/obj/item/clothing/head/hardhat/weldhat/proc/toggle_welding_screen2(mob/user)
+/obj/item/clothing/head/hardhat/weldhat2/proc/toggle_welding_screen2(mob/user)
 	weldingvisortoggle(user)
-	update_icon()
+	update_icon(user)
 
-/obj/item/clothing/head/hardhat/weldhat/update_icon()
+/obj/item/clothing/head/hardhat/weldhat2/update_icon(mob/user)
+	..()
 	cut_overlays()
 	icon_state = "hardhat[on]_[item_color]"
 	item_state = "hardhat[on]_[item_color]"
 	if(up)
 		add_overlay("weldvisor")
 	user.update_inv_head()
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		C.head_update(src, forced = 1)
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.UpdateButtonIcon()
