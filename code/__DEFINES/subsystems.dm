@@ -1,7 +1,7 @@
 //Update this whenever the db schema changes
 //make sure you add an update to the schema_version stable in the db changelog
-#define DB_MAJOR_VERSION 4
-#define DB_MINOR_VERSION 7
+#define DB_MAJOR_VERSION 5
+#define DB_MINOR_VERSION 0
 
 //Timing subsystem
 //Don't run if there is an identical unique timer active
@@ -78,7 +78,7 @@
 #define INIT_ORDER_STICKY_BAN		-10
 #define INIT_ORDER_LIGHTING			-20
 #define INIT_ORDER_SHUTTLE			-21
-#define INIT_ORDER_SQUEAK			-40
+#define INIT_ORDER_MINOR_MAPPING	-40
 #define INIT_ORDER_PATH				-50
 #define INIT_ORDER_PERSISTENCE		-100
 
@@ -140,6 +140,12 @@
 		}\
 		if(LAZYLEN(po)){\
 			A.overlays |= po;\
+		}\
+		for(var/I in A.alternate_appearances){\
+			var/datum/atom_hud/alternate_appearance/AA = A.alternate_appearances[I];\
+			if(AA.transfer_overlays){\
+				AA.copy_overlays(A, TRUE);\
+			}\
 		}\
 		A.flags_1 &= ~OVERLAY_QUEUED_1;\
 	}

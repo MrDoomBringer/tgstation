@@ -23,6 +23,8 @@ Captain
 	paycheck = PAYCHECK_COMMAND
 	paycheck_department = ACCOUNT_SEC
 
+	mind_traits = list(TRAIT_DISK_VERIFIER)
+
 /datum/job/captain/get_access()
 	return get_all_accesses()
 
@@ -58,7 +60,7 @@ Captain
 	name = "Captain (Hardsuit)"
 
 	mask = /obj/item/clothing/mask/gas/sechailer
-	suit = /obj/item/clothing/suit/space/hardsuit/captain
+	suit = /obj/item/clothing/suit/space/hardsuit/swat/captain
 	suit_store = /obj/item/tank/internals/oxygen
 
 /*
