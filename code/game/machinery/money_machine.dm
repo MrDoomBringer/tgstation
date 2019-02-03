@@ -28,7 +28,7 @@
 	dump = new /obj/machinery/dumpeet()
 	animate(DF, pixel_z = 0, time = 5, , easing = LINEAR_EASING) //Make the pod fall! At an angle!
 	addtimer(CALLBACK(src, .proc/endLaunch), 5, TIMER_CLIENT_TIME) //Go onto the last step after a very short falling animation
-	playFallingSound()
+	addtimer(CALLBACK(src, .proc/playFallingSound), 1, TIMER_CLIENT_TIME) //Go onto the last step after a very short falling animation
 
 /obj/effect/dumpeetTarget/proc/playFallingSound()
 	playsound(src,  'sound/weapons/mortar_whistle.ogg', 80, 1, 6)
