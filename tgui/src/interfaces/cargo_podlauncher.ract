@@ -2,7 +2,8 @@
   <ui-display title='Express Cargo Console'>
 
     <ui-section label='Landing Location'>
-      <ui-button state='{{data.builtSilo ? null : "selected"}}' action='buildSilo'>Build Silo</ui-button>
+      <ui-button state='{{data.builtSilo ? "selected" : null}}' action='buildSilo'>Build Silo</ui-button>
+      <ui-button state='{{data.builtSilo ? null : "disabled"}}' action='launchPod'>Launch Pod</ui-button>
     
       </ui-section>
       </ui-display>
