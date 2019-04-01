@@ -1457,6 +1457,7 @@
 #include "code\modules\cargo\packs.dm"
 #include "code\modules\cargo\supplypod.dm"
 #include "code\modules\cargo\supplypod_beacon.dm"
+#include "code\modules\cargo\supplypod_designator.dm"
 #include "code\modules\cargo\bounties\assistant.dm"
 #include "code\modules\cargo\bounties\botany.dm"
 #include "code\modules\cargo\bounties\chef.dm"

@@ -19,7 +19,7 @@
 			M.buffer = src
 			to_chat(user, "<span class='caution'>You upload the data into the [W.name]'s buffer.</span>")
 
-/obj/machinery/podlauncher_loader/proc/set_link(var/toggle)
+/obj/machinery/cargo_podlauncher/proc/set_link(var/toggle)
 	if(toggle)
 		linkedLoader.hasLinkedLauncher = TRUE
 		linkedLoader.update_icon()
@@ -44,7 +44,10 @@
 	var/builtSilo = FALSE
 	var/obj/machinery/podlauncher_loader/linkedLoader
 	var/obj/item/supplypod_beacon/designator/beacon
-	var/usingBeacon
+	var/designatorCooldown = 0
+	var/launchCooldown = 0
+	var/printed_beacons = 0
+	var/openDoor = FALSE
 
 /obj/machinery/cargo_podlauncher/Initialize()
 	. = ..()
@@ -62,9 +65,9 @@
 			if (linkedLoader != M.buffer)
 				if (linkedLoader)
 					to_chat(user, "<span class='caution'>You disconnect the previously linked Pod Loader.</span>")
-					linkedLoader.set_link(FALSE)
+					set_link(FALSE)
 				linkedLoader = M.buffer
-				linkedLoader.set_link(TRUE)
+				set_link(TRUE)
 				M.buffer = null
 				to_chat(user, "<span class='caution'>You upload the data from the [W.name]'s buffer, linking a new Pod Loader to this Launcher.</span>")
 				update_icon()
@@ -78,11 +81,13 @@
 		add_overlay("podlauncher_panel")
 	if(linkedLoader)
 		add_overlay("podlauncher_overlay")
+	if(openDoor)
+		add_overlay("podlauncher_door")
 
 /obj/machinery/cargo_podlauncher/ui_interact(mob/living/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state) // Remember to use the appropriate state.
 	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "cargo_podlauncher", name, 100, 200, master_ui, state)
+		ui = new(user, src, ui_key, "cargo_podlauncher", name, 300, 200, master_ui, state)
 		ui.open()
 
 /obj/machinery/cargo_podlauncher/ui_data(mob/user)
@@ -91,20 +96,48 @@
 	if(D)
 		data["points"] = D.account_balance
 	data["builtSilo"] = builtSilo
-	data["beacon"] = beacon
-	data["canBuyBeacon"] = cooldown <= 0 && D.account_balance >= BEACON_COST
-	data["printMsg"] = cooldown > 0 ? "Print Beacon for [BEACON_COST] credits ([cooldown])" : "Print Beacon for [BEACON_COST] credits"//buttontext for printing beacons
+	data["beacon"] = beacon ? "[beacon] at [COORD(beacon)]" : "ERROR:DESIGNATOR REQUIRED"
+	data["canLaunch"] = beacon && launchCooldown <= 0
+	data["launchMsg"] = beacon ? (launchCooldown > 0 ? "Launch Supplypod ([launchCooldown])" : "Launch Supplypod") : "ERROR: REQUIRES ACTIVE DESIGNATOR"
+	data["canBuyDesignator"] = designatorCooldown <= 0 && D.account_balance >= DESIGNATOR_COST
+	data["designatorMsg"] = designatorCooldown > 0 ? "Print Beacon for [DESIGNATOR_COST] credits ([designatorCooldown])" : "Print Beacon for [DESIGNATOR_COST] credits"//buttontext for printing beacons
+	if (designatorCooldown > 0)//cooldown used for printing designators
+		designatorCooldown--
+	if (launchCooldown > 0)//cooldown used for launching
+		launchCooldown--
+	else
+		open_door()
 	return data
+
+/obj/machinery/cargo_podlauncher/proc/open_door()
+	openDoor = TRUE
+	update_icon()
+	playsound(loc, 'sound/machines/click.ogg', 50,0)
+
+/obj/machinery/cargo_podlauncher/proc/close_door()
+	openDoor = FALSE
+	update_icon()
+	playsound(loc, 'sound/machines/click.ogg', 50,0)
 
 /obj/machinery/cargo_podlauncher/ui_act(action, params, datum/tgui/ui)
 	switch(action)
 		if("buildSilo")
 			buildSilo()
 		if("launchPod")
-			launchPod()
+			if (launchCooldown <= 0)
+				launchPod()
 		if("printDesignator")
 			printDesignator()
 		
+/obj/machinery/cargo_podlauncher/proc/printDesignator()
+	var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_CAR)
+	if(D)
+		if(D.adjust_money(-DESIGNATOR_COST))
+			designatorCooldown = 20//a ~twenty second cooldown for printing beacons to prevent spam
+			var/obj/item/supplypod_beacon/designator/C = new /obj/item/supplypod_beacon/designator(drop_location())
+			C.link_console(src, usr)//rather than in beacon's Initialize(), we can assign the computer to the beacon by reusing this proc)
+			printed_beacons++//printed_beacons starts at 0, so the first one out will be called beacon # 1
+			beacon.name = "Supply Pod Designator #[printed_beacons]"
 
 /obj/machinery/cargo_podlauncher/proc/loadPod()
 	var/obj/structure/closet/supplypod/bluespacepod/pod = new()
@@ -114,26 +147,14 @@
 	return pod
 
 /obj/machinery/cargo_podlauncher/proc/launchPod()
-	if (!linkedLoader)
+	if (!linkedLoader || !beacon.lockedInTurf)
 		playsound(src,'sound/machines/synth_no.ogg',50,0)
 		return
 	else
+		launchCooldown = 30
 		var/obj/structure/closet/supplypod/bluespacepod/pod = loadPod()
-		var/area/landingzone = /area/quartermaster/storage //where we droppin boys
-		var/list/empty_turfs
-		var/LZ
-		landingzone = GLOB.areas_by_type[/area/quartermaster/storage]
-		if (!landingzone)
-			WARNING("[src] couldnt find a Quartermaster/Storage (aka cargobay) area on the station, and as such it has set the supplypod landingzone to the area it resides in.")
-			landingzone = get_area(src)
-		for(var/turf/open/floor/T in landingzone.contents)//uses default landing zone
-			if(is_blocked_turf(T))
-				continue
-			LAZYADD(empty_turfs, T)
-			CHECK_TICK
-		if(empty_turfs && empty_turfs.len)
-			LZ = pick(empty_turfs)
-		new /obj/effect/DPtarget(LZ, pod)
+		new /obj/effect/DPtarget(beacon.lockedInTurf, pod)
+		addtimer(CALLBACK(src, .proc/close_door), 20)
 
 /obj/machinery/cargo_podlauncher/proc/buildSilo()
 	var/list/turfsToCheck = list()
@@ -160,6 +181,16 @@
 	icon_state = "cargo_podlauncher"
 	playsound(src,'sound/machines/triple_beep.ogg',50,0)
 	return TRUE
+
+/obj/machinery/computer/cargo/express/attackby(obj/item/W, mob/living/user, params)
+	if(istype(W, /obj/item/supplypod_beacon/designator))
+		var/obj/item/supplypod_beacon/designator/sd = W
+		if (sd.express_console != src)
+			sd.link_console(src, user)
+			return TRUE
+		else
+			to_chat(user, "<span class='notice'>[src] is already linked to [sd].</span>")
+	..()
 
 /obj/machinery/cargo_podlauncher/Destroy()
 	return ..()

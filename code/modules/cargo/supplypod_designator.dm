@@ -7,12 +7,12 @@
 	lefthand_file = 'icons/mob/inhands/misc/devices_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
 	w_class = WEIGHT_CLASS_SMALL
-	var/obj/machinery/podlauncher_loader/linkedLauncher
-	var/linked = FALSE
-	var/ready = FALSE
-	var/launched = FALSE
+	var/obj/machinery/podlauncher_loader/linkedConsole
+	var/turf/lockedInTurf
+	var/lockingDuration = 50
+	var/distance_limit = 7
 
-/obj/item/supplypod_beacon/designator/proc/update_status(var/consoleStatus)
+/obj/item/supplypod_beacon/designator/update_status(var/consoleStatus)
 	switch(consoleStatus)
 		if (SP_LINKED)
 			linked = TRUE
@@ -40,48 +40,13 @@
 	else if (linked)
 		add_overlay("sp_orange")
 
-/obj/item/supplypod_beacon/designator/proc/endLaunch()
-	launched = FALSE
-	update_status()
-
 /obj/item/supplypod_beacon/designator/examine(user)
 	..()
-	if(!linkedLauncher)
+	if(!linkedConsole)
 		to_chat(user, "<span class='notice'>[src] is not currently linked to a Cargo Pod Launcher.</span>")
 	else
-		to_chat(user, "<span class='notice'>Alt-click to unlink it from [linkedLauncher].</span>")
+		to_chat(user, "<span class='notice'>Alt-click to unlink it from [linkedConsole].</span>")
 
-/obj/item/supplypod_beacon/designator/Destroy()
-	if(linkedLauncher)
-		linkedLauncher.beacon = null
-	return ..()
-
-/obj/item/supplypod_beacon/designator/proc/unlink_console()
-	if(linkedLauncher)
-		linkedLauncher.beacon = null
-		linkedLauncher = null
-	update_status(SP_UNLINK)
-	update_status(SP_UNREADY) 
-
-/obj/item/supplypod_beacon/designator/proc/link_console(obj/machinery/podlauncher_loader/C, mob/living/user)
-	if (C.beacon)//if new console has a beacon, then...
-		C.beacon.unlink_console()//unlink the old beacon from new console
-	if (linkedLauncher)//if this beacon has an express console
-		linkedLauncher.beacon = null//remove the connection the expressconsole has from beacons
-	linkedLauncher = C//set the linked console var to the console
-	linkedLauncher.beacon = src//out with the old in with the news
-	update_status(SP_LINKED)
-	if (linkedLauncher.usingBeacon)
-		update_status(SP_READY)
-	to_chat(user, "<span class='notice'>[src] linked to [C].</span>")
-
-/obj/item/supplypod_beacon/designator/AltClick(mob/user)
-	if (!user.canUseTopic(src, !issilicon(user)))
-		return
-	if (linkedLauncher)
-		unlink_console()
-	else
-		to_chat(user, "<span class='notice'>There is no linked console!</span>")
 
 /obj/item/supplypod_beacon/designator/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/pen)) //give a tag that is visible from the linked express console
@@ -93,3 +58,40 @@
 		return
 	else	
 		return ..()
+
+/obj/item/supplypod_beacon/designator/afterattack(atom/target, mob/user, proximity_flag)
+	. = ..()
+	if(!check_allowed_items(target, 1))
+		return
+	var/turf/T = get_turf(target)
+	if(T.density)
+		return
+	if(get_dist(T,src) > distance_limit)
+		return
+
+	var/datum/beam/designatorBeam = new(src,target,'icons/effects/beam.dmi',"b_beam",50,distance_limit+1,/obj/effect/ebeam,beam_sleep_time = 3)
+	INVOKE_ASYNC(designatorBeam, /datum/beam/.proc/Start)
+	user.visible_message("<span class='warning'>[user] begins to designate a supplypod landing zone!</span>","<span class='notice'>You begin to lock in a supplypod landing zone...</span>")
+	if(do_after(user, 50, target = src))
+		playsound(src,'sound/weapons/resonator_fire.ogg',50,1)
+		new /obj/effect/temp_visual/supplypod_inbound(T, lockingDuration)
+		addtimer(CALLBACK(src, .proc/loseLockOnTarget), lockingDuration)
+		lockedInTurf = T
+		to_chat(user, "<span class='notice'>You establish a lock on the landing zone. The lock will dissipate in [lockingDuration/10] seconds.</span>")
+		designatorBeam.End()
+	else
+		to_chat(user, "<span class='warning'>You lose your lock on the landing zone.</span>")
+		designatorBeam.End()
+	user.changeNext_move(CLICK_CD_MELEE)
+		
+
+/obj/item/supplypod_beacon/designator/proc/loseLockOnTarget()
+	lockedInTurf = null
+
+/obj/effect/temp_visual/supplypod_inbound
+	icon = 'icons/obj/cargo.dmi'
+	icon_state = "supplypod_inbound"
+	
+/obj/effect/temp_visual/Initialize(var/D)
+	. = ..()
+	duration = D
