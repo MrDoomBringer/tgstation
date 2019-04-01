@@ -1,9 +1,17 @@
 
   <ui-display title='Express Cargo Console'>
-
+      <ui-section label='Credits'>
+          <span>{{Math.floor(adata.points)}}</span>
+        </ui-section>
     <ui-section label='Landing Location'>
+
       <ui-button state='{{data.builtSilo ? "selected" : null}}' action='buildSilo'>Build Silo</ui-button>
       <ui-button state='{{data.builtSilo ? null : "disabled"}}' action='launchPod'>Launch Pod</ui-button>
-    
+      <ui-button state='{{data.canBuyBeacon ? null : "disabled"}}' action='printDesignator'> {{data.printMsg}}</ui-button>
+      <ui-button state='{{data.beacon ? null : "disabled"}}' action='unlinkDesignator'>Unlink Landing Designator</ui-button>
+      
       </ui-section>
+      <ui-section label='Credits'>
+      <span>{{Math.floor(adata.points)}}</span>
+    </ui-section>
       </ui-display>
