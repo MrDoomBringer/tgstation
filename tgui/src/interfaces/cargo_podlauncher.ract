@@ -1,16 +1,27 @@
+<ui-display title='Cargo Pod Launcher Console'>
+  <ui-section label='Credits'>
+    <span>{{Math.floor(data.points)}}</span>
+  </ui-section>
 
-  <ui-display title='Express Cargo Console'>
-      <ui-section label='Credits'>
-          <span>{{Math.floor(data.points)}}</span>
-        </ui-section>
-    <ui-section label='Landing Location'>
+  <ui-section label='Linked Designator'>
+    <span>{{data.beacon}}</span>
+  </ui-section>
 
-      <ui-button state='{{data.builtSilo ? "selected" : null}}' action='buildSilo'>Build Silo</ui-button>
-      {{#if data.builtSilo}}
-        <span>{{data.beacon}}</span>
-        <ui-button state='{{data.canBuyDesignator ? null : "disabled"}}' action='printDesignator'> {{data.designatorMsg}}</ui-button>
-        <ui-button state='{{data.canLaunch ? null : "disabled"}}' action='launchPod'>{{data.launchMsg}}</ui-button>
-        <ui-button state='{{data.beacon ? null : "disabled"}}' action='unlinkDesignator'>Unlink Landing Designator</ui-button>
-      {{/if}}
-      </ui-section>
-      </ui-display>
+  <ui-section label='Landing Location'>
+    <span>{{data.targetLocation}}</span>
+  </ui-section>
+</ui-display>
+
+<ui-display title='Launch Operation'>
+  <ui-button state='{{data.builtSilo ? "selected" : null}}' action='buildSilo'>Build Silo</ui-button>
+
+  {{#if data.builtSilo}}
+  <ui-section>
+
+  <ui-button state='{{data.canBuyDesignator ? null : "disabled"}}' action='printDesignator'>{{data.designatorMsg}}</ui-button>
+  <ui-button state='{{data.canLaunch ? null : "disabled"}}' action='launchPod'>{{data.launchMsg}}</ui-button>
+  <ui-button state='{{data.linkedBeacon ? null : "disabled"}}' action='unlinkDesignator'>Unlink Landing Designator</ui-button>
+
+  </ui-section>
+  {{/if}}
+</ui-display>

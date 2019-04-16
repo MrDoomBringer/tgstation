@@ -11,6 +11,7 @@
 	var/turf/lockedInTurf
 	var/lockingDuration = 50
 	var/distance_limit = 7
+	var/placingTarget = FALSE
 
 /obj/item/supplypod_beacon/designator/update_status(var/consoleStatus)
 	switch(consoleStatus)
@@ -61,27 +62,33 @@
 
 /obj/item/supplypod_beacon/designator/afterattack(atom/target, mob/user, proximity_flag)
 	. = ..()
+	if(placingTarget)
+		return
 	if(!check_allowed_items(target, 1))
+		return
+	if(istype(target, /obj/machinery/cargo_podlauncher))
+		var/obj/machinery/cargo_podlauncher/C = target
+		link_console(C, user)
 		return
 	var/turf/T = get_turf(target)
 	if(T.density)
 		return
 	if(get_dist(T,src) > distance_limit)
 		return
-
-	var/datum/beam/designatorBeam = new(src,target,'icons/effects/beam.dmi',"b_beam",50,distance_limit+1,/obj/effect/ebeam,beam_sleep_time = 3)
+	placingTarget = TRUE
+	var/datum/beam/designatorBeam = new(get_turf(src),T,'icons/effects/beam.dmi',"sat_beam",50,distance_limit+1,/obj/effect/ebeam,beam_sleep_time = 3)
 	INVOKE_ASYNC(designatorBeam, /datum/beam/.proc/Start)
 	user.visible_message("<span class='warning'>[user] begins to designate a supplypod landing zone!</span>","<span class='notice'>You begin to lock in a supplypod landing zone...</span>")
-	if(do_after(user, 50, target = src))
+	if(do_after(user, 50, target = T))
 		playsound(src,'sound/weapons/resonator_fire.ogg',50,1)
 		new /obj/effect/temp_visual/supplypod_inbound(T, lockingDuration)
 		addtimer(CALLBACK(src, .proc/loseLockOnTarget), lockingDuration)
 		lockedInTurf = T
 		to_chat(user, "<span class='notice'>You establish a lock on the landing zone. The lock will dissipate in [lockingDuration/10] seconds.</span>")
-		designatorBeam.End()
 	else
 		to_chat(user, "<span class='warning'>You lose your lock on the landing zone.</span>")
 		designatorBeam.End()
+	placingTarget = FALSE
 	user.changeNext_move(CLICK_CD_MELEE)
 		
 
@@ -92,6 +99,6 @@
 	icon = 'icons/obj/cargo.dmi'
 	icon_state = "supplypod_inbound"
 	
-/obj/effect/temp_visual/Initialize(var/D)
-	. = ..()
+/obj/effect/temp_visual/supplypod_inbound/Initialize(mapload, var/D)
 	duration = D
+	return ..()

@@ -42,12 +42,12 @@
 	icon_state = "cargo_podlauncher_nosilo"
 	desc = "This console allows the user to bring DEATH upon the station"
 	var/builtSilo = FALSE
+	var/buildingSilo = FALSE
+	var/usingBeacon = FALSE
 	var/obj/machinery/podlauncher_loader/linkedLoader
 	var/obj/item/supplypod_beacon/designator/beacon
 	var/designatorCooldown = 0
-	var/launchCooldown = 0
 	var/printed_beacons = 0
-	var/openDoor = FALSE
 
 /obj/machinery/cargo_podlauncher/Initialize()
 	. = ..()
@@ -81,7 +81,7 @@
 		add_overlay("podlauncher_panel")
 	if(linkedLoader)
 		add_overlay("podlauncher_overlay")
-	if(openDoor)
+	if(!usingBeacon)
 		add_overlay("podlauncher_door")
 
 /obj/machinery/cargo_podlauncher/ui_interact(mob/living/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state) // Remember to use the appropriate state.
@@ -92,42 +92,44 @@
 
 /obj/machinery/cargo_podlauncher/ui_data(mob/user)
 	var/list/data = list()
+	var/turf/beaconLocation = get_turf(beacon)
 	var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_CAR)
 	if(D)
 		data["points"] = D.account_balance
 	data["builtSilo"] = builtSilo
-	data["beacon"] = beacon ? "[beacon] at [COORD(beacon)]" : "ERROR:DESIGNATOR REQUIRED"
-	data["canLaunch"] = beacon && launchCooldown <= 0
-	data["launchMsg"] = beacon ? (launchCooldown > 0 ? "Launch Supplypod ([launchCooldown])" : "Launch Supplypod") : "ERROR: REQUIRES ACTIVE DESIGNATOR"
+	data["linkedBeacon"] = beacon
+	data["beacon"] = beacon ? "[beacon] at [COORD(beaconLocation)]" : "ERROR:DESIGNATOR REQUIRED"
+	data["canLaunch"] = beacon && beacon.lockedInTurf
+	data["launchMsg"] = beacon ? "Launch Supplypod" : "ERROR: REQUIRES ACTIVE DESIGNATOR"
 	data["canBuyDesignator"] = designatorCooldown <= 0 && D.account_balance >= DESIGNATOR_COST
-	data["designatorMsg"] = designatorCooldown > 0 ? "Print Beacon for [DESIGNATOR_COST] credits ([designatorCooldown])" : "Print Beacon for [DESIGNATOR_COST] credits"//buttontext for printing beacons
+	data["designatorMsg"] = designatorCooldown > 0 ? "Print Designator for [DESIGNATOR_COST] credits ([designatorCooldown])" : "Print Designator for [DESIGNATOR_COST] credits"//buttontext for printing beacons
+	data["targetLocation"] = beacon ? "[beacon.lockedInTurf] at [COORD(beacon.lockedInTurf)]" : "ERROR: REQUIRES ACTIVE DESIGNATOR"
 	if (designatorCooldown > 0)//cooldown used for printing designators
 		designatorCooldown--
-	if (launchCooldown > 0)//cooldown used for launching
-		launchCooldown--
-	else
-		open_door()
 	return data
 
 /obj/machinery/cargo_podlauncher/proc/open_door()
-	openDoor = TRUE
-	update_icon()
-	playsound(loc, 'sound/machines/click.ogg', 50,0)
+	if (!usingBeacon && builtSilo)
+		usingBeacon = TRUE
+		update_icon()
+		playsound(loc, 'sound/machines/click.ogg', 50,0)
 
 /obj/machinery/cargo_podlauncher/proc/close_door()
-	openDoor = FALSE
-	update_icon()
-	playsound(loc, 'sound/machines/click.ogg', 50,0)
+	if (usingBeacon)
+		usingBeacon = FALSE
+		update_icon()
+		playsound(loc, 'sound/machines/click.ogg', 50,0)
 
 /obj/machinery/cargo_podlauncher/ui_act(action, params, datum/tgui/ui)
 	switch(action)
 		if("buildSilo")
 			buildSilo()
 		if("launchPod")
-			if (launchCooldown <= 0)
-				launchPod()
+			launchPod()
 		if("printDesignator")
 			printDesignator()
+		if("unlinkDesignator")
+			beacon.unlink_console()
 		
 /obj/machinery/cargo_podlauncher/proc/printDesignator()
 	var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_CAR)
@@ -147,16 +149,22 @@
 	return pod
 
 /obj/machinery/cargo_podlauncher/proc/launchPod()
-	if (!linkedLoader || !beacon.lockedInTurf)
+	if (!linkedLoader || !beacon || !beacon.lockedInTurf)
 		playsound(src,'sound/machines/synth_no.ogg',50,0)
 		return
 	else
-		launchCooldown = 30
+		var/turf/target = beacon.lockedInTurf
+		beacon.loseLockOnTarget()
+		var/obj/effect/temp_visual/supplypod_inbound/indicator = locate() in target
+		if (indicator)
+			qdel(indicator)
 		var/obj/structure/closet/supplypod/bluespacepod/pod = loadPod()
-		new /obj/effect/DPtarget(beacon.lockedInTurf, pod)
-		addtimer(CALLBACK(src, .proc/close_door), 20)
-
+		new /obj/effect/DPtarget(target, pod)
+		
 /obj/machinery/cargo_podlauncher/proc/buildSilo()
+	if (buildingSilo || builtSilo)
+		return
+	buildingSilo = TRUE
 	var/list/turfsToCheck = list()
 	turfsToCheck.Add(get_step(src, NORTH))
 	turfsToCheck.Add(get_step(src, EAST))
@@ -173,13 +181,14 @@
 			playsound(src,'sound/machines/beep.ogg',50,0)
 	if (!turfsAllGood)
 		return
-	builtSilo = TRUE
 	sleep(20)
 	playsound(src,'sound/machines/twobeep.ogg',50,0)
 	icon_state = "cargo_podlauncher_building"
 	sleep(25)
 	icon_state = "cargo_podlauncher"
 	playsound(src,'sound/machines/triple_beep.ogg',50,0)
+	builtSilo = TRUE
+	buildingSilo = FALSE
 	return TRUE
 
 /obj/machinery/computer/cargo/express/attackby(obj/item/W, mob/living/user, params)
