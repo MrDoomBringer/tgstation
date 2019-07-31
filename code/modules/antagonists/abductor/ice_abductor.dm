@@ -7,5 +7,6 @@
 
 /obj/iced_abductor/Destroy()
 	var/turf/T = get_turf(src)
-	var/obj/effect/mob_spawn/human/abductor/A = new(T)
+	new /obj/effect/mob_spawn/human/abductor(T)
+	. = ..()
 
