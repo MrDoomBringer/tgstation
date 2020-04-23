@@ -77,7 +77,7 @@
 	prox_check = FALSE
 
 /obj/item/card/emag/attack()
-	return
+	return//
 
 /obj/item/card/emag/afterattack(atom/target, mob/user, proximity)
 	. = ..()
