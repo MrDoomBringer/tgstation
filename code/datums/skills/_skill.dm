@@ -62,7 +62,7 @@
 	if (!ispath(skillcapepath))	
 		to_chat(mind.current, "<span class='nicegreen'>My legendary [name] skill is quite impressive, thoguh it seems the Professional [title] Association doesn't have any status symbols to commemorate my abilities with. I should let Centcom know of this travesty, maybe they can do something about it.</span>")
 		return
-	if (src in mind.skills_leveled_to_legendary)	
+	if (LAZYFIND(mind.skills_leveled_to_legendary, src))	
 		to_chat(mind.current, "<span class='nicegreen'>I have regained my legendary [name] skill. It seems the Professional [title] Association won't send me another status symbol, however.</span>")
 		return
 	var/obj/structure/closet/supplypod/bluespacepod/pod = new()
@@ -71,4 +71,4 @@
 	to_chat(mind.current, "<span class='nicegreen'>My legendary skill has attracted the attention of the Professional [title] Association. It seems they are sending me a status symbol to commemorate my abilities.</span>")
 	var/turf/T = get_turf(mind.current)
 	new /obj/effect/DPtarget(T, pod , new skillcapepath(T))
-	mind.skills_leveled_to_legendary.Add(src)
+	LAZYADD(mind.skills_leveled_to_legendary, src)

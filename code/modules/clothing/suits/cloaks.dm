@@ -99,10 +99,10 @@
 	. += "<span class='notice'>You notice a powerful aura about this cloak, suggesting that only the truly experienced may wield it.</span>"
 
 /obj/item/clothing/neck/cloak/skill_reward/equipped(mob/user, slot)
-	..()
+	. = ..()
 	if (user.mind?.get_skill_level(associated_skill_path) < SKILL_LEVEL_LEGENDARY)
-		to_chat(user, "<span class = 'notice'>You feel completely and utterly unworthy to even hold \the [src]. You set it on the ground out of respect.</span>")
-		user.dropItemToGround(src, TRUE)
+		to_chat(user, "<span class = 'notice'>You feel completely and utterly unworthy to even touch \the [src].</span>")
+		return
 
 /obj/item/clothing/neck/cloak/skill_reward/gaming
 	name = "legendary gamer's cloak"
