@@ -1,10 +1,16 @@
+/**
+ * @file
+ * @copyright 2020 Aleksej Komarov
+ * @license MIT
+ */
+
 import { Fragment } from 'inferno';
 import { useBackend, useLocalState } from '../../backend';
-import { BlockQuote, Box, Button, ByondUi, Collapsible, Flex, Icon, Input, Knob, LabeledList, NumberInput, ProgressBar, Section, Slider, Tabs, Tooltip } from '../../components';
-import { DraggableControl } from '../../components/DraggableControl';
+import { BlockQuote, Box, Button, ByondUi, Collapsible, DraggableControl, Flex, Icon, Input, Knob, LabeledList, NoticeBox, NumberInput, ProgressBar, Section, Slider, Tabs, Tooltip } from '../../components';
+import { formatSiUnit } from '../../format';
 import { Window } from '../../layouts';
 
-const COLORS_ARBITRARY = [
+const COLORS_SPECTRUM = [
   'red',
   'orange',
   'yellow',
@@ -68,6 +74,10 @@ const PAGES = [
     title: 'Themes',
     component: () => KitchenSinkThemes,
   },
+  {
+    title: 'Storage',
+    component: () => KitchenSinkStorage,
+  },
 ];
 
 export const KitchenSink = (props, context) => {
@@ -76,6 +86,9 @@ export const KitchenSink = (props, context) => {
   const PageComponent = PAGES[pageIndex].component();
   return (
     <Window
+      title="Kitchen Sink"
+      width={600}
+      height={500}
       theme={theme}
       resizable>
       <Window.Content scrollable>
@@ -130,14 +143,14 @@ const KitchenSinkButton = props => {
             content={color} />
         ))}
         <br />
-        {COLORS_ARBITRARY.map(color => (
+        {COLORS_SPECTRUM.map(color => (
           <Button
             key={color}
             color={color}
             content={color} />
         ))}
         <br />
-        {COLORS_ARBITRARY.map(color => (
+        {COLORS_SPECTRUM.map(color => (
           <Box inline
             mx="7px"
             key={color}
@@ -424,6 +437,9 @@ const KitchenSinkBlockQuote = props => {
 
 const KitchenSinkByondUi = (props, context) => {
   const { config } = useBackend(context);
+  const [code, setCode] = useLocalState(context,
+    'byondUiEvalCode',
+    `Byond.call('winset', {\n  id: '',\n})`);
   return (
     <Box>
       <Section
@@ -432,9 +448,31 @@ const KitchenSinkByondUi = (props, context) => {
         <ByondUi
           params={{
             type: 'button',
-            parent: config.window,
+            parent: config.window.id,
             text: 'Button',
           }} />
+      </Section>
+      <Section
+        title="Make BYOND calls"
+        level={2}
+        buttons={(
+          <Button
+            icon="chevron-right"
+            onClick={() => {
+              setImmediate(() => {
+                eval(code);
+              });
+            }}>
+            Evaluate
+          </Button>
+        )}>
+        <Box
+          as="textarea"
+          width="100%"
+          height="10em"
+          onChange={e => setCode(e.target.value)}>
+          {code}
+        </Box>
       </Section>
     </Box>
   );
@@ -453,5 +491,38 @@ const KitchenSinkThemes = (props, context) => {
         </LabeledList.Item>
       </LabeledList>
     </Box>
+  );
+};
+
+const KitchenSinkStorage = (props, context) => {
+  if (!window.localStorage) {
+    return (
+      <NoticeBox>
+        Local storage is not available.
+      </NoticeBox>
+    );
+  }
+  return (
+    <Section
+      title="Local Storage"
+      level={2}
+      buttons={(
+        <Button
+          icon="recycle"
+          onClick={() => {
+            localStorage.clear();
+          }}>
+          Clear
+        </Button>
+      )}>
+      <LabeledList>
+        <LabeledList.Item label="Keys in use">
+          {localStorage.length}
+        </LabeledList.Item>
+        <LabeledList.Item label="Remaining space">
+          {formatSiUnit(localStorage.remainingSpace, 0, 'B')}
+        </LabeledList.Item>
+      </LabeledList>
+    </Section>
   );
 };

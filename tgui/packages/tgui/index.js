@@ -20,85 +20,85 @@ import './polyfills/inferno';
 import './styles/main.scss';
 import './styles/themes/abductor.scss';
 import './styles/themes/cardtable.scss';
+import './styles/themes/hackerman.scss';
 import './styles/themes/malfunction.scss';
 import './styles/themes/ntos.scss';
 import './styles/themes/paper.scss';
-import './styles/themes/hackerman.scss';
 import './styles/themes/retro.scss';
 import './styles/themes/syndicate.scss';
 
-import { loadCSS } from 'fg-loadcss';
+import { perf } from 'common/perf';
 import { render } from 'inferno';
 import { setupHotReloading } from 'tgui-dev-server/link/client';
-import { backendUpdate } from './backend';
+import { loadCSS } from './assets';
+import { backendUpdate, backendSuspendSuccess, selectBackend } from './backend';
 import { IS_IE8 } from './byond';
 import { setupDrag } from './drag';
 import { logger } from './logging';
 import { createStore, StoreProvider } from './store';
 
-const enteredBundleAt = Date.now();
+perf.mark('inception', window.__inception__);
+perf.mark('init');
+
 const store = createStore();
 let reactRoot;
 let initialRender = true;
 
 const renderLayout = () => {
-  // Mark the beginning of the render
-  let startedAt;
-  if (process.env.NODE_ENV !== 'production') {
-    startedAt = Date.now();
-  }
-  try {
-    const state = store.getState();
-    // Initial render setup
-    if (initialRender) {
-      logger.log('initial render', state);
-      // Setup dragging
-      setupDrag(state);
+  perf.mark('render/start');
+  const state = store.getState();
+  const { suspended, assets } = selectBackend(state);
+  // Initial render setup
+  if (initialRender) {
+    logger.log('initial render', state);
+    // Setup dragging
+    if (initialRender !== 'recycled') {
+      setupDrag();
     }
-    // Start rendering
-    const { getRoutedComponent } = require('./routes');
-    const Component = getRoutedComponent(state);
-    const element = (
-      <StoreProvider store={store}>
-        <Component />
-      </StoreProvider>
-    );
-    if (!reactRoot) {
-      reactRoot = document.getElementById('react-root');
-    }
-    render(element, reactRoot);
   }
-  catch (err) {
-    logger.error('rendering error', err);
-    throw err;
+  // Start rendering
+  const { getRoutedComponent } = require('./routes');
+  const Component = getRoutedComponent(state);
+  const element = (
+    <StoreProvider store={store}>
+      <Component />
+    </StoreProvider>
+  );
+  if (!reactRoot) {
+    reactRoot = document.getElementById('react-root');
   }
+  render(element, reactRoot);
+  if (suspended) {
+    return;
+  }
+  perf.mark('render/finish');
   // Report rendering time
   if (process.env.NODE_ENV !== 'production') {
-    const finishedAt = Date.now();
-    if (initialRender) {
+    if (initialRender === 'recycled') {
+      logger.log('rendered in',
+        perf.measure('render/start', 'render/finish'));
+    }
+    else if (initialRender) {
       logger.debug('serving from:', location.href);
-      logger.debug('bundle entered in', timeDiff(
-        window.__inception__, enteredBundleAt));
-      logger.debug('initialized in', timeDiff(
-        enteredBundleAt, startedAt));
-      logger.log('rendered in', timeDiff(
-        startedAt, finishedAt));
-      logger.log('fully loaded in', timeDiff(
-        window.__inception__, finishedAt));
+      logger.debug('bundle entered in',
+        perf.measure('inception', 'init'));
+      logger.debug('initialized in',
+        perf.measure('init', 'render/start'));
+      logger.log('rendered in',
+        perf.measure('render/start', 'render/finish'));
+      logger.log('fully loaded in',
+        perf.measure('inception', 'render/finish'));
     }
     else {
-      logger.debug('rendered in', timeDiff(startedAt, finishedAt));
+      logger.debug('rendered in',
+        perf.measure('render/start', 'render/finish'));
     }
   }
   if (initialRender) {
     initialRender = false;
   }
-};
-
-const timeDiff = (startedAt, finishedAt) => {
-  const diff = finishedAt - startedAt;
-  const diffFrames = (diff / 16.6667).toFixed(2);
-  return `${diff}ms (${diffFrames} frames)`;
+  // Load assets
+  assets?.styles?.forEach(filename => loadCSS(filename));
 };
 
 // Parse JSON and report all abnormal JSON strings coming from BYOND
@@ -135,13 +135,24 @@ const setupApp = () => {
 
   // Subscribe for bankend updates
   window.update = stateJson => {
+    logger.debug(`window.update (${window.__windowId__})`);
+    const { suspended } = selectBackend(store.getState());
     // NOTE: stateJson can be an object only if called manually from console.
     // This is useful for debugging tgui in external browsers, like Chrome.
-    const state = typeof stateJson === 'string'
+    const nextState = typeof stateJson === 'string'
       ? parseStateJson(stateJson)
       : stateJson;
+    if (suspended) {
+      logger.log('reinitializing to:', nextState.config.ref);
+      window.__ref__ = nextState.config.ref;
+      initialRender = 'recycled';
+    }
     // Backend update dispatches a store action
-    store.dispatch(backendUpdate(state));
+    store.dispatch(backendUpdate(nextState));
+  };
+
+  window.suspend = () => {
+    store.dispatch(backendSuspendSuccess());
   };
 
   // Enable hot module reloading
@@ -167,6 +178,26 @@ const setupApp = () => {
 
   // Dynamically load font-awesome from browser's cache
   loadCSS('font-awesome.css');
+};
+
+// Setup a fatal error reporter
+window.__logger__ = {
+  fatal: (error, stack) => {
+    // Get last state for debugging purposes
+    const backendState = selectBackend(store.getState());
+    const reportedState = {
+      config: backendState.config,
+      suspended: backendState.suspended,
+      suspending: backendState.suspending,
+    };
+    // Send to development server
+    logger.log('FatalError:', error || stack);
+    logger.log('State:', reportedState);
+    // Append this data to the stack
+    stack += '\nState: ' + JSON.stringify(reportedState);
+    // Return an updated stack
+    return stack;
+  },
 };
 
 if (document.readyState === 'loading') {
