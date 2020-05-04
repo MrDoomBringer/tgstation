@@ -36,7 +36,7 @@ const log = (level, ns, ...args) => {
     callByond('', {
       src: window.__ref__,
       action: 'tgui:log',
-      log: logEntry,
+      message: logEntry,
     });
   }
 };

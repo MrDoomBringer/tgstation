@@ -100,6 +100,10 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 			keyUp(keycode)
 		return
 
+	// Tgui Topic middleware
+	if(!tgui_Topic(href, href_list, hsrc))
+		return
+
 	// Admin PM
 	if(href_list["priv_msg"])
 		cmd_admin_pm(href_list["priv_msg"],null)

@@ -4,48 +4,129 @@
  * @license MIT
  */
 
-import { vecAdd, vecInverse, vecMultiply } from 'common/vector';
+import { vecAdd, vecInverse, vecMultiply, vecScale } from 'common/vector';
 import { winget, winset } from './byond';
 import { createLogger } from './logging';
+import { storage } from 'common/storage';
 
 const logger = createLogger('drag');
 
-let ref;
+const windowId = window.__windowId__;
+let windowKey = windowId;
 let dragging = false;
 let resizing = false;
 let screenOffset = [0, 0];
+let screenOffsetPromise;
 let dragPointOffset;
 let resizeMatrix;
 let initialSize;
 let size;
 
-const getWindowPosition = ref => {
-  return winget(ref, 'pos').then(pos => [pos.x, pos.y]);
+export const setWindowKey = key => {
+  windowKey = key;
 };
 
-const setWindowPosition = (ref, vec) => {
-  return winset(ref, 'pos', vec[0] + ',' + vec[1]);
+export const getWindowPosition = id => [
+  window.screenLeft,
+  window.screenTop,
+];
+
+export const setWindowPosition = (id, vec) => {
+  const byondPos = vecAdd(vec, screenOffset);
+  return winset(id, 'pos', byondPos[0] + ',' + byondPos[1]);
 };
 
-const setWindowSize = (ref, vec) => {
-  return winset(ref, 'size', vec[0] + ',' + vec[1]);
+export const getWindowSize = id => [
+  window.innerWidth,
+  window.innerHeight,
+];
+
+export const setWindowSize = (id, vec) => {
+  return winset(id, 'size', vec[0] + ',' + vec[1]);
 };
 
-export const setupDrag = async state => {
-  logger.log('setting up');
-  ref = state.config.window;
-  // Calculate offset caused by windows taskbar
-  const realPosition = await getWindowPosition(ref);
-  screenOffset = [
-    realPosition[0] - window.screenLeft,
-    realPosition[1] - window.screenTop,
-  ];
-  // Constraint window position
-  const [relocated, safePosition] = constraintPosition(realPosition);
-  if (relocated) {
-    setWindowPosition(ref, safePosition);
+/**
+ * Moves an item to the top of the recents array, and keeps its length
+ * limited to the number in `limit` argument.
+ *
+ * Uses a strict equality check for comparisons.
+ *
+ * Returns new recents and an item which was trimmed.
+ */
+const touchRecents = (recents, touchedItem, limit = 50) => {
+  const nextRecents = [touchedItem];
+  let trimmedItem;
+  for (let i = 0; i < recents.length; i++) {
+    const item = recents[i];
+    if (item === touchedItem) {
+      continue;
+    }
+    if (nextRecents.length < limit) {
+      nextRecents.push(item);
+    }
+    else {
+      trimmedItem = item;
+    }
   }
-  logger.debug('current state', { ref, screenOffset });
+  return [nextRecents, trimmedItem];
+};
+
+export const storeWindowGeometry = windowKey => {
+  logger.log('storing geometry');
+  const geometry = {
+    pos: getWindowPosition(),
+    size: getWindowSize(),
+  };
+  storage.set(windowKey, geometry);
+  // Update the list of stored geometries
+  const [geometries, trimmedKey] = touchRecents(
+    storage.get('geometries') || [],
+    windowKey);
+  if (trimmedKey) {
+    storage.remove(trimmedKey);
+  }
+  storage.set('geometries', geometries);
+};
+
+export const recallWindowGeometry = async (windowKey, defaults = {}) => {
+  const geometry = storage.get(windowKey);
+  if (geometry) {
+    logger.log('recalled geometry:', geometry);
+  }
+  const pos = geometry?.pos || defaults.pos;
+  const size = defaults.size;
+  if (size) {
+    setWindowSize(windowId, size);
+  }
+  if (pos) {
+    await screenOffsetPromise;
+    setWindowPosition(windowId, pos);
+  }
+  // Position the window at the center of the screen.
+  else if (size) {
+    await screenOffsetPromise;
+    const areaAvailable = [
+      window.screen.availWidth - Math.abs(screenOffset[0]),
+      window.screen.availHeight - Math.abs(screenOffset[1]),
+    ];
+    const pos = vecAdd(
+      vecScale(areaAvailable, 0.5),
+      vecScale(size, -0.5),
+      vecScale(screenOffset, -1.0));
+    setWindowPosition(windowId, pos);
+  }
+};
+
+export const setupDrag = async () => {
+  // Calculate offset caused by windows taskbar
+  logger.log('calculating screen offset');
+  screenOffsetPromise = winget(windowId, 'pos')
+    .then(pos => [
+      pos.x - window.screenLeft,
+      pos.y - window.screenTop,
+    ]);
+  screenOffset = await screenOffsetPromise;
+  logger.debug({ screenOffset });
 };
 
 /**
@@ -97,6 +178,7 @@ const dragEndHandler = event => {
   document.removeEventListener('mousemove', dragMoveHandler);
   document.removeEventListener('mouseup', dragEndHandler);
   dragging = false;
+  storeWindowGeometry(windowKey);
 };
 
 const dragMoveHandler = event => {
@@ -104,9 +186,8 @@ const dragMoveHandler = event => {
     return;
   }
   event.preventDefault();
-  setWindowPosition(ref, vecAdd(
+  setWindowPosition(windowId, vecAdd(
     [event.screenX, event.screenY],
-    screenOffset,
     dragPointOffset));
 };
 
@@ -133,6 +214,7 @@ const resizeEndHandler = event => {
   document.removeEventListener('mousemove', resizeMoveHandler);
   document.removeEventListener('mouseup', resizeEndHandler);
   resizing = false;
+  storeWindowGeometry(windowKey);
 };
 
 const resizeMoveHandler = event => {
@@ -148,5 +230,5 @@ const resizeMoveHandler = event => {
   // Sane window size values
   size[0] = Math.max(size[0], 250);
   size[1] = Math.max(size[1], 120);
-  setWindowSize(ref, size);
+  setWindowSize(windowId, size);
 };
