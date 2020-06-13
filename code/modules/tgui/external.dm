@@ -1,7 +1,7 @@
 /**
  * tgui external
  *
- * Contains all external tgui declarations.
+ * Contains all external tgui definitions, such as src_object APIs.
  *
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT
@@ -150,7 +150,7 @@
 /client/verb/uiclose(ref as text)
 	// Name the verb, and hide it from the user panel.
 	set name = "uiclose"
-	set hidden = 1
+	set hidden = TRUE
 	// Get the UI based on the ref.
 	var/datum/tgui/ui = locate(ref)
 	// If we found the UI, close it.

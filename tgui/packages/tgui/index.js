@@ -142,9 +142,9 @@ const setupApp = () => {
     const nextState = typeof stateJson === 'string'
       ? parseStateJson(stateJson)
       : stateJson;
+    window.__ref__ = nextState.config.ref;
     if (suspended) {
       logger.log('reinitializing to:', nextState.config.ref);
-      window.__ref__ = nextState.config.ref;
       initialRender = 'recycled';
     }
     // Backend update dispatches a store action

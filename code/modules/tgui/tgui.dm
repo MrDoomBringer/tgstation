@@ -75,7 +75,7 @@
 	// Bail if we're not supposed to open.
 	if(status < UI_UPDATE)
 		return
-	var/list/free_windows = user.client.tgui_free_windows
+	var/list/free_windows = user.tgui_free_windows
 	var/has_free_window = !!length(free_windows)
 	// Use a recycled window
 	if(has_free_window)
@@ -155,18 +155,18 @@
 		if(user.client)
 			var/can_be_recycled = recycle \
 				&& !_has_fatal_error \
-				&& length(user.client.tgui_free_windows) < MAX_RECYCLED_WINDOWS
+				&& length(user.tgui_free_windows) < MAX_RECYCLED_WINDOWS
 			if(can_be_recycled)
 				user << output("", "[window_id].browser:suspend")
 				// Add it to the stack of free windows
-				if (!user.client.tgui_free_windows.Find(window_id))
-					user.client.tgui_free_windows += window_id
+				if (!user.tgui_free_windows.Find(window_id))
+					user.tgui_free_windows += window_id
 			else
 				// Destroy the window
 				user << browse(null, "window=[window_id]")
 				// Remove this window_id just in case it existed in the pool
 				// to avoid contamination with broken windows.
-				user.client.tgui_free_windows -= window_id
+				user.tgui_free_windows -= window_id
 		src_object.ui_close(user)
 		SStgui.on_close(src)
 	state = null
