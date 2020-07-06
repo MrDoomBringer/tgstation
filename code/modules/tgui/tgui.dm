@@ -67,23 +67,21 @@
  * Open this UI (and initialize it with data).
  */
 /datum/tgui/proc/open()
-	// Bail if there is no client.
+	// Bail if there is no client
 	if(!user.client)
+		return
+	// Bail if window is already open
+	if(window_id)
 		return
 	// Update the window status.
 	update_status(push = FALSE)
 	// Bail if we're not supposed to open.
 	if(status < UI_UPDATE)
 		return
-	var/list/free_windows = user.tgui_free_windows
-	var/has_free_window = !!length(free_windows)
-	// Use a recycled window
-	if(has_free_window)
-		window_id = free_windows[length(free_windows)]
-		free_windows -= window_id
-		initialized = TRUE
+	window_id = SStgui.get_free_window(user)
+	var/is_window_recycled = !!window_id
 	// Create a new window
-	else
+	if(!is_window_recycled)
 		window_id = SStgui.create_window_id()
 		// Build window options
 		var/window_options = "can_minimize=0;auto_format=0;"
@@ -101,6 +99,7 @@
 		html = replacetextEx(html, "\[tgui:windowId]", window_id)
 		// Open the window.
 		user << browse(html, "window=[window_id];[window_options]")
+		SStgui.on_window_open(user, window_id)
 
 	// Instruct the client to signal UI when the window is closed.
 	// NOTE: Intentional \ref usage; tgui datums can't/shouldn't
@@ -117,8 +116,9 @@
 		get_assets()))
 
 	// Send a full update to a recycled window
-	if(has_free_window)
+	if(is_window_recycled)
 		user << output(_initial_update, "[window_id].browser:update")
+		initialized = TRUE
 
 	SStgui.on_open(src)
 
@@ -155,18 +155,16 @@
 		if(user.client)
 			var/can_be_recycled = recycle \
 				&& !_has_fatal_error \
-				&& length(user.tgui_free_windows) < MAX_RECYCLED_WINDOWS
+				&& SStgui.can_add_free_window(user)
 			if(can_be_recycled)
 				user << output("", "[window_id].browser:suspend")
-				// Add it to the stack of free windows
-				if (!user.tgui_free_windows.Find(window_id))
-					user.tgui_free_windows += window_id
+				SStgui.add_free_window(user, window_id)
 			else
 				// Destroy the window
 				user << browse(null, "window=[window_id]")
 				// Remove this window_id just in case it existed in the pool
 				// to avoid contamination with broken windows.
-				user.tgui_free_windows -= window_id
+				SStgui.remove_free_window(user, window_id)
 		src_object.ui_close(user)
 		SStgui.on_close(src)
 	state = null

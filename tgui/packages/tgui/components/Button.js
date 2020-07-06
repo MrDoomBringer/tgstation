@@ -87,7 +87,10 @@ export const Button = props => {
       }}
       {...rest}>
       {icon && (
-        <Icon name={icon} rotation={iconRotation} spin={iconSpin} />
+        <Icon
+          name={icon}
+          rotation={iconRotation}
+          spin={iconSpin} />
       )}
       {content}
       {children}
