@@ -124,7 +124,21 @@
  *
  * Used to track UIs for a mob.
  */
-/mob/var/list/open_uis = list()
+/mob/var/list/tgui_open_uis = list()
+
+/**
+ * global
+ *
+ * Used to track UIs for a mob.
+ */
+/mob/var/list/tgui_open_windows
+
+/**
+ * global
+ *
+ * Used to track UIs for a mob.
+ */
+/mob/var/list/tgui_free_windows
 
 /**
  * public
@@ -133,11 +147,6 @@
  * client/verb/uiclose(), which closes the ui window
  */
 /datum/proc/ui_close(mob/user)
-
-/**
- * Stack of window ids that are free to be recycled into
- */
-/client/var/list/tgui_free_windows = list()
 
 /**
  * verb

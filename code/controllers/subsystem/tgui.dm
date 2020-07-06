@@ -57,6 +57,38 @@ SUBSYSTEM_DEF(tgui)
 	return "tgui-window-[_window_id_counter++]"
 
 /**
+ * Add a window_id to the pool of reusable windows.
+ */
+/datum/controller/subsystem/tgui/proc/add_free_window(mob/user, window_id)
+	LAZYOR(user.tgui_free_windows, window_id)
+
+/**
+ * Check if you can add a window_id to the pool.
+ *
+ * return bool
+ */
+/datum/controller/subsystem/tgui/proc/can_add_free_window(mob/user)
+	return LAZYLEN(user.tgui_free_windows) < MAX_RECYCLED_WINDOWS
+
+/**
+ * Get a window_id (and remove) from the pool of reusable windows.
+ *
+ * return string
+ */
+/datum/controller/subsystem/tgui/proc/get_free_window(mob/user)
+	if(!user.tgui_free_windows)
+		return null
+	var/window_id = user.tgui_free_windows[1]
+	remove_free_window_id(user, window_id)
+	return window_id
+
+/**
+ * Removes a window_id from the pool of reusable windows.
+ */
+/datum/controller/subsystem/tgui/proc/remove_free_window(mob/user, window_id)
+	LAZYREMOVE(user.tgui_free_windows, window_id)
+
+/**
  * public
  *
  * Try to find an instance of a UI, and push an update to it.
