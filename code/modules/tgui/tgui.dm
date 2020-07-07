@@ -57,6 +57,7 @@
 	src.interface = interface
 	if(title)
 		src.title = title
+	// TODO: Move this to ui.set_state(state)
 	src.state = src_object.ui_state()
 	var/datum/asset/assets = get_asset_datum(/datum/asset/group/tgui)
 	assets.send(user)

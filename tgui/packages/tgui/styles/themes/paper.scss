@@ -19,17 +19,17 @@
   $border-radius: 0px,
 );
 $font-size: 24px;
+
 // A fat warning to anyone who wants to use this: this only half works.
 // It was made almost purely for the nuke ui, and requires a good amount of manual hacks to get it working as intended.
 .theme-paper {
-  $color-fg:  rgb(0,0,0);
-  $color-bg:  rgb(255, 255, 255);
+  $color-fg: rgb(0, 0, 0);
+  $color-bg: rgb(255, 255, 255);
   // Atomic classes
   @include meta.load-css('../atomic/color.scss');
 
   // Components
   @include meta.load-css('../components/Tabs.scss');
-
 
   @include meta.load-css('../components/Button.scss', $with: (
     'color-default': #E8E4C9,
@@ -38,13 +38,14 @@ $font-size: 24px;
     'color-caution': #be6209,
     'color-danger': #9a9d00,
   ));
+
   // Layouts
   @include meta.load-css('../layouts/Layout.scss');
-
   @include meta.load-css('../layouts/Window.scss');
-
   @include meta.load-css('../layouts/TitleBar.scss', $with: (
-    'color-background':$color-bg,
+    'color-text': rgba(0, 0, 0, 0.75),
+    'color-background': $color-bg,
+    'color-shadow-core': rgba(0, 0, 0, 0.25),
   ));
 
   .PaperInput {

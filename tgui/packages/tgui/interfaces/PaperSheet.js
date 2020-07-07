@@ -5,23 +5,19 @@
  * @author Changes stylemistake
  * @license MIT
  */
-import { Component } from 'inferno';
-import { Tabs, Box, Flex, TextArea } from '../components';
-import { useBackend } from '../backend';
-import { Window } from '../layouts';
-import marked from 'marked';
-import DOMPurify from 'dompurify';
-import { classes, isFalsy } from "common/react";
-// There is a sanatize option in marked but they say its deprecated.
-// Might as well use a proper one then
 
+import { classes, isFalsy } from "common/react";
+import { vecCreate, vecSubtract } from 'common/vector';
+import DOMPurify from 'dompurify';
+import { Component } from 'inferno';
+import marked from 'marked';
+import { useBackend } from '../backend';
+import { Box, Flex, Tabs, TextArea } from '../components';
+import { Window } from '../layouts';
 import { createLogger } from '../logging';
-import { Fragment } from 'inferno';
-import { vecCreate, vecAdd, vecSubtract } from 'common/vector';
+
 const logger = createLogger('PaperSheet');
 const MAX_PAPER_LENGTH = 5000; // Question, should we send this with ui_data?
-
-
 
 const sanatize_text = value => {
   // This is VERY important to think first if you NEED
@@ -40,7 +36,6 @@ const sanatize_text = value => {
   });
 };
 
-
 // Hacky, yes, works?...yes
 const textWidth = (text, font, fontsize) => {
   // default font height is 12 in tgui
@@ -52,7 +47,6 @@ const textWidth = (text, font, fontsize) => {
   return width;
 };
 
-
 const setFontinText = (text, font, color, bold=false) => {
   return "<span style=\""
     + "color:'" + color + "';"
@@ -63,7 +57,6 @@ const setFontinText = (text, font, color, bold=false) => {
     + "\">" + text + "</span>";
 };
 
-const paperfield_id_headder = "paperfield_";
 const createIDHeader = index => {
   return "paperfield_" + index;
 };
@@ -73,10 +66,6 @@ const createIDHeader = index => {
 const field_regex = /\[(_+)\]/g;
 const field_tag_regex = /\[<input\s+(.*?)id="(?<id>paperfield_\d+)"(.*?)\/>\]/gm;
 const sign_regex = /%s(?:ign)?(?=\\s|$)/igm;
-
-
-const field_id_regex = /id\s*=\s*'(paperfield_\d+)'/g;
-const field_maxlength_regex = /maxlength\s*=\s*(\d+)/g;
 
 const createInputField = (length, width, font,
   fontsize, color, id) => {
@@ -100,7 +89,10 @@ const createFields = (txt, font, fontsize, color, counter) => {
     return createInputField(p1.length,
       width, font, fontsize, color, createIDHeader(counter++));
   });
-  return { counter: counter, text: ret_text };
+  return {
+    counter,
+    text: ret_text,
+  };
 };
 
 const signDocument = (txt, color, user) => {
@@ -108,8 +100,8 @@ const signDocument = (txt, color, user) => {
     return setFontinText(user, "Times New Roman", color, true);
   });
 };
-const run_marked_default = value => {
 
+const run_marked_default = value => {
   // Override function, any links and images should
   // kill any other marked tokens we don't want here
   const walkTokens = token => {
@@ -126,23 +118,14 @@ const run_marked_default = value => {
         break;
     }
   };
-  return marked(value,
-    { breaks: true,
-      smartypants: true,
-      smartLists: true,
-      walkTokens: walkTokens,
-      // Once assets are fixed might need to change this for them
-      baseUrl: "thisshouldbreakhttp",
-    });
-};
-const fillAllfields = fields => {
-  for (const id in fields) {
-    const dom = document.getElementById(id);
-    if (dom) {
-
-    }
-    const dom_text = dom && dom.value ? dom.value : "";
-  }
+  return marked(value, {
+    breaks: true,
+    smartypants: true,
+    smartLists: true,
+    walkTokens,
+    // Once assets are fixed might need to change this for them
+    baseUrl: 'thisshouldbreakhttp',
+  });
 };
 
 /*
@@ -573,7 +556,6 @@ class PaperSheetEdit extends Component {
   }
 }
 
-
 export const PaperSheet = (props, context) => {
   const { data } = useBackend(context);
   const {
@@ -623,7 +605,12 @@ export const PaperSheet = (props, context) => {
   };
 
   return (
-    <Window resizable theme="paper" style={background_style}>
+    <Window
+      theme="paper"
+      style={background_style}
+      width={800}
+      height={600}
+      resizable>
       <Window.Content min-height="100vh" min-width="100vw"
         style={background_style}>
         <Box fillPositionedParent={1} min-height="100vh"
