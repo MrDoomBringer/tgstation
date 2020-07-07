@@ -134,13 +134,6 @@
 /mob/var/list/tgui_open_windows
 
 /**
- * global
- *
- * Used to track UIs for a mob.
- */
-/mob/var/list/tgui_free_windows
-
-/**
  * public
  *
  * Called on a UI's object when the UI is closed, not to be confused with
@@ -164,7 +157,7 @@
 	var/datum/tgui/ui = locate(ref)
 	// If we found the UI, close it.
 	if(istype(ui))
-		ui.close(FALSE)
+		ui.close(recycle = FALSE)
 		// Unset machine just to be sure.
 		if(src && src.mob)
 			src.mob.unset_machine()
@@ -180,13 +173,24 @@
 	if(href_list["action"] == "tgui:log")
 		var/message = href_list["message"]
 		log_tgui("[usr] ([usr.ckey]):\n[message]")
+	if(href_list["action"] == "tgui:initialize")
+		// Locate an uninitialized tgui datum
+		var/window_id = href_list["window_id"]
+		for(var/datum/tgui/ui in usr.tgui_open_uis)
+			if(ui.window_id == window_id)
+				log_tgui("[usr] ([usr.ckey]):\nInitialized 'window_id' [ui].")
+				ui.Topic(href, href_list)
+				return FALSE
+		log_tgui("[usr] ([usr.ckey]):\nForce closing '[window_id]'.")
+		SStgui.force_close_window(usr, window_id)
+		return FALSE
 	// Destroy windows that cannot be suspended due to disconnects
 	if(href_list["action"] == "tgui:close")
 		var/src_object = locate(href_list["src"])
 		if(!istype(src_object, /datum/tgui))
 			var/window_id = href_list["window_id"]
-			log_tgui("[usr] ([usr.ckey]):\nForce closing '[window_id].'")
-			usr << browse(null, "window=[window_id]")
+			log_tgui("[usr] ([usr.ckey]):\nForce closing '[window_id]'.")
+			SStgui.force_close_window(usr, window_id)
 			return FALSE
 	// Pass
 	return TRUE

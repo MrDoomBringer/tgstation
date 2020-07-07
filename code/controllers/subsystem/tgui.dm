@@ -21,8 +21,6 @@ SUBSYSTEM_DEF(tgui)
 	var/list/processing_uis = list()
 	/// The HTML base used for all UIs.
 	var/basehtml
-	/// Window counter, which is used for creating sequential window ids.
-	var/_window_id_counter = 1
 
 /datum/controller/subsystem/tgui/PreInit()
 	basehtml = file2text('tgui/packages/tgui/public/tgui.html')
@@ -48,45 +46,92 @@ SUBSYSTEM_DEF(tgui)
 		if (MC_TICK_CHECK)
 			return
 
-/**
- * Creates a new, unique window id.
- *
- * return string
- */
-/datum/controller/subsystem/tgui/proc/create_window_id()
-	return "tgui-window-[_window_id_counter++]"
-
-/**
- * Add a window_id to the pool of reusable windows.
- */
-/datum/controller/subsystem/tgui/proc/add_free_window(mob/user, window_id)
-	LAZYOR(user.tgui_free_windows, window_id)
-
-/**
- * Check if you can add a window_id to the pool.
- *
- * return bool
- */
-/datum/controller/subsystem/tgui/proc/can_add_free_window(mob/user)
-	return LAZYLEN(user.tgui_free_windows) < MAX_RECYCLED_WINDOWS
-
-/**
- * Get a window_id (and remove) from the pool of reusable windows.
- *
- * return string
- */
-/datum/controller/subsystem/tgui/proc/get_free_window(mob/user)
-	if(!user.tgui_free_windows)
+/datum/controller/subsystem/tgui/proc/allocate_window(mob/user)
+	// Bail if there is no client
+	if(!user.client)
 		return null
-	var/window_id = user.tgui_free_windows[1]
-	remove_free_window_id(user, window_id)
+	log_tgui("[user] ([user.ckey]):\nallocate_window()")
+	LAZYINITLIST(user.tgui_open_windows)
+	var/list/open_windows = user.tgui_open_windows
+	// Find a free window
+	for(var/i in 1 to TGUI_WINDOW_SOFT_LIMIT)
+		var/window_id = TGUI_WINDOW_ID(i)
+		if(open_windows[window_id] == TGUI_WINDOW_FREE)
+			log_tgui("[user] ([user.ckey]):\nfound free [window_id]")
+			return window_id
+	// Find a reusable window_id
+	var/window_id
+	for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
+		var/_window_id = TGUI_WINDOW_ID(i)
+		if(!open_windows[_window_id])
+			window_id = _window_id
+			log_tgui("[user] ([user.ckey]):\nfound uninitialized [window_id]")
+			break
+	// Bail if we couldn't find a reusable window_id
+	if(!window_id)
+		log_tgui("[user] ([user.ckey]):\ncould not find window_id")
+		return null
+	// Build window options
+	var/window_options = "file=[window_id].html;can_minimize=0;auto_format=0;"
+	// Remove titlebar and resize handles for a fancy window
+	if(user.client.prefs.tgui_fancy)
+		window_options += "titlebar=0;can_resize=0;"
+	else
+		window_options += "titlebar=1;can_resize=1;"
+	// Generate page html
+	var/html = basehtml
+	html = replacetextEx(html, "\[tgui:windowId]", window_id)
+	// Open the window
+	user << browse(html, "window=[window_id];[window_options]")
+	open_windows[window_id] = TGUI_WINDOW_LOADING
 	return window_id
 
-/**
- * Removes a window_id from the pool of reusable windows.
- */
-/datum/controller/subsystem/tgui/proc/remove_free_window(mob/user, window_id)
-	LAZYREMOVE(user.tgui_free_windows, window_id)
+/datum/controller/subsystem/tgui/proc/is_window_ready(mob/user, window_id)
+	LAZYINITLIST(user.tgui_open_windows)
+	return user.tgui_open_windows[window_id] == TGUI_WINDOW_FREE
+
+/datum/controller/subsystem/tgui/proc/acquire_window(mob/user, window_id)
+	log_tgui("[user] ([user.ckey]):\nacquire_window([window_id])")
+	LAZYINITLIST(user.tgui_open_windows)
+	user.tgui_open_windows[window_id] = TGUI_WINDOW_ALLOCATED
+
+/datum/controller/subsystem/tgui/proc/release_window(mob/user, window_id)
+	if(!user.client)
+		log_tgui("[user] ([user.ckey]):\nrelease_window([window_id]): client is null")
+		return null
+	log_tgui("[user] ([user.ckey]):\nrelease_window([window_id])")
+	LAZYINITLIST(user.tgui_open_windows)
+	var/index = TGUI_WINDOW_INDEX(window_id)
+	var/status = user.tgui_open_windows[window_id]
+	var/can_be_suspended = index > 0 \
+		&& index <= TGUI_WINDOW_SOFT_LIMIT \
+		&& status == TGUI_WINDOW_ALLOCATED
+	log_tgui("[user] ([user.ckey]):\nindex [index] status [status] CBS [can_be_suspended]")
+	if(can_be_suspended)
+		user << output("", "[window_id].browser:suspend")
+		// TODO: Use an intermediate "RELEASED" state to catch broken windows
+		user.tgui_open_windows[window_id] = TGUI_WINDOW_FREE
+	else
+		force_close_window(user, window_id)
+
+/datum/controller/subsystem/tgui/proc/send_data(mob/user, window_id, data)
+	if(!user.client)
+		log_tgui("[user] ([user.ckey]):\nsend_data([window_id]): client is null")
+		return null
+	user << output(data, "[window_id].browser:update")
+
+/datum/controller/subsystem/tgui/proc/force_close_window(mob/user, window_id)
+	if(!user.client)
+		return null
+	LAZYINITLIST(user.tgui_open_windows)
+	user << browse(null, "window=[window_id]")
+	user.tgui_open_windows[window_id] = TGUI_WINDOW_CLOSED
+
+/datum/controller/subsystem/tgui/proc/force_close_all_windows(mob/user)
+	user.tgui_open_windows = null
+	for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
+		var/window_id = TGUI_WINDOW_ID(i)
+		user << browse(null, "window=[window_id]")
 
 /**
  * public
@@ -213,9 +258,9 @@ SUBSYSTEM_DEF(tgui)
  */
 /datum/controller/subsystem/tgui/proc/update_user_uis(mob/user, datum/src_object)
 	var/count = 0
-	if(length(user?.open_uis) == 0)
+	if(length(user?.tgui_open_uis) == 0)
 		return count
-	for(var/datum/tgui/ui in user.open_uis)
+	for(var/datum/tgui/ui in user.tgui_open_uis)
 		if(isnull(src_object) || ui.src_object == src_object)
 			ui.process(force = 1)
 			count++
@@ -234,9 +279,9 @@ SUBSYSTEM_DEF(tgui)
  */
 /datum/controller/subsystem/tgui/proc/close_user_uis(mob/user, datum/src_object)
 	var/count = 0
-	if(length(user?.open_uis) == 0)
+	if(length(user?.tgui_open_uis) == 0)
 		return count
-	for(var/datum/tgui/ui in user.open_uis)
+	for(var/datum/tgui/ui in user.tgui_open_uis)
 		if(isnull(src_object) || ui.src_object == src_object)
 			ui.close()
 			count++
@@ -255,7 +300,7 @@ SUBSYSTEM_DEF(tgui)
 	if(isnull(open_uis[key]) || !istype(open_uis[key], /list))
 		open_uis[key] = list()
 	// Append the UI to all the lists.
-	ui.user.open_uis |= ui
+	ui.user.tgui_open_uis |= ui
 	var/list/uis = open_uis[key]
 	uis |= ui
 	processing_uis |= ui
@@ -277,7 +322,7 @@ SUBSYSTEM_DEF(tgui)
 	processing_uis.Remove(ui)
 	// If the user exists, remove it from them too.
 	if(ui.user)
-		ui.user.open_uis.Remove(ui)
+		ui.user.tgui_open_uis.Remove(ui)
 	var/list/uis = open_uis[key]
 	uis.Remove(ui)
 	if(length(uis) == 0)
@@ -294,7 +339,8 @@ SUBSYSTEM_DEF(tgui)
  * return int The number of UIs closed.
  */
 /datum/controller/subsystem/tgui/proc/on_logout(mob/user)
-	return close_user_uis(user)
+	force_close_all_windows(user)
+	close_user_uis(user)
 
 /**
  * private
@@ -308,15 +354,21 @@ SUBSYSTEM_DEF(tgui)
  */
 /datum/controller/subsystem/tgui/proc/on_transfer(mob/source, mob/target)
 	// The old mob had no open UIs.
-	if(length(source?.open_uis) == 0)
+	if(length(source?.tgui_open_uis) == 0)
 		return FALSE
-	if(isnull(target.open_uis) || !istype(target.open_uis, /list))
-		target.open_uis = list()
+	if(isnull(target.tgui_open_uis) || !istype(target.tgui_open_uis, /list))
+		target.tgui_open_uis = list()
 	// Transfer all the UIs.
-	for(var/datum/tgui/ui in source.open_uis)
+	for(var/datum/tgui/ui in source.tgui_open_uis)
 		// Inform the UIs of their new owner.
 		ui.user = target
-		target.open_uis.Add(ui)
+		target.tgui_open_uis.Add(ui)
 	// Clear the old list.
-	source.open_uis.Cut()
+	source.tgui_open_uis.Cut()
+	// Transfer windows
+	LAZYINITLIST(source.tgui_open_windows)
+	LAZYINITLIST(target.tgui_open_windows)
+	for(var/window_id in source.tgui_open_windows)
+		target.tgui_open_windows[window_id] = source.tgui_open_windows[window_id]
+	source.tgui_open_windows = null
 	return TRUE
