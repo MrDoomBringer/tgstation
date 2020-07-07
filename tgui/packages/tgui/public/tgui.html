@@ -137,6 +137,7 @@ window.update = function (stateJson) {
 window.suspend = function () {};
 Byond.call('', {
   src: window.__ref__,
+  window_id: window.__windowId__,
   action: 'tgui:initialize',
 });
 </script>

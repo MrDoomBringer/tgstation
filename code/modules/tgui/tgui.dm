@@ -78,48 +78,26 @@
 	// Bail if we're not supposed to open.
 	if(status < UI_UPDATE)
 		return
-	window_id = SStgui.get_free_window(user)
-	var/is_window_recycled = !!window_id
-	// Create a new window
-	if(!is_window_recycled)
-		window_id = SStgui.create_window_id()
-		// Build window options
-		var/window_options = "can_minimize=0;auto_format=0;"
-		// Remove titlebar and resize handles for a fancy window
-		if(user.client.prefs.tgui_fancy)
-			window_options += "titlebar=0;can_resize=0;"
-		else
-			window_options += "titlebar=1;can_resize=1;"
-		// Generate page html
-		var/html = SStgui.basehtml
-		// Replace template tokens with important UI data
-		// NOTE: Intentional \ref usage; tgui datums can't/shouldn't
-		// be tagged, so this is an effective unwrap
-		html = replacetextEx(html, "\[tgui:ref]", "\ref[src]")
-		html = replacetextEx(html, "\[tgui:windowId]", window_id)
-		// Open the window.
-		user << browse(html, "window=[window_id];[window_options]")
-		SStgui.on_window_open(user, window_id)
-
+	window_id = SStgui.allocate_window(user)
+	// Bail if subsystem could not allocate a window_id
+	if(!window_id)
+		return
 	// Instruct the client to signal UI when the window is closed.
 	// NOTE: Intentional \ref usage; tgui datums can't/shouldn't
 	// be tagged, so this is an effective unwrap
 	winset(user, window_id, "on-close=\"uiclose \ref[src]\"")
-
-	// Pre-fetch initial state while browser is still loading in
-	// another thread
+	// Pre-fetch initial state while browser is still loading
 	if(!initial_data)
 		initial_data = src_object.ui_data(user)
 	_initial_update = url_encode(get_json(
 		initial_data,
 		src_object.ui_static_data(user),
 		get_assets()))
-
-	// Send a full update to a recycled window
-	if(is_window_recycled)
-		user << output(_initial_update, "[window_id].browser:update")
+	// Send a full update if window is being reused
+	if(SStgui.is_window_ready(user, window_id))
+		SStgui.acquire_window(user, window_id)
+		SStgui.send_data(user, window_id, _initial_update)
 		initialized = TRUE
-
 	SStgui.on_open(src)
 
 /**
@@ -150,21 +128,11 @@
 	// If we don't have window_id, open proc did not have the opportunity
 	// to finish, therefore it's safe to skip this whole block.
 	if(window_id)
-		// If we don't have a client, destroying this window will have
-		// no effect. Safe to skip.
-		if(user.client)
-			var/can_be_recycled = recycle \
-				&& !_has_fatal_error \
-				&& SStgui.can_add_free_window(user)
-			if(can_be_recycled)
-				user << output("", "[window_id].browser:suspend")
-				SStgui.add_free_window(user, window_id)
-			else
-				// Destroy the window
-				user << browse(null, "window=[window_id]")
-				// Remove this window_id just in case it existed in the pool
-				// to avoid contamination with broken windows.
-				SStgui.remove_free_window(user, window_id)
+		var/can_be_recycled = recycle && !_has_fatal_error
+		if(can_be_recycled)
+			SStgui.release_window(user, window_id)
+		else
+			SStgui.force_close_window(user, window_id)
 		src_object.ui_close(user)
 		SStgui.on_close(src)
 	state = null
@@ -269,7 +237,8 @@
 		if("tgui:close")
 			close()
 		if("tgui:initialize")
-			user << output(_initial_update, "[window_id].browser:update")
+			SStgui.acquire_window(user, window_id)
+			SStgui.send_data(user, window_id, _initial_update)
 			initialized = TRUE
 		if("tgui:setSharedState")
 			// Update the window state.
@@ -339,10 +308,7 @@
 	// Cannot update UI, we have no visibility.
 	if(status <= UI_DISABLED && !force)
 		return
-	// Send the new JSON to the update() Javascript function.
-	user << output(
-		url_encode(get_json(data, static_data)),
-		"[window_id].browser:update")
+	SStgui.send_data(user, window_id, url_encode(get_json(data, static_data)))
 
 /**
  * private
