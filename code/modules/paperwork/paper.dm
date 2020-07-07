@@ -92,9 +92,6 @@
 	var/contact_poison // Reagent ID to transfer on contact
 	var/contact_poison_volume = 0
 
-	// ui stuff
-	var/ui_x = 600
-	var/ui_y = 800
 	// Ok, so WHY are we caching the ui's?
 	// Since we are not using autoupdate we
 	// need some way to update the ui's of
@@ -167,12 +164,6 @@
 	if(info && show_written_words)
 		icon_state = "[initial(icon_state)]_words"
 
-/obj/item/paper/ui_base_html(html)
-	/// This might change in a future PR
-	var/datum/asset/spritesheet/assets = get_asset_datum(/datum/asset/spritesheet/simple/paper)
-	. = replacetext(html, "<!--customheadhtml-->", assets.css_tag())
-
-
 /obj/item/paper/verb/rename()
 	set name = "Rename paper"
 	set category = "Object"
@@ -241,7 +232,7 @@
  ** not sure how tgui handles many producers?
 **/
 /obj/item/paper/proc/create_ui(mob/user, datum/ui_state/default/paper_state/state)
-	ui_interact(user, "main", null, FALSE, null, state)
+	ui_interact(user, null, state)
 
 
 /obj/item/proc/burn_paper_product_attackby_check(obj/item/I, mob/living/user, bypass_clumsy)
@@ -317,14 +308,18 @@
 	if(.)
 		info = "[stars(info)]"
 
-/obj/item/paper/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/default/paper_state/state = new)
-	ui_key = "main-[REF(user)]"
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/item/paper/ui_assets(mob/user)
+	return list(
+		get_asset_datum(/datum/asset/spritesheet/simple/paper),
+	)
+
+/obj/item/paper/ui_interact(mob/user, datum/tgui/ui,
+		datum/ui_state/default/paper_state/state = new)
+	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		var/datum/asset/assets = get_asset_datum(/datum/asset/spritesheet/simple/paper)
-		assets.send(user)
 		// The x size is because we double the width for the editor
-		ui = new(user, src, ui_key, "PaperSheet", name, ui_x, ui_y, master_ui, state)
+		ui = new(user, src, "PaperSheet", name)
+		ui.state = state
 		ui.set_autoupdate(FALSE)
 		viewing_ui[user] = ui
 		ui.open()
@@ -334,7 +329,6 @@
 			last_state.copy_from(state)
 		else
 			ui.state = state
-
 
 /obj/item/paper/ui_close(mob/user)
 	/// close the editing window and change the mode
