@@ -142,7 +142,7 @@
 	else
 		. = ..()
 
-/obj/item/tank/ui_status()
+/obj/item/tank/ui_state(mob/user)
 	return GLOB.hands_state
 
 /obj/item/tank/ui_interact(mob/user, datum/tgui/ui)

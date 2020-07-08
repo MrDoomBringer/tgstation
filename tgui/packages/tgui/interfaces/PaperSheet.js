@@ -573,32 +573,35 @@ export const PaperSheet = (props, context) => {
   const backgroundColor = paper_color && paper_color !== "white"
     ? paper_color
     : "#FFFFFF";
-  const background_style = {
-    'background-color': backgroundColor,
-  };
   const stamp_list = !stamps || stamps === null
     ? []
     : stamps;
 
   const decide_mode = mode => {
     switch (mode) {
-      case 0: // min-height="100vh" min-width="100vw"
-        return (<PaperSheetView
-          value={text}
-          stamps={stamp_list}
-          readOnly={1} />);
+      case 0:
+        return (
+          <PaperSheetView
+            value={text}
+            stamps={stamp_list}
+            readOnly={1} />
+        );
       case 1:
-        return (<PaperSheetEdit value={text}
-          textColor={pen_color}
-          fontFamily={pen_font}
-          stamps={stamp_list}
-          backgroundColor={backgroundColor}
-        />);
+        return (
+          <PaperSheetEdit
+            value={text}
+            textColor={pen_color}
+            fontFamily={pen_font}
+            stamps={stamp_list}
+            backgroundColor={backgroundColor} />
+        );
       case 2:
-        return (<PaperSheetStamper value={text}
-          stamps={stamp_list}
-          stamp_class={stamp_class}
-        />);
+        return (
+          <PaperSheetStamper
+            value={text}
+            stamps={stamp_list}
+            stamp_class={stamp_class} />
+        );
       default:
         return "ERROR ERROR WE CANNOT BE HERE!!";
     }
@@ -607,14 +610,13 @@ export const PaperSheet = (props, context) => {
   return (
     <Window
       theme="paper"
-      style={background_style}
       width={800}
       height={600}
       resizable>
-      <Window.Content min-height="100vh" min-width="100vw"
-        style={background_style}>
-        <Box fillPositionedParent={1} min-height="100vh"
-          min-width="100vw" backgroundColor={backgroundColor}>
+      <Window.Content>
+        <Box
+          fillPositionedParent
+          backgroundColor={backgroundColor}>
           {decide_mode(edit_mode)}
         </Box>
       </Window.Content>

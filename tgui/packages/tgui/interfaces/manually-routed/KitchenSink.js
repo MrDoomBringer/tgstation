@@ -9,6 +9,9 @@ import { useBackend, useLocalState } from '../../backend';
 import { BlockQuote, Box, Button, ByondUi, Collapsible, DraggableControl, Flex, Icon, Input, Knob, LabeledList, NoticeBox, NumberInput, ProgressBar, Section, Slider, Tabs, Tooltip } from '../../components';
 import { formatSiUnit } from '../../format';
 import { Window } from '../../layouts';
+import { createLogger } from '../../logging';
+
+const logger = createLogger('KitchenSink');
 
 const COLORS_SPECTRUM = [
   'red',
@@ -460,7 +463,7 @@ const KitchenSinkByondUi = (props, context) => {
             icon="chevron-right"
             onClick={() => {
               setImmediate(() => {
-                eval(code);
+                logger.log(eval(code));
               });
             }}>
             Evaluate

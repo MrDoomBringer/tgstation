@@ -10,9 +10,9 @@
 #define UI_CLOSING -2
 
 /// Maximum number of windows that can be suspended/reused
-#define TGUI_WINDOW_SOFT_LIMIT 3
+#define TGUI_WINDOW_SOFT_LIMIT 4
 /// Maximum number of open windows
-#define TGUI_WINDOW_HARD_LIMIT 6
+#define TGUI_WINDOW_HARD_LIMIT 8
 
 /// Window does not exist
 #define TGUI_WINDOW_CLOSED 0

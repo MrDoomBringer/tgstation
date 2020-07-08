@@ -149,18 +149,12 @@
  *
  * required uiref ref The UI that was closed.
  */
-/client/verb/uiclose(ref as text)
+/client/verb/uiclose(window_id as text)
 	// Name the verb, and hide it from the user panel.
 	set name = "uiclose"
 	set hidden = TRUE
-	// Get the UI based on the ref.
-	var/datum/tgui/ui = locate(ref)
-	// If we found the UI, close it.
-	if(istype(ui))
-		ui.close(recycle = FALSE)
-		// Unset machine just to be sure.
-		if(src && src.mob)
-			src.mob.unset_machine()
+	var/user = src && src.mob
+	SStgui.on_uiclose_verb(user, window_id)
 
 /**
  * Middleware for /client/Topic. This proc allows processing topic calls
@@ -182,7 +176,7 @@
 				ui.Topic(href, href_list)
 				return FALSE
 		log_tgui("[usr] ([usr.ckey]):\nForce closing '[window_id]'.")
-		SStgui.force_close_window(usr, window_id)
+		SStgui.close_window(usr, window_id)
 		return FALSE
 	// Destroy windows that cannot be suspended due to disconnects
 	if(href_list["action"] == "tgui:close")
@@ -190,7 +184,7 @@
 		if(!istype(src_object, /datum/tgui))
 			var/window_id = href_list["window_id"]
 			log_tgui("[usr] ([usr.ckey]):\nForce closing '[window_id]'.")
-			SStgui.force_close_window(usr, window_id)
+			SStgui.close_window(usr, window_id)
 			return FALSE
 	// Pass
 	return TRUE
