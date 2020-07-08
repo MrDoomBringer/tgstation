@@ -83,6 +83,8 @@ SUBSYSTEM_DEF(tgui)
 	html = replacetextEx(html, "\[tgui:windowId]", window_id)
 	// Open the window
 	user << browse(html, "window=[window_id];[window_options]")
+	// Instruct the client to signal UI when the window is closed.
+	winset(user, window_id, "on-close=\"uiclose [window_id]\"")
 	open_windows[window_id] = TGUI_WINDOW_LOADING
 	return window_id
 
@@ -112,7 +114,7 @@ SUBSYSTEM_DEF(tgui)
 		// TODO: Use an intermediate "RELEASED" state to catch broken windows
 		user.tgui_open_windows[window_id] = TGUI_WINDOW_FREE
 	else
-		force_close_window(user, window_id)
+		close_window(user, window_id)
 
 /datum/controller/subsystem/tgui/proc/send_data(mob/user, window_id, data)
 	if(!user.client)
@@ -120,20 +122,34 @@ SUBSYSTEM_DEF(tgui)
 		return null
 	user << output(data, "[window_id].browser:update")
 
-/datum/controller/subsystem/tgui/proc/force_close_window(mob/user, window_id)
-	log_tgui("[user] ([user.ckey]):\nforce_close_window [window_id]")
+/datum/controller/subsystem/tgui/proc/close_window(mob/user, window_id)
+	log_tgui("[user] ([user.ckey]):\nclose_window [window_id]")
 	if(!user.client)
 		return null
 	LAZYINITLIST(user.tgui_open_windows)
 	user << browse(null, "window=[window_id]")
 	user.tgui_open_windows[window_id] = TGUI_WINDOW_CLOSED
 
-/datum/controller/subsystem/tgui/proc/force_close_all_windows(mob/user)
-	log_tgui("[user] ([user.ckey]):\nforce_close_all_windows")
+/datum/controller/subsystem/tgui/proc/close_all_windows(mob/user)
+	log_tgui("[user] ([user.ckey]):\nclose_all_windows")
 	user.tgui_open_windows = null
 	for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
 		var/window_id = TGUI_WINDOW_ID(i)
 		user << browse(null, "window=[window_id]")
+
+/datum/controller/subsystem/tgui/proc/on_uiclose_verb(mob/user, window_id)
+	if(!user || !user.client)
+		log_tgui("[user] ([user.ckey]):\nERROR ERROR on_uiclose_verb(): missing user!")
+		return null
+	// Close all tgui datums based on window_id
+	for(var/datum/tgui/ui in user.tgui_open_uis)
+		if(ui.window_id == window_id)
+			// Do not recycle
+			ui.close(recycle = FALSE)
+	// Unset machine just to be sure.
+	user.unset_machine()
+	// Close the window just to be sure
+	close_window(user, window_id)
 
 /**
  * public
@@ -152,11 +168,17 @@ SUBSYSTEM_DEF(tgui)
 		datum/src_object,
 		datum/tgui/ui,
 		force_open = FALSE)
-	// Loop up a UI if it wasn't passed
+	// Look up a UI if it wasn't passed
 	if(isnull(ui))
 		ui = get_open_ui(user, src_object)
 	// Couldn't find a UI.
 	if(isnull(ui))
+		return null
+	// UI ended up with the closed status
+	// or is actively trying to close itself.
+	// FIXME: Doesn't actually fix the paper bug.
+	if(ui.status <= UI_CLOSE)
+		ui.close()
 		return null
 	var/data = src_object.ui_data(user)
 	if(!force_open)
@@ -341,7 +363,7 @@ SUBSYSTEM_DEF(tgui)
  * return int The number of UIs closed.
  */
 /datum/controller/subsystem/tgui/proc/on_logout(mob/user)
-	force_close_all_windows(user)
+	close_all_windows(user)
 	close_user_uis(user)
 
 /**

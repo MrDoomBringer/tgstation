@@ -53,7 +53,7 @@
  * return datum/tgui The requested UI.
  */
 /datum/tgui/New(mob/user, datum/src_object, interface, title)
-	log_tgui("[user] ([user.ckey]):\nnew [interface]")
+	log_tgui("[user] ([user.ckey]):\nnew [interface] fancy [user.client.prefs.tgui_fancy]")
 	src.user = user
 	src.src_object = src_object
 	src.window_key = "[REF(src_object)]-main"
@@ -89,10 +89,6 @@
 	// Bail if subsystem could not allocate a window_id
 	if(!window_id)
 		return
-	// Instruct the client to signal UI when the window is closed.
-	// NOTE: Intentional \ref usage; tgui datums can't/shouldn't
-	// be tagged, so this is an effective unwrap
-	winset(user, window_id, "on-close=\"uiclose \ref[src]\"")
 	// Pre-fetch initial state while browser is still loading
 	if(!initial_data)
 		initial_data = src_object.ui_data(user)
@@ -138,7 +134,7 @@
 		if(can_be_recycled)
 			SStgui.release_window(user, window_id)
 		else
-			SStgui.force_close_window(user, window_id)
+			SStgui.close_window(user, window_id)
 		src_object.ui_close(user)
 		SStgui.on_close(src)
 	state = null

@@ -29,9 +29,13 @@ export class Window extends Component {
 
   updateFancy() {
     const { config } = useBackend(this.context);
-    if (this.fancy === null) {
-      this.fancy = config.fancy;
-    }
+    // FIXME: This code is commented out because after toggling the "fancy"
+    // setting and opening the suspended window, it prevents the window from
+    // reacting to that change. This probably has to be handled on Redux
+    // store level.
+    // if (this.fancy === null) {
+    //   this.fancy = config.fancy;
+    // }
     if (this.fancy !== config.fancy) {
       logger.log('changing fancy mode to', config.fancy);
       this.fancy = config.fancy;

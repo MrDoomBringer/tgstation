@@ -232,7 +232,7 @@
  ** not sure how tgui handles many producers?
 **/
 /obj/item/paper/proc/create_ui(mob/user, datum/ui_state/default/paper_state/state)
-	ui_interact(user, null, state)
+	ui_interact(user, state = state)
 
 
 /obj/item/proc/burn_paper_product_attackby_check(obj/item/I, mob/living/user, bypass_clumsy)
