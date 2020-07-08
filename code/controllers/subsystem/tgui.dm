@@ -121,6 +121,7 @@ SUBSYSTEM_DEF(tgui)
 	user << output(data, "[window_id].browser:update")
 
 /datum/controller/subsystem/tgui/proc/force_close_window(mob/user, window_id)
+	log_tgui("[user] ([user.ckey]):\nforce_close_window [window_id]")
 	if(!user.client)
 		return null
 	LAZYINITLIST(user.tgui_open_windows)
@@ -128,6 +129,7 @@ SUBSYSTEM_DEF(tgui)
 	user.tgui_open_windows[window_id] = TGUI_WINDOW_CLOSED
 
 /datum/controller/subsystem/tgui/proc/force_close_all_windows(mob/user)
+	log_tgui("[user] ([user.ckey]):\nforce_close_all_windows [window_id]")
 	user.tgui_open_windows = null
 	for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
 		var/window_id = TGUI_WINDOW_ID(i)
