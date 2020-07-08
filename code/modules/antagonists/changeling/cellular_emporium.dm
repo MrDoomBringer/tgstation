@@ -13,7 +13,7 @@
 	changeling = null
 	. = ..()
 
-/datum/cellular_emporium/ui_state()
+/datum/cellular_emporium/ui_state(mob/user)
 	return GLOB.always_state
 
 /datum/cellular_emporium/ui_interact(mob/user, datum/tgui/ui)

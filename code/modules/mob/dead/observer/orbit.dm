@@ -6,7 +6,7 @@
 		qdel(src)
 	owner = new_owner
 
-/datum/orbit_menu/ui_state()
+/datum/orbit_menu/ui_state(mob/user)
 	return GLOB.observer_state
 
 /datum/orbit_menu/ui_interact(mob/user, datum/tgui/ui)

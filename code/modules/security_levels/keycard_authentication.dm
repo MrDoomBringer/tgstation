@@ -31,7 +31,7 @@ GLOBAL_DATUM_INIT(keycard_events, /datum/events, new)
 	QDEL_NULL(ev)
 	return ..()
 
-/obj/machinery/keycard_auth/ui_state()
+/obj/machinery/keycard_auth/ui_state(mob/user)
 	return GLOB.physical_state
 
 /obj/machinery/keycard_auth/ui_interact(mob/user, datum/tgui/ui)

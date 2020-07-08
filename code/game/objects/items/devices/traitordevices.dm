@@ -109,7 +109,7 @@ effective or pretty fucking useless.
 /obj/item/healthanalyzer/rad_laser/interact(mob/user)
 	ui_interact(user)
 
-/obj/item/healthanalyzer/rad_laser/ui_state()
+/obj/item/healthanalyzer/rad_laser/ui_state(mob/user)
 	return GLOB.hands_state
 
 /obj/item/healthanalyzer/rad_laser/ui_interact(mob/user, datum/tgui/ui)

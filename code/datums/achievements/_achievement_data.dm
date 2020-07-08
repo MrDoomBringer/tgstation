@@ -96,7 +96,7 @@
 		get_asset_datum(/datum/asset/spritesheet/simple/achievements),
 	)
 
-/datum/achievement_data/ui_state()
+/datum/achievement_data/ui_state(mob/user)
 	return GLOB.always_state
 
 /datum/achievement_data/ui_interact(mob/user, datum/tgui/ui)

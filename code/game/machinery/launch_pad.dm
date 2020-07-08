@@ -322,7 +322,7 @@
 	to_chat(user, "<span class='notice'>[src] projects a display onto your retina.</span>")
 
 
-/obj/item/launchpad_remote/ui_state()
+/obj/item/launchpad_remote/ui_state(mob/user)
 	return GLOB.inventory_state
 
 /obj/item/launchpad_remote/ui_interact(mob/user, datum/tgui/ui)

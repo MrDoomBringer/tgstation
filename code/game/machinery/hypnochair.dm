@@ -29,7 +29,7 @@
 		return
 	return ..()
 
-/obj/machinery/hypnochair/ui_state()
+/obj/machinery/hypnochair/ui_state(mob/user)
 	return GLOB.notcontained_state
 
 /obj/machinery/hypnochair/ui_interact(mob/user, datum/tgui/ui)

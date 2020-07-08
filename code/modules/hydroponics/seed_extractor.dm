@@ -161,7 +161,7 @@
 
 	. = TRUE
 
-/obj/machinery/seed_extractor/ui_state()
+/obj/machinery/seed_extractor/ui_state(mob/user)
 	return GLOB.notcontained_state
 
 /obj/machinery/seed_extractor/ui_interact(mob/user, datum/tgui/ui)

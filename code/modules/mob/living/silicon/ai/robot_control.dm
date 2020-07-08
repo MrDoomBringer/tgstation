@@ -19,7 +19,7 @@
 		return ..()
 	return UI_CLOSE
 
-/datum/robot_control/ui_state()
+/datum/robot_control/ui_state(mob/user)
 	return GLOB.always_state
 
 /datum/robot_control/ui_interact(mob/user, datum/tgui/ui)

@@ -135,11 +135,11 @@ logs and time spent on rendering. Use this information to optimize your
 code, and try to keep re-renders below 16ms.
 
 **Kitchen Sink.**
-Press `Ctrl+Alt+=` to open the KitchenSink interface. This interface is a
+Press `F12` to open the KitchenSink interface. This interface is a
 playground to test various tgui components.
 
 **Layout Debugger.**
-Press `Ctrl+Alt+-` to toggle the *layout debugger*. It will show outlines of
+Press `F11` to toggle the *layout debugger*. It will show outlines of
 all tgui elements, which makes it easy to understand how everything comes
 together, and can reveal certain layout bugs which are not normally visible.
 

@@ -28,7 +28,7 @@
 
 	return filtered_modules
 
-/datum/module_picker/ui_state()
+/datum/module_picker/ui_state(mob/user)
 	return GLOB.always_state
 
 /datum/module_picker/ui_interact(mob/user, datum/tgui/ui)

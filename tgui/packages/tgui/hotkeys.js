@@ -113,6 +113,9 @@ const createHotkeyString = (ctrlKey, altKey, shiftKey, keyCode) => {
   if (keyCode >= 48 && keyCode <= 90) {
     str += String.fromCharCode(keyCode);
   }
+  else if (keyCode >= KEY_F1 && keyCode <= KEY_F12) {
+    str += 'F' + (keyCode - 111);
+  }
   else {
     str += '[' + keyCode + ']';
   }
@@ -209,7 +212,8 @@ const handleHotKey = (e, eventType, store) => {
     keyString,
   } = keyData;
   // Dispatch a detected hotkey as a store action
-  if (hasModifierKeys && !MODIFIER_KEYS.includes(keyCode)) {
+  if (hasModifierKeys && !MODIFIER_KEYS.includes(keyCode)
+      || keyCode >= KEY_F1 && keyCode <= KEY_F12) {
     logger.log(keyString);
     for (let subscriberFn of hotKeySubscribers) {
       subscriberFn(store, keyData);

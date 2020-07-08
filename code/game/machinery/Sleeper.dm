@@ -134,7 +134,7 @@
 		visible_message("<span class='notice'>[usr] pries open [src].</span>", "<span class='notice'>You pry open [src].</span>")
 		open_machine()
 
-/obj/machinery/sleeper/ui_state()
+/obj/machinery/sleeper/ui_state(mob/user)
 	if(controls_inside)
 		return GLOB.notcontained_state
 	return GLOB.default_state

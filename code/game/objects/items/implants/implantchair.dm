@@ -26,7 +26,7 @@
 	open_machine()
 	update_icon()
 
-/obj/machinery/implantchair/ui_state()
+/obj/machinery/implantchair/ui_state(mob/user)
 	return GLOB.notcontained_state
 
 /obj/machinery/implantchair/ui_interact(mob/user, datum/tgui/ui)

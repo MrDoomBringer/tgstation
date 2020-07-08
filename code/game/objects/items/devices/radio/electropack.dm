@@ -84,7 +84,7 @@
 	frequency = new_frequency
 	SSradio.add_object(src, frequency, RADIO_SIGNALER)
 
-/obj/item/electropack/ui_state()
+/obj/item/electropack/ui_state(mob/user)
 	return GLOB.hands_state
 
 /obj/item/electropack/ui_interact(mob/user, datum/tgui/ui)

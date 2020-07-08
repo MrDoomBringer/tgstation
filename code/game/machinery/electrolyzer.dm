@@ -142,7 +142,7 @@
 		return
 	return ..()
 
-/obj/machinery/electrolyzer/ui_state()
+/obj/machinery/electrolyzer/ui_state(mob/user)
 	return GLOB.physical_state
 
 /obj/machinery/electrolyzer/ui_interact(mob/user, datum/tgui/ui)
