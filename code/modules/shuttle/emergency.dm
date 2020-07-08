@@ -17,7 +17,7 @@
 		say("Please equip your ID card into your ID slot to authenticate.")
 	. = ..()
 
-/obj/machinery/computer/emergency_shuttle/ui_state()
+/obj/machinery/computer/emergency_shuttle/ui_state(mob/user)
 	return GLOB.human_adjacent_state
 
 /obj/machinery/computer/emergency_shuttle/ui_interact(mob/user, datum/tgui/ui)

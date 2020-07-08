@@ -31,7 +31,7 @@
 	var/available_on_ntnet = 1
 	/// Whether the program can be downloaded from SyndiNet (accessible via emagging the computer). Set to 1 to enable.
 	var/available_on_syndinet = 0
-	/// ID of TGUI interface
+	/// Name of the tgui interface
 	var/tgui_id
 	/// Example: "something.gif" - a header image that will be rendered in computer's UI when this program is running at background. Images are taken from /icons/program_icons. Be careful not to use too large images!
 	var/ui_header = null
@@ -166,13 +166,11 @@
 		generate_network_log("Connection to [network_destination] closed.")
 	return 1
 
-
 /datum/computer_file/program/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui && tgui_id)
-		var/datum/asset/assets = get_asset_datum(/datum/asset/simple/headers)
-		assets.send(user)
 		ui = new(user, src, tgui_id, filedesc)
+		ui.send_asset(get_asset_datum(/datum/asset/simple/headers))
 		ui.open()
 
 // CONVENTIONS, READ THIS WHEN CREATING NEW PROGRAM AND OVERRIDING THIS PROC:

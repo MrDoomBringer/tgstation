@@ -64,7 +64,7 @@
 		return
 	interact(user)
 
-/obj/item/radio/intercom/ui_state()
+/obj/item/radio/intercom/ui_state(mob/user)
 	return GLOB.default_state
 
 /obj/item/radio/intercom/can_receive(freq, level)

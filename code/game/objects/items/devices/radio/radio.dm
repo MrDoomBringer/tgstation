@@ -109,7 +109,7 @@
 	else
 		..()
 
-/obj/item/radio/ui_state()
+/obj/item/radio/ui_state(mob/user)
 	return GLOB.inventory_state
 
 /obj/item/radio/ui_interact(mob/user, datum/tgui/ui)

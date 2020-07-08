@@ -37,6 +37,8 @@
 	var/status = UI_INTERACTIVE
 	/// Topic state used to determine status/interactability.
 	var/datum/ui_state/state = null
+	/// Asset data to be sent with every update
+	var/list/asset_data
 
 /**
  * public
@@ -57,10 +59,13 @@
 	src.interface = interface
 	if(title)
 		src.title = title
-	// TODO: Move this to ui.set_state(state)
 	src.state = src_object.ui_state()
-	var/datum/asset/assets = get_asset_datum(/datum/asset/group/tgui)
-	assets.send(user)
+	// Send assets
+	var/datum/asset/asset
+	asset = get_asset_datum(/datum/asset/group/tgui)
+	asset.send(user)
+	for(asset in src_object.ui_assets(user))
+		src.send_asset(asset)
 
 /**
  * public
@@ -92,8 +97,7 @@
 		initial_data = src_object.ui_data(user)
 	_initial_update = url_encode(get_json(
 		initial_data,
-		src_object.ui_static_data(user),
-		get_assets()))
+		src_object.ui_static_data(user)))
 	// Send a full update if window is being reused
 	if(SStgui.is_window_ready(user, window_id))
 		SStgui.acquire_window(user, window_id)
@@ -144,10 +148,34 @@
  *
  * Enable/disable auto-updating of the UI.
  *
- * required state bool Enable/disable auto-updating.
+ * required value bool Enable/disable auto-updating.
  */
-/datum/tgui/proc/set_autoupdate(state = TRUE)
-	autoupdate = state
+/datum/tgui/proc/set_autoupdate(autoupdate)
+	src.autoupdate = autoupdate
+
+/**
+ * public
+ *
+ * Replace current ui.state with a new one.
+ *
+ * required state datum/ui_state/state Next state
+ */
+/datum/tgui/proc/set_state(datum/ui_state/state)
+	src.state = state
+
+/**
+ * public
+ *
+ * Makes an asset available to use in tgui.
+ *
+ * required asset datum/asset
+ */
+/datum/tgui/proc/send_asset(var/datum/asset/asset)
+	if(istype(asset, /datum/asset/spritesheet))
+		var/datum/asset/spritesheet/spritesheet = asset
+		LAZYINITLIST(asset_data)
+		LAZYADD(asset_data["styles"], list(spritesheet.css_filename()))
+	asset.send(user)
 
 /**
  * private
@@ -157,9 +185,8 @@
  *
  * return string The packaged JSON.
  */
-/datum/tgui/proc/get_json(list/data, list/static_data, list/assets)
+/datum/tgui/proc/get_json(list/data, list/static_data)
 	var/list/json_data = list()
-
 	json_data["config"] = list(
 		"title" = title,
 		"status" = status,
@@ -178,47 +205,20 @@
 		// be tagged, so this is an effective unwrap
 		"ref" = "\ref[src]"
 	)
-
 	if(!isnull(data))
 		json_data["data"] = data
 	if(!isnull(static_data))
 		json_data["static_data"] = static_data
-	if(!isnull(assets))
-		json_data["assets"] = assets
-
-	// Send shared states
+	if(!isnull(asset_data))
+		json_data["assets"] = asset_data
 	if(src_object.tgui_shared_states)
 		json_data["shared"] = src_object.tgui_shared_states
-
 	// Generate the JSON.
 	var/json = json_encode(json_data)
 	// Strip #255/improper.
 	json = replacetext(json, "\proper", "")
 	json = replacetext(json, "\improper", "")
 	return json
-
-/**
- * private
- *
- * Calls ui_assets() proc on src_object, processes asset datums and returns
- * an associative list of stylesheets and other paths which are directly
- * consumable by tgui.
- */
-/datum/tgui/proc/get_assets()
-	var/list/items = src_object.ui_assets(user)
-	var/list/output = list(
-		"styles" = list(),
-	)
-	if(!items)
-		return output
-	for (var/item in items)
-		if(istype(item, /datum/asset/spritesheet))
-			var/datum/asset/spritesheet/asset = item
-			output["styles"] += list(asset.css_filename())
-		if(istype(item, /datum/asset))
-			var/datum/asset/simple/asset = item
-			asset.send(user)
-	return output
 
 /**
  * private

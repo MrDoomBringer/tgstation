@@ -241,7 +241,7 @@
 	var/target
 	var/area_aim = FALSE //should also show areas for targeting
 
-/obj/machinery/computer/bsa_control/ui_state()
+/obj/machinery/computer/bsa_control/ui_state(mob/user)
 	return GLOB.physical_state
 
 /obj/machinery/computer/bsa_control/ui_interact(mob/user, datum/tgui/ui)

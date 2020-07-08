@@ -80,7 +80,7 @@
 		var/datum/nanite_program/relay/N = X
 		N.relay_signal(code, relay_code, source)
 
-/obj/item/nanite_remote/ui_state()
+/obj/item/nanite_remote/ui_state(mob/user)
 	return GLOB.hands_state
 
 /obj/item/nanite_remote/ui_interact(mob/user, datum/tgui/ui)

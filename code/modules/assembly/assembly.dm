@@ -126,5 +126,5 @@
 		return holder
 	return src
 
-/obj/item/assembly/ui_state()
+/obj/item/assembly/ui_state(mob/user)
 	return GLOB.hands_state

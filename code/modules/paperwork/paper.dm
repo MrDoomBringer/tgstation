@@ -319,7 +319,7 @@
 	if(!ui)
 		// The x size is because we double the width for the editor
 		ui = new(user, src, "PaperSheet", name)
-		ui.state = state
+		ui.set_state(state)
 		ui.set_autoupdate(FALSE)
 		viewing_ui[user] = ui
 		ui.open()
@@ -328,7 +328,7 @@
 		if(last_state)
 			last_state.copy_from(state)
 		else
-			ui.state = state
+			ui.set_state(state)
 
 /obj/item/paper/ui_close(mob/user)
 	/// close the editing window and change the mode

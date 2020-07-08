@@ -144,7 +144,7 @@
 		to_chat(user, "<span class='warning'>There is not enough of [src] left!</span>")
 		. = TRUE
 
-/obj/item/toy/crayon/ui_state()
+/obj/item/toy/crayon/ui_state(mob/user)
 	return GLOB.hands_state
 
 /obj/item/toy/crayon/ui_interact(mob/user, datum/tgui/ui)

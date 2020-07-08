@@ -432,7 +432,7 @@
 		visible_message("<span class='notice'>[usr] pries open \the [src].</span>", "<span class='notice'>You pry open \the [src].</span>")
 		open_machine()
 
-/obj/machinery/suit_storage_unit/ui_state()
+/obj/machinery/suit_storage_unit/ui_state(mob/user)
 	return GLOB.notcontained_state
 
 /obj/machinery/suit_storage_unit/ui_interact(mob/user, datum/tgui/ui)

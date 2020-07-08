@@ -11,7 +11,7 @@
 		var/mob/userMob = user
 		holder = userMob.client //if its a mob, assign the mob's client to holder
 
-/datum/skill_panel/ui_state()
+/datum/skill_panel/ui_state(mob/user)
 	return GLOB.admin_state
 
 /datum/skill_panel/ui_interact(mob/user, datum/tgui/ui)

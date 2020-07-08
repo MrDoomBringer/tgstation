@@ -204,7 +204,7 @@
 /obj/structure/chisel_message/interact()
 	return
 
-/obj/structure/chisel_message/ui_state()
+/obj/structure/chisel_message/ui_state(mob/user)
 	return GLOB.always_state
 
 /obj/structure/chisel_message/ui_interact(mob/user, datum/tgui/ui)

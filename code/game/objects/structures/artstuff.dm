@@ -73,7 +73,7 @@
 	. = ..()
 	ui_interact(user)
 
-/obj/item/canvas/ui_state()
+/obj/item/canvas/ui_state(mob/user)
 	if(finalized)
 		return GLOB.physical_obscured_state
 	else

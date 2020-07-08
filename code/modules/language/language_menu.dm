@@ -8,7 +8,7 @@
 	language_holder = null
 	. = ..()
 
-/datum/language_menu/ui_state()
+/datum/language_menu/ui_state(mob/user)
 	return GLOB.language_menu_state
 
 /datum/language_menu/ui_interact(mob/user, datum/tgui/ui)

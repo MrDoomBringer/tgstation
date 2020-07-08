@@ -192,7 +192,7 @@
 /obj/item/transfer_valve/proc/c_state()
 	return
 
-/obj/item/transfer_valve/ui_state()
+/obj/item/transfer_valve/ui_state(mob/user)
 	return GLOB.hands_state
 
 /obj/item/transfer_valve/ui_interact(mob/user, datum/tgui/ui)

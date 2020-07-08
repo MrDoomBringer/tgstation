@@ -108,7 +108,7 @@
  * The UI's state controller to be used for created uis
  * This is a proc over a var for memory reasons
  */
-/datum/proc/ui_state()
+/datum/proc/ui_state(mob/user)
 	return GLOB.default_state
 
 /**

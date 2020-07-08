@@ -25,15 +25,12 @@
 	if(!istype(to_borg))
 		qdel(src)
 		CRASH("Borg panel is only available for borgs")
-
 	user = CLIENT_FROM_VAR(to_user)
-
 	if (!user)
 		CRASH("Borg panel attempted to open to a mob without a client")
-
 	borg = to_borg
 
-/datum/borgpanel/ui_state()
+/datum/borgpanel/ui_state(mob/user)
 	return GLOB.admin_state
 
 /datum/borgpanel/ui_interact(mob/user, datum/tgui/ui)

@@ -651,7 +651,7 @@
 			judgement_guilty_votes -= user_role//no double voting
 			judgement_guilty_votes += user_role
 
-/datum/mafia_controller/ui_state()
+/datum/mafia_controller/ui_state(mob/user)
 	return GLOB.always_state
 
 /datum/mafia_controller/ui_interact(mob/user, datum/tgui/ui)

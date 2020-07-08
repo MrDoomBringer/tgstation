@@ -19,7 +19,7 @@
 	else
 		src.user = user
 
-/datum/notificationpanel/ui_state()
+/datum/notificationpanel/ui_state(mob/user)
 	return GLOB.observer_state
 
 /datum/notificationpanel/ui_interact(mob/user, datum/tgui/ui)

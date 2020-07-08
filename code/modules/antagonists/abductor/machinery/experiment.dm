@@ -59,7 +59,7 @@
 		return UI_CLOSE
 	return ..()
 
-/obj/machinery/abductor/experiment/ui_state()
+/obj/machinery/abductor/experiment/ui_state(mob/user)
 	return GLOB.physical_state
 
 /obj/machinery/abductor/experiment/ui_interact(mob/user, datum/tgui/ui)

@@ -55,7 +55,7 @@
 		name = initial(name)
 		icon_state = initial(icon_state)
 
-/obj/item/aicard/ui_state()
+/obj/item/aicard/ui_state(mob/user)
 	return GLOB.hands_state
 
 /obj/item/aicard/ui_interact(mob/user, datum/tgui/ui)

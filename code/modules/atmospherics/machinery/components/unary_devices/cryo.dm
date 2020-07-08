@@ -364,7 +364,7 @@
 		return
 	return ..()
 
-/obj/machinery/atmospherics/components/unary/cryo_cell/ui_state()
+/obj/machinery/atmospherics/components/unary/cryo_cell/ui_state(mob/user)
 	return GLOB.notcontained_state
 
 

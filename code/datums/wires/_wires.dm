@@ -215,7 +215,7 @@
 		return ..()
 	return UI_CLOSE
 
-/datum/wires/ui_state()
+/datum/wires/ui_state(mob/user)
 	return GLOB.physical_state
 
 /datum/wires/ui_interact(mob/user, datum/tgui/ui)

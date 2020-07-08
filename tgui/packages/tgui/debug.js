@@ -14,6 +14,8 @@ export const toggleDebugLayout = () => ({
   type: 'debug/toggleDebugLayout',
 });
 
+subscribeToHotKey('F11', () => toggleDebugLayout());
+subscribeToHotKey('F12', () => toggleKitchenSink());
 subscribeToHotKey('Ctrl+Alt+[187]', () => toggleKitchenSink());
 subscribeToHotKey('Ctrl+Alt+[189]', () => toggleDebugLayout());
 subscribeToHotKey('Ctrl+Alt+[8]', () => {

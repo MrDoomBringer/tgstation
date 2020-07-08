@@ -418,7 +418,7 @@
 		take_damage(clamp((our_temperature/heat_limit) * (our_pressure/pressure_limit), 5, 50), BURN, 0)
 	update_icon()
 
-/obj/machinery/portable_atmospherics/canister/ui_state()
+/obj/machinery/portable_atmospherics/canister/ui_state(mob/user)
 	return GLOB.physical_state
 
 /obj/machinery/portable_atmospherics/canister/ui_interact(mob/user, datum/tgui/ui)

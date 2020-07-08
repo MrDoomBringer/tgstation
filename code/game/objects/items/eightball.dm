@@ -192,7 +192,7 @@
 
 	return top_vote
 
-/obj/item/toy/eightball/haunted/ui_state()
+/obj/item/toy/eightball/haunted/ui_state(mob/user)
 	return GLOB.observer_state
 
 /obj/item/toy/eightball/haunted/ui_interact(mob/user, datum/tgui/ui)
