@@ -129,7 +129,7 @@ SUBSYSTEM_DEF(tgui)
 	user.tgui_open_windows[window_id] = TGUI_WINDOW_CLOSED
 
 /datum/controller/subsystem/tgui/proc/force_close_all_windows(mob/user)
-	log_tgui("[user] ([user.ckey]):\nforce_close_all_windows [window_id]")
+	log_tgui("[user] ([user.ckey]):\nforce_close_all_windows")
 	user.tgui_open_windows = null
 	for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
 		var/window_id = TGUI_WINDOW_ID(i)
