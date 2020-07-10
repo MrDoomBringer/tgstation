@@ -34,9 +34,11 @@ const log = (level, ns, ...args) => {
       .join(' ')
       + '\nUser Agent: ' + navigator.userAgent;
     callByond('', {
-      src: window.__ref__,
-      action: 'tgui:log',
+      tgui: 1,
+      type: 'tgui:log',
       message: logEntry,
+      src: window.__ref__,
+      window_id: window.__windowId__,
     });
   }
 };

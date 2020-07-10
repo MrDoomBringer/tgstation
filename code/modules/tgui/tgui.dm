@@ -18,7 +18,7 @@
 	/// The title of te UI.
 	var/title
 	/// The window_id for browse() and onclose().
-	var/window_id
+	var/datum/tgui_window/window
 	/// Key that is used for remembering the window geometry.
 	var/window_key
 	/// The interface (template) to be used for this UI.
@@ -27,17 +27,13 @@
 	var/autoupdate = TRUE
 	/// If the UI has been initialized yet.
 	var/initialized = FALSE
-	/// The data (and datastructure) used to initialize the UI.
-	var/list/initial_data
-	/// Holder for the json string, that is sent during the initial update
-	var/_initial_update
-	/// Whether UI has fatally errored
-	var/_has_fatal_error = FALSE
+	/// Gates further updates when close was called.
+	var/closing = FALSE
 	/// The status/visibility of the UI.
 	var/status = UI_INTERACTIVE
 	/// Topic state used to determine status/interactability.
 	var/datum/ui_state/state = null
-	/// Asset data to be sent with every update
+	/// Asset data to be sent with every update.
 	var/list/asset_data
 
 /**
@@ -53,7 +49,7 @@
  * return datum/tgui The requested UI.
  */
 /datum/tgui/New(mob/user, datum/src_object, interface, title)
-	log_tgui("[user] ([user.ckey]):\nnew [interface] fancy [user.client.prefs.tgui_fancy]")
+	log_tgui(user, "new [interface] fancy [user.client.prefs.tgui_fancy]")
 	src.user = user
 	src.src_object = src_object
 	src.window_key = "[REF(src_object)]-main"
@@ -61,12 +57,6 @@
 	if(title)
 		src.title = title
 	src.state = src_object.ui_state()
-	// Send assets
-	var/datum/asset/asset
-	asset = get_asset_datum(/datum/asset/group/tgui)
-	asset.send(user)
-	for(asset in src_object.ui_assets(user))
-		src.send_asset(asset)
 
 /**
  * public
@@ -74,67 +64,40 @@
  * Open this UI (and initialize it with data).
  */
 /datum/tgui/proc/open()
-	// Bail if there is no client
 	if(!user.client)
-		return
-	// Bail if window is already open
-	if(window_id)
-		return
+		return null
+	if(window)
+		return null
 	// Update the window status.
 	update_status(push = FALSE)
 	// Bail if we're not supposed to open.
 	if(status < UI_UPDATE)
-		return
-	window_id = SStgui.allocate_window(user)
-	// Bail if subsystem could not allocate a window_id
-	if(!window_id)
-		return
-	// Pre-fetch initial state while browser is still loading
-	if(!initial_data)
-		initial_data = src_object.ui_data(user)
-	_initial_update = url_encode(get_json(
-		initial_data,
-		src_object.ui_static_data(user)))
-	// Send a full update if window is being reused
-	if(SStgui.is_window_ready(user, window_id))
-		SStgui.acquire_window(user, window_id)
-		SStgui.send_data(user, window_id, _initial_update)
+		return null
+	window = SStgui.request_pooled_window(user)
+	if(!window)
+		return null
+	window.acquire_lock()
+	if(!window.is_ready())
+		window.initialize()
 		initialized = TRUE
+	for(var/datum/asset/asset in src_object.ui_assets(user))
+		send_asset(asset)
+	window.send_message("update", get_payload(with_static = TRUE))
 	SStgui.on_open(src)
-
-/**
- * public
- *
- * Reinitialize the UI.
- * (Possibly with a new interface and/or data).
- *
- * optional template string The name of the new interface.
- * optional data list The new initial data.
- */
-/datum/tgui/proc/reinitialize(interface, list/data)
-	if(interface)
-		src.interface = interface
-	if(data)
-		initial_data = data
-	open()
 
 /**
  * public
  *
  * Close the UI.
  */
-/datum/tgui/proc/close(recycle = TRUE)
-	if(status == UI_CLOSING)
+/datum/tgui/proc/close(can_be_suspended = TRUE)
+	if(closing)
 		return
-	status = UI_CLOSING
+	closing = TRUE
 	// If we don't have window_id, open proc did not have the opportunity
 	// to finish, therefore it's safe to skip this whole block.
-	if(window_id)
-		var/can_be_recycled = recycle && !_has_fatal_error
-		if(can_be_recycled)
-			SStgui.release_window(user, window_id)
-		else
-			SStgui.close_window(user, window_id)
+	if(window)
+		window.release_lock(can_be_suspended)
 		src_object.ui_close(user)
 		SStgui.on_close(src)
 	state = null
@@ -178,11 +141,10 @@
  * private
  *
  * Package the data to send to the UI, as JSON.
- * This includes the UI data and config_data.
  *
- * return string The packaged JSON.
+ * return list JSON
  */
-/datum/tgui/proc/get_json(list/data, list/static_data)
+/datum/tgui/proc/get_payload(with_static = FALSE)
 	var/list/json_data = list()
 	json_data["config"] = list(
 		"title" = title,
@@ -195,79 +157,47 @@
 			"observer" = isobserver(user),
 		),
 		"window" = list(
-			"id" = window_id,
+			"id" = window.id,
 			"key" = window_key,
 		),
 		// NOTE: Intentional \ref usage; tgui datums can't/shouldn't
 		// be tagged, so this is an effective unwrap
-		"ref" = "\ref[src]"
+		"ref" = "\ref[src]",
 	)
-	if(!isnull(data))
+	var/data = src_object.ui_data(user)
+	if(data)
 		json_data["data"] = data
-	if(!isnull(static_data))
+	var/static_data = with_static && src_object.ui_static_data(user)
+	if(static_data)
 		json_data["static_data"] = static_data
-	if(!isnull(asset_data))
+	if(asset_data)
 		json_data["assets"] = asset_data
 	if(src_object.tgui_shared_states)
 		json_data["shared"] = src_object.tgui_shared_states
-	// Generate the JSON.
-	var/json = json_encode(json_data)
-	// Strip #255/improper.
-	json = replacetext(json, "\proper", "")
-	json = replacetext(json, "\improper", "")
-	return json
+	return json_data
 
-/**
- * private
- *
- * Handle clicks from the UI.
- * Call the src_object's ui_act() if status is UI_INTERACTIVE.
- * If the src_object's ui_act() returns 1, update all UIs attacked to it.
- */
-/datum/tgui/Topic(href, href_list)
-	if(user != usr)
-		return // Something is not right here.
-
-	var/action = href_list["action"]
-	var/params = href_list; params -= "action"
-
-	switch(action)
-		if("tgui:close")
-			close()
-		if("tgui:initialize")
-			SStgui.acquire_window(user, window_id)
-			SStgui.send_data(user, window_id, _initial_update)
-			initialized = TRUE
-		if("tgui:setSharedState")
-			// Update the window state.
-			update_status(push = FALSE)
-			// Bail if UI is not interactive or usr calling Topic
-			// is not the UI user.
-			if(status != UI_INTERACTIVE)
-				return
-			var/key = params["key"]
-			var/value = params["value"]
-			if(!src_object.tgui_shared_states)
-				src_object.tgui_shared_states = list()
-			src_object.tgui_shared_states[key] = value
+/datum/tgui/proc/on_message(type, list/payload, list/href_list)
+	if(type && copytext(type, 1, 6) != "tgui:")
+		if(src_object.ui_act(type, payload, src, state))
 			SStgui.update_uis(src_object)
-		if("tgui:setFancy")
-			var/value = text2num(params["value"])
-			user.client.prefs.tgui_fancy = value
-		if("tgui:log")
-			if(params["fatal"])
-				_has_fatal_error = TRUE
-				autoupdate = FALSE
-			// NOTE: Logging is handled in client_procs.dm (/client/Topic)
-		if("tgui:link")
-			user << link(params["url"])
-		else
-			// Update the window state.
-			update_status(push = FALSE)
-			// Call ui_act() on the src_object.
-			if(src_object.ui_act(action, params, src, state))
-				// Update if the object requested it.
-				SStgui.update_uis(src_object)
+		return FALSE
+	if(type == "tgui:ready")
+		initialized = TRUE
+		return FALSE
+	if(type == "tgui:close")
+		close()
+		return FALSE
+	if(type == "tgui:log")
+		if(href_list["fatal"])
+			autoupdate = FALSE
+		return TRUE
+	if(type == "tgui:set_shared_state")
+		LAZYINITLIST(src_object.tgui_shared_states)
+		src_object.tgui_shared_states[href_list["key"]] = href_list["value"]
+		SStgui.update_uis(src_object)
+		return FALSE
+	return TRUE
+
 
 /**
  * private
@@ -278,7 +208,7 @@
  * optional force bool If the UI should be forced to update.
  */
 /datum/tgui/process(force = FALSE)
-	if(status == UI_CLOSING)
+	if(closing)
 		return
 	var/datum/host = src_object.ui_host(user)
 	if(!src_object || !host || !user) // If the object or user died (or something else), abort.
@@ -300,13 +230,16 @@
 /datum/tgui/proc/push_data(data, static_data, force = FALSE)
 	// Update the window state.
 	update_status(push = FALSE)
+	// Can not continue if ui is in process of closing
+	if(!closing)
+		return
 	// Cannot update UI if it is not set up yet.
 	if(!initialized)
 		return
 	// Cannot update UI, we have no visibility.
 	if(status <= UI_DISABLED && !force)
 		return
-	SStgui.send_data(user, window_id, url_encode(get_json(data, static_data)))
+	window.send_message("update", get_payload())
 
 /**
  * private

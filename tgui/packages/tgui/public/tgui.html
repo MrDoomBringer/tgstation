@@ -5,20 +5,12 @@
 <meta charset="utf-8">
 
 <!-- Inlined data -->
-<meta id="tgui:ref" content="[tgui:ref]">
 <meta id="tgui:windowId" content="[tgui:windowId]">
 
 <!-- Early setup -->
 <script type="text/javascript">
 // Mark the beginning of initialization
 window.__inception__ = new Date().getTime();
-// Read tgui ref into a global
-window.__ref__ = document
-  .getElementById('tgui:ref')
-  .getAttribute('content');
-if (window.__ref__ === '[' + 'tgui:ref' + ']') {
-  window.__ref__ = null;
-}
 // Read window id into a global
 window.__windowId__ = document
   .getElementById('tgui:windowId')
@@ -118,6 +110,7 @@ window.onerror = function (msg, url, line, col, error) {
   // Send logs to the game server
   Byond.call('', {
     src: window.__ref__,
+    window_id: window.__windowId__,
     action: 'tgui:log',
     fatal: 1,
     message: stack,
@@ -125,20 +118,18 @@ window.onerror = function (msg, url, line, col, error) {
   // Short-circuit further updates
   window.__updateQueue__ = [];
   window.update = function () {};
-  window.suspend = function () {};
   // Prevent default action
   return true;
 };
 // Early initialization
 window.__updateQueue__ = [];
-window.update = function (stateJson) {
-  window.__updateQueue__.push(stateJson);
+window.update = function (message) {
+  window.__updateQueue__.push(message);
 };
-window.suspend = function () {};
 Byond.call('', {
-  src: window.__ref__,
+  tgui: 1,
+  type: 'tgui:ready',
   window_id: window.__windowId__,
-  action: 'tgui:initialize',
 });
 </script>
 
