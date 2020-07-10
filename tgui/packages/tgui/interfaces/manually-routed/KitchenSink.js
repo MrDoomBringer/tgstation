@@ -6,6 +6,7 @@
 
 import { Fragment } from 'inferno';
 import { useBackend, useLocalState } from '../../backend';
+import { callByond, callByondAsync } from '../../byond';
 import { BlockQuote, Box, Button, ByondUi, Collapsible, DraggableControl, Flex, Icon, Input, Knob, LabeledList, NoticeBox, NumberInput, ProgressBar, Section, Slider, Tabs, Tooltip } from '../../components';
 import { formatSiUnit } from '../../format';
 import { Window } from '../../layouts';
@@ -442,7 +443,7 @@ const KitchenSinkByondUi = (props, context) => {
   const { config } = useBackend(context);
   const [code, setCode] = useLocalState(context,
     'byondUiEvalCode',
-    `Byond.call('winset', {\n  id: '',\n})`);
+    `callByond('winset', {\n  id: '',\n})`);
   return (
     <Box>
       <Section
@@ -462,8 +463,19 @@ const KitchenSinkByondUi = (props, context) => {
           <Button
             icon="chevron-right"
             onClick={() => {
-              setImmediate(() => {
-                logger.log(eval(code));
+              // This is necessary to simply mark these imports as used,
+              // because we need them in eval.
+              window.callByond = callByond;
+              window.callByondAsync = callByondAsync;
+              setImmediate(async () => {
+                const result = eval(code);
+                if (result && result.then) {
+                  logger.log('Promise');
+                  result.then(logger.log);
+                }
+                else {
+                  logger.log(result);
+                }
               });
             }}>
             Evaluate

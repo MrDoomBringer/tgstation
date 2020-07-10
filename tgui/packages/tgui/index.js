@@ -134,25 +134,28 @@ const setupApp = () => {
   });
 
   // Subscribe for bankend updates
-  window.update = stateJson => {
+  window.update = messageJson => {
     logger.debug(`window.update (${window.__windowId__})`);
     const { suspended } = selectBackend(store.getState());
-    // NOTE: stateJson can be an object only if called manually from console.
+    // NOTE: messageJson can be an object only if called manually from console.
     // This is useful for debugging tgui in external browsers, like Chrome.
-    const nextState = typeof stateJson === 'string'
-      ? parseStateJson(stateJson)
-      : stateJson;
-    window.__ref__ = nextState.config.ref;
-    if (suspended) {
-      logger.log('reinitializing to:', nextState.config.ref);
-      initialRender = 'recycled';
+    const message = typeof messageJson === 'string'
+      ? parseStateJson(messageJson)
+      : messageJson;
+    const { type, payload } = message;
+    if (type === 'update') {
+      window.__ref__ = payload.config.ref;
+      if (suspended) {
+        logger.log('reinitializing to:', payload.config.ref);
+        initialRender = 'recycled';
+      }
+      // Backend update dispatches a store action
+      store.dispatch(backendUpdate(payload));
+      return;
     }
-    // Backend update dispatches a store action
-    store.dispatch(backendUpdate(nextState));
-  };
-
-  window.suspend = () => {
-    store.dispatch(backendSuspendSuccess());
+    if (type === 'suspend') {
+      store.dispatch(backendSuspendSuccess());
+    }
   };
 
   // Enable hot module reloading

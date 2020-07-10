@@ -122,16 +122,16 @@
 /**
  * global
  *
- * Used to track UIs for a mob.
+ * Tracks open UIs for a user.
  */
 /mob/var/list/tgui_open_uis = list()
 
 /**
  * global
  *
- * Used to track UIs for a mob.
+ * Tracks open windows for a user.
  */
-/mob/var/list/tgui_open_windows
+/client/var/list/tgui_windows = list()
 
 /**
  * public
@@ -153,8 +153,16 @@
 	// Name the verb, and hide it from the user panel.
 	set name = "uiclose"
 	set hidden = TRUE
-	var/user = src && src.mob
-	SStgui.on_uiclose_verb(user, window_id)
+	var/mob/user = src && src.mob
+	if(!user)
+		return
+	// Close all tgui datums based on window_id.
+	for(var/datum/tgui/ui in user.tgui_open_uis)
+		if(ui.window && ui.window.id == window_id)
+			ui.close(can_be_suspended = FALSE)
+	// Unset machine just to be sure.
+	user.unset_machine()
+	// TODO: Close the window.
 
 /**
  * Middleware for /client/Topic. This proc allows processing topic calls
@@ -163,28 +171,33 @@
  * return bool Whether the topic is passed (TRUE), or cancelled (FALSE).
  */
 /proc/tgui_Topic(href, href_list, hsrc)
-	// Process tgui logs
-	if(href_list["action"] == "tgui:log")
-		var/message = href_list["message"]
-		log_tgui("[usr] ([usr.ckey]):\n[message]")
-	if(href_list["action"] == "tgui:initialize")
-		// Locate an uninitialized tgui datum
-		var/window_id = href_list["window_id"]
-		for(var/datum/tgui/ui in usr.tgui_open_uis)
-			if(ui.window_id == window_id)
-				log_tgui("[usr] ([usr.ckey]):\nInitialized 'window_id' [ui].")
-				ui.Topic(href, href_list)
-				return FALSE
-		log_tgui("[usr] ([usr.ckey]):\nForce closing '[window_id]'.")
-		SStgui.close_window(usr, window_id)
+	// Skip non-tgui topics
+	if(!href_list["tgui"])
+		return TRUE
+	var/type = href_list["type"]
+	var/payload
+	var/window_id = href_list["window_id"]
+	var/datum/tgui_window/window
+	var/datum/tgui/ui
+	// Locate window
+	if(window_id)
+		window = usr.client.tgui_windows[window_id]
+		if(!window)
+			log_tgui(usr, "Window did not exist on client, force closing.")
+			usr << browse(null, "window=[window_id]")
+	// Locate UI datum
+	if(href_list["src"])
+		var/located = locate(href_list["src"])
+		if(istype(located, /datum/tgui))
+			ui = located
+	// Decode payload
+	if(href_list["payload"])
+		payload = json_decode(href_list["payload"])
+	// Do middleware things
+	if(type == "log")
+		log_tgui(usr, href_list["message"])
+	if(ui && !ui.on_message(type, payload, href_list))
 		return FALSE
-	// Destroy windows that cannot be suspended due to disconnects
-	if(href_list["action"] == "tgui:close")
-		var/src_object = locate(href_list["src"])
-		if(!istype(src_object, /datum/tgui))
-			var/window_id = href_list["window_id"]
-			log_tgui("[usr] ([usr.ckey]):\nForce closing '[window_id]'.")
-			SStgui.close_window(usr, window_id)
-			return FALSE
-	// Pass
-	return TRUE
+	if(window && !window.on_message(type, payload, href_list))
+		return FALSE
+	return FALSE
