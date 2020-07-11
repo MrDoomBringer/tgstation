@@ -109,14 +109,14 @@ SUBSYSTEM_DEF(tgui)
 	// Couldn't find a UI.
 	if(isnull(ui))
 		return null
+	ui.process_status()
 	// UI ended up with the closed status
 	// or is actively trying to close itself.
 	// FIXME: Doesn't actually fix the paper bug.
 	if(ui.status <= UI_CLOSE)
 		ui.close()
 		return null
-	var/data = src_object.ui_data(user)
-	ui.push_data(data)
+	ui.send_update()
 	return ui
 
 /**
@@ -320,11 +320,4 @@ SUBSYSTEM_DEF(tgui)
 		target.tgui_open_uis.Add(ui)
 	// Clear the old list.
 	source.tgui_open_uis.Cut()
-	// Transfer windows
-	// TODO: Implement transfer
-	// LAZYINITLIST(source.tgui_windows)
-	// LAZYINITLIST(target.tgui_windows)
-	// for(var/window_id in source.tgui_windows)
-	// 	target.tgui_windows[window_id] = source.tgui_windows[window_id]
-	// source.tgui_windows = null
 	return TRUE

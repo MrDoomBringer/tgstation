@@ -6,6 +6,7 @@
 	var/pool_index
 	var/status = TGUI_WINDOW_CLOSED
 	var/locked = FALSE
+	var/datum/tgui/locked_by
 	var/broken = FALSE
 	var/message_queue
 
@@ -21,7 +22,7 @@
 /datum/tgui_window/proc/initialize()
 	log_tgui(client, "[id]/initialize")
 	if(!client)
-		return null
+		return
 	status = TGUI_WINDOW_LOADING
 	message_queue = null
 	// Build window options
@@ -54,17 +55,19 @@
 		&& pool_index <= TGUI_WINDOW_SOFT_LIMIT \
 		&& status >= TGUI_WINDOW_READY
 
-/datum/tgui_window/proc/acquire_lock()
+/datum/tgui_window/proc/acquire_lock(datum/tgui/ui)
 	log_tgui(client, "[id]/acquire_lock")
 	if(!client)
-		return null
+		return
 	locked = TRUE
+	locked_by = ui
 
 /datum/tgui_window/proc/release_lock(can_be_suspended = TRUE)
 	log_tgui(client, "[id]/release_lock")
 	if(!client)
-		return null
+		return
 	locked = FALSE
+	locked_by = null
 	if(can_be_suspended && can_be_suspended())
 		// TODO: Use an intermediate "RELEASED" state
 		// to catch broken windows
@@ -77,12 +80,16 @@
 /datum/tgui_window/proc/close()
 	log_tgui(client, "[id]/close")
 	if(!client)
-		return null
+		return
+	locked = FALSE
+	src.locked_by = null
 	status = TGUI_WINDOW_CLOSED
 	message_queue = null
 	client << browse(null, "window=[id]")
 
 /datum/tgui_window/proc/send_message(type, list/payload, force)
+	if(!client)
+		return
 	var/message = json_encode(list(
 		"type" = type,
 		"payload" = payload,
@@ -97,36 +104,32 @@
 		if(!message_queue)
 			message_queue = list()
 		message_queue += list(message)
-		return null
+		return
 	client << output(message, "[id].browser:update")
 
 /datum/tgui_window/proc/flush_message_queue()
 	if(!client || !message_queue)
-		return null
+		return
 	for(var/message in message_queue)
 		client << output(message, "[id].browser:update")
 	message_queue = null
 
 /datum/tgui_window/proc/on_message(type, list/payload, list/href_list)
-	if(type == "tgui:ready")
-		status = TGUI_WINDOW_READY
-		var/mob/user = client.mob
-		// TODO: Perhaps store the datum that initiated the lock?
-		if(locked)
-			for(var/datum/tgui/ui in user.tgui_open_uis)
-				if(ui.window == src)
-					ui.on_message(type, payload)
-					flush_message_queue()
-					return FALSE
-			// Could not find the UI, release the lock
-			release_lock()
-		return FALSE
-	if(type == "tgui:log")
-		if(href_list["fatal"])
-			broken = TRUE
-		return TRUE
-	if(type == "tgui:set_prefs")
-		if(payload["fancy"])
-			client.prefs.tgui_fancy = payload["fancy"]
-		return FALSE
-	return TRUE
+	switch(type)
+		if("tgui:ready")
+			status = TGUI_WINDOW_READY
+		if("tgui:log")
+			if(href_list["fatal"])
+				broken = TRUE
+		if("tgui:set_prefs")
+			if(payload["fancy"])
+				client.prefs.tgui_fancy = payload["fancy"]
+	// Pass message to UI that requested the lock
+	if(locked && locked_by)
+		locked_by.on_message(type, payload, href_list)
+		flush_message_queue()
+		return
+	// Just close the window if nobody requested the lock
+	if(type == "tgui:close")
+		close()
+		return

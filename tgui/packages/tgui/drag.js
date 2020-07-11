@@ -88,13 +88,14 @@ export const storeWindowGeometry = windowKey => {
   storage.set('geometries', geometries);
 };
 
-export const recallWindowGeometry = async (windowKey, defaults = {}) => {
-  const geometry = storage.get(windowKey);
+export const recallWindowGeometry = async (windowKey, options = {}) => {
+  // Only recall geometry in fancy mode
+  const geometry = options.fancy && storage.get(windowKey);
   if (geometry) {
     logger.log('recalled geometry:', geometry);
   }
-  const pos = geometry?.pos || defaults.pos;
-  const size = defaults.size;
+  const pos = geometry?.pos || options.pos;
+  const size = options.size;
   if (size) {
     setWindowSize(windowId, size);
   }

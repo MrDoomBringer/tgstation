@@ -32,7 +32,7 @@ import { render } from 'inferno';
 import { setupHotReloading } from 'tgui-dev-server/link/client';
 import { loadCSS } from './assets';
 import { backendUpdate, backendSuspendSuccess, selectBackend } from './backend';
-import { IS_IE8 } from './byond';
+import { IS_IE8, callByond } from './byond';
 import { setupDrag } from './drag';
 import { logger } from './logging';
 import { createStore, StoreProvider } from './store';
@@ -135,13 +135,13 @@ const setupApp = () => {
 
   // Subscribe for bankend updates
   window.update = messageJson => {
-    logger.debug(`window.update (${window.__windowId__})`);
     const { suspended } = selectBackend(store.getState());
     // NOTE: messageJson can be an object only if called manually from console.
     // This is useful for debugging tgui in external browsers, like Chrome.
     const message = typeof messageJson === 'string'
       ? parseStateJson(messageJson)
       : messageJson;
+    logger.debug(`received message '${message?.type}'`);
     const { type, payload } = message;
     if (type === 'update') {
       window.__ref__ = payload.config.ref;
@@ -155,7 +155,17 @@ const setupApp = () => {
     }
     if (type === 'suspend') {
       store.dispatch(backendSuspendSuccess());
+      return;
     }
+    if (type === 'ping') {
+      callByond('', {
+        tgui: 1,
+        window_id: window.__windowId__,
+        type: 'tgui:ping_reply',
+      });
+      return;
+    }
+    logger.log('unhandled message', message);
   };
 
   // Enable hot module reloading

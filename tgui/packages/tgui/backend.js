@@ -133,9 +133,8 @@ export const backendMiddleware = store => {
       logger.log(`suspending (${window.__windowId__})`);
       callByond('', {
         tgui: 1,
-        type: 'tgui:close',
-        src: window.__ref__,
         window_id: window.__windowId__,
+        type: 'tgui:close',
       });
       // Show a bluescreen if failed to suspend or force-close in time.
       suspendTimer = setTimeout(() => {
@@ -232,14 +231,12 @@ export const selectBackend = state => state.backend || {};
 export const useBackend = context => {
   const { store } = context;
   const state = selectBackend(store.getState());
-  const ref = state.config.ref;
   const act = (action, params) => {
     callByond('', {
       tgui: 1,
+      window_id: window.__windowId__,
       type: action,
       payload: JSON.stringify(params),
-      src: ref,
-      window_id: window.__windowId__,
     });
   };
   return { ...state, act };
@@ -300,11 +297,10 @@ export const useSharedState = (context, key, initialState) => {
     nextState => {
       callByond('', {
         tgui: 1,
+        window_id: window.__windowId__,
         type: 'tgui:set_shared_state',
         key,
         value: JSON.stringify(nextState) || '',
-        src: ref,
-        window_id: window.__windowId__,
       });
     },
   ];
