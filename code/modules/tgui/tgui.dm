@@ -231,7 +231,7 @@
 		return
 	// Validate previous ping
 	if(world.time - received_ping_at > 5 SECONDS)
-		log_tgui("Zombie window detected, killing it with fire.")
+		log_tgui("ERROR: Zombie window detected, killing it with fire.")
 		close(can_be_suspended = FALSE)
 		return
 	// Send ping

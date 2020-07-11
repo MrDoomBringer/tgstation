@@ -181,7 +181,7 @@
 	if(window_id)
 		window = usr.client.tgui_windows[window_id]
 		if(!window)
-			log_tgui(usr, "Window did not exist on client, force closing.")
+			log_tgui(usr, "ERROR: Couldn't find the window datum, force closing.")
 			usr << browse(null, "window=[window_id]")
 	// Decode payload
 	if(href_list["payload"])
