@@ -109,9 +109,9 @@ window.onerror = function (msg, url, line, col, error) {
   }
   // Send logs to the game server
   Byond.call('', {
-    src: window.__ref__,
+    tgui: 1,
     window_id: window.__windowId__,
-    action: 'tgui:log',
+    type: 'tgui:log',
     fatal: 1,
     message: stack,
   });
@@ -128,8 +128,8 @@ window.update = function (message) {
 };
 Byond.call('', {
   tgui: 1,
-  type: 'tgui:ready',
   window_id: window.__windowId__,
+  type: 'tgui:ready',
 });
 </script>
 

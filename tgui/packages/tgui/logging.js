@@ -35,10 +35,9 @@ const log = (level, ns, ...args) => {
       + '\nUser Agent: ' + navigator.userAgent;
     callByond('', {
       tgui: 1,
+      window_id: window.__windowId__,
       type: 'tgui:log',
       message: logEntry,
-      src: window.__ref__,
-      window_id: window.__windowId__,
     });
   }
 };

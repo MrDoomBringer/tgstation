@@ -338,7 +338,7 @@
 // Again, we have to do this as autoupdate is off
 /obj/item/paper/proc/update_all_ui()
 	for(var/datum/tgui/ui in viewing_ui)
-		ui.update()
+		ui.process(force = TRUE)
 
 // Again, we have to do this as autoupdate is off
 /obj/item/paper/proc/close_all_ui()

@@ -59,11 +59,10 @@
  * optional ui ui to be updated
  */
 /datum/proc/update_static_data(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
-	// If there was no ui to update, there's no static data to update either.
 	if(!ui)
-		return
-	ui.push_data(null, ui_static_data(user), TRUE)
+		ui = SStgui.get_open_ui(user, src)
+	if(ui)
+		ui.send_full_update()
 
 /**
  * public
@@ -178,26 +177,18 @@
 	var/payload
 	var/window_id = href_list["window_id"]
 	var/datum/tgui_window/window
-	var/datum/tgui/ui
 	// Locate window
 	if(window_id)
 		window = usr.client.tgui_windows[window_id]
 		if(!window)
 			log_tgui(usr, "Window did not exist on client, force closing.")
 			usr << browse(null, "window=[window_id]")
-	// Locate UI datum
-	if(href_list["src"])
-		var/located = locate(href_list["src"])
-		if(istype(located, /datum/tgui))
-			ui = located
 	// Decode payload
 	if(href_list["payload"])
 		payload = json_decode(href_list["payload"])
-	// Do middleware things
-	if(type == "log")
+	// Unconditionally collect tgui logs
+	if(type == "tgui:log")
 		log_tgui(usr, href_list["message"])
-	if(ui && !ui.on_message(type, payload, href_list))
-		return FALSE
-	if(window && !window.on_message(type, payload, href_list))
-		return FALSE
-	return FALSE
+	// Pass message to window
+	if(window)
+		window.on_message(type, payload, href_list)

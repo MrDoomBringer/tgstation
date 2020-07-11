@@ -62,7 +62,10 @@ export class Window extends Component {
         || DEFAULT_SIZE[1],
     ];
     setWindowKey(config.window.key);
-    recallWindowGeometry(config.window.key, { size });
+    recallWindowGeometry(config.window.key, {
+      fancy: config.fancy,
+      size,
+    });
     this.updateFancy();
     refocusLayout();
   }
