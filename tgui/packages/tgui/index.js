@@ -31,8 +31,8 @@ import { perf } from 'common/perf';
 import { render } from 'inferno';
 import { setupHotReloading } from 'tgui-dev-server/link/client';
 import { loadCSS } from './assets';
-import { backendUpdate, backendSuspendSuccess, selectBackend } from './backend';
-import { IS_IE8, callByond } from './byond';
+import { backendUpdate, backendSuspendSuccess, selectBackend, sendMessage } from './backend';
+import { IS_IE8 } from './byond';
 import { setupDrag } from './drag';
 import { logger } from './logging';
 import { createStore, StoreProvider } from './store';
@@ -158,10 +158,8 @@ const setupApp = () => {
       return;
     }
     if (type === 'ping') {
-      callByond('', {
-        tgui: 1,
-        window_id: window.__windowId__,
-        type: 'tgui:ping_reply',
+      sendMessage({
+        type: 'pingReply',
       });
       return;
     }

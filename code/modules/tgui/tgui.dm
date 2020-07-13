@@ -1,8 +1,4 @@
 /**
- * tgui
- *
- * /tg/station user interface library
- *
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT
  */
@@ -102,7 +98,11 @@
 	// If we don't have window_id, open proc did not have the opportunity
 	// to finish, therefore it's safe to skip this whole block.
 	if(window)
-		window.release_lock(can_be_suspended)
+		// Windows you want to keep are usually blue screens of death
+		// and we want to keep them around, to allow user to read
+		// the error message properly.
+		window.release_lock()
+		window.close(can_be_suspended)
 		src_object.ui_close(user)
 		SStgui.on_close(src)
 	state = null
@@ -201,23 +201,23 @@
 	return json_data
 
 /datum/tgui/proc/on_message(type, list/payload, list/href_list)
-	if(type && copytext(type, 1, 6) != "tgui:")
+	if(type && copytext(type, 1, 5) == "act/")
 		process_status()
-		if(src_object.ui_act(type, payload, src, state))
+		if(src_object.ui_act(copytext(type, 5), payload, src, state))
 			SStgui.update_uis(src_object)
 		return FALSE
 	switch(type)
-		if("tgui:ready")
+		if("ready")
 			initialized = TRUE
-		if("tgui:close")
+		if("close")
 			close()
-		if("tgui:log")
+		if("log")
 			if(href_list["fatal"])
-				autoupdate = FALSE
-		if("tgui:ping_reply")
+				close(can_be_suspended = FALSE)
+		if("pingReply")
 			initialized = TRUE
 			received_ping_at = world.time
-		if("tgui:set_shared_state")
+		if("setSharedState")
 			LAZYINITLIST(src_object.tgui_shared_states)
 			src_object.tgui_shared_states[href_list["key"]] = href_list["value"]
 			SStgui.update_uis(src_object)
@@ -226,7 +226,8 @@
 	if(closing)
 		return
 	var/datum/host = src_object.ui_host(user)
-	if(!src_object || !host || !user) // If the object or user died (or something else), abort.
+	// If the object or user died (or something else), abort.
+	if(!src_object || !host || !user)
 		close(can_be_suspended = FALSE)
 		return
 	// Validate previous ping

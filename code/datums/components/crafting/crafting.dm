@@ -409,13 +409,8 @@
 			display_compact = !display_compact
 			. = TRUE
 		if("set_category")
-			if(!isnull(params["category"]))
-				cur_category = params["category"]
-			if(!isnull(params["subcategory"]))
-				if(params["subcategory"] == "0")
-					cur_subcategory = ""
-				else
-					cur_subcategory = params["subcategory"]
+			cur_category = params["category"]
+			cur_subcategory = params["subcategory"] || ""
 			. = TRUE
 
 /datum/component/personal_crafting/proc/build_recipe_data(datum/crafting_recipe/R)

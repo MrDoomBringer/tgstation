@@ -93,7 +93,6 @@ export const PersonalCrafting = (props, context) => {
                     selected={category.name === tab}
                     onClick={() => {
                       setTab(category.name);
-                      // Backend expects `0` or '' to indicate no subcategory
                       act('set_category', {
                         category: category.category,
                         subcategory: category.subcategory,

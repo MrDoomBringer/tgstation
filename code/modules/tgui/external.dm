@@ -1,7 +1,5 @@
 /**
- * tgui external
- *
- * Contains all external tgui definitions, such as src_object APIs.
+ * External tgui definitions, such as src_object APIs.
  *
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT
@@ -156,16 +154,10 @@
 	if(!user)
 		return
 	// Close all tgui datums based on window_id.
-	for(var/datum/tgui/ui in user.tgui_open_uis)
-		if(ui.window && ui.window.id == window_id)
-			ui.close(can_be_suspended = FALSE)
-	// Unset machine just to be sure.
-	user.unset_machine()
-	// TODO: Close the window.
+	SStgui.force_close_window(user, window_id)
 
 /**
- * Middleware for /client/Topic. This proc allows processing topic calls
- * before they reach /datum/tgui.
+ * Middleware for /client/Topic.
  *
  * return bool Whether the topic is passed (TRUE), or cancelled (FALSE).
  */
@@ -174,21 +166,23 @@
 	if(!href_list["tgui"])
 		return TRUE
 	var/type = href_list["type"]
-	var/payload
+	// Unconditionally collect tgui logs
+	if(type == "log")
+		log_tgui(usr, href_list["message"])
+	// Locate window
 	var/window_id = href_list["window_id"]
 	var/datum/tgui_window/window
-	// Locate window
 	if(window_id)
 		window = usr.client.tgui_windows[window_id]
 		if(!window)
-			log_tgui(usr, "ERROR: Couldn't find the window datum, force closing.")
-			usr << browse(null, "window=[window_id]")
+			log_tgui(usr, "WARNING: Couldn't find the window datum, force closing.")
+			SStgui.force_close_window(usr, window_id)
+			return FALSE
 	// Decode payload
+	var/payload
 	if(href_list["payload"])
 		payload = json_decode(href_list["payload"])
-	// Unconditionally collect tgui logs
-	if(type == "tgui:log")
-		log_tgui(usr, href_list["message"])
 	// Pass message to window
 	if(window)
 		window.on_message(type, payload, href_list)
+	return FALSE

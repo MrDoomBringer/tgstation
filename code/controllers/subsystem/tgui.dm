@@ -80,12 +80,22 @@ SUBSYSTEM_DEF(tgui)
 
 /datum/controller/subsystem/tgui/proc/force_close_all_windows(mob/user)
 	log_tgui(user, "force_close_all_windows")
-	if(!user.client)
-		return null
-	user.client.tgui_windows = list()
-	for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
-		var/window_id = TGUI_WINDOW_ID(i)
-		user << browse(null, "window=[window_id]")
+	if(user.client)
+		user.client.tgui_windows = list()
+		for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
+			var/window_id = TGUI_WINDOW_ID(i)
+			user << browse(null, "window=[window_id]")
+
+/datum/controller/subsystem/tgui/proc/force_close_window(mob/user, window_id)
+	log_tgui(user, "force_close_window")
+	// Close all tgui datums based on window_id.
+	for(var/datum/tgui/ui in user.tgui_open_uis)
+		if(ui.window && ui.window.id == window_id)
+			ui.close(can_be_suspended = FALSE)
+	// Unset machine just to be sure.
+	user.unset_machine()
+	// Close window directly just to be sure.
+	user << browse(null, "window=[window_id]")
 
 /**
  * public

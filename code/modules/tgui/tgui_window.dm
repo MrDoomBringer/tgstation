@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2020 Aleksej Komarov
+ * SPDX-License-Identifier: MIT
+ */
+
 /datum/tgui_window
 	var/id
 	var/client/client
@@ -7,7 +12,7 @@
 	var/status = TGUI_WINDOW_CLOSED
 	var/locked = FALSE
 	var/datum/tgui/locked_by
-	var/broken = FALSE
+	var/fatally_errored = FALSE
 	var/message_queue
 
 /datum/tgui_window/New(client/client, id, pooled = FALSE)
@@ -24,6 +29,7 @@
 	if(!client)
 		return
 	status = TGUI_WINDOW_LOADING
+	fatally_errored = FALSE
 	message_queue = null
 	// Build window options
 	var/options = "file=[id].html;can_minimize=0;auto_format=0;"
@@ -49,7 +55,7 @@
 	return status == TGUI_WINDOW_READY
 
 /datum/tgui_window/proc/can_be_suspended()
-	return !broken \
+	return !fatally_errored \
 		&& pooled \
 		&& pool_index > 0 \
 		&& pool_index <= TGUI_WINDOW_SOFT_LIMIT \
@@ -57,35 +63,31 @@
 
 /datum/tgui_window/proc/acquire_lock(datum/tgui/ui)
 	log_tgui(client, "[id]/acquire_lock")
-	if(!client)
-		return
 	locked = TRUE
 	locked_by = ui
 
-/datum/tgui_window/proc/release_lock(can_be_suspended = TRUE)
+/datum/tgui_window/proc/release_lock()
 	log_tgui(client, "[id]/release_lock")
-	if(!client)
-		return
 	locked = FALSE
 	locked_by = null
-	if(can_be_suspended && can_be_suspended())
-		// TODO: Use an intermediate "RELEASED" state
-		// to catch broken windows
-		log_tgui(client, "suspending")
-		status = TGUI_WINDOW_READY
-		send_message("suspend")
-	else
-		close()
 
-/datum/tgui_window/proc/close()
+/datum/tgui_window/proc/close(can_be_suspended = TRUE)
 	log_tgui(client, "[id]/close")
 	if(!client)
 		return
+	if(can_be_suspended && can_be_suspended())
+		log_tgui(client, "suspending")
+		status = TGUI_WINDOW_READY
+		send_message("suspend")
+		return
 	locked = FALSE
-	src.locked_by = null
+	locked_by = null
 	status = TGUI_WINDOW_CLOSED
 	message_queue = null
-	client << browse(null, "window=[id]")
+	// Do not close the window to give user some time
+	// to read the error message.
+	if(!fatally_errored)
+		client << browse(null, "window=[id]")
 
 /datum/tgui_window/proc/send_message(type, list/payload, force)
 	if(!client)
@@ -116,12 +118,12 @@
 
 /datum/tgui_window/proc/on_message(type, list/payload, list/href_list)
 	switch(type)
-		if("tgui:ready")
+		if("ready")
 			status = TGUI_WINDOW_READY
-		if("tgui:log")
+		if("log")
 			if(href_list["fatal"])
-				broken = TRUE
-		if("tgui:set_prefs")
+				fatally_errored = TRUE
+		if("setPrefs")
 			if(payload["fancy"])
 				client.prefs.tgui_fancy = payload["fancy"]
 	// Pass message to UI that requested the lock
@@ -130,6 +132,6 @@
 		flush_message_queue()
 		return
 	// Just close the window if nobody requested the lock
-	if(type == "tgui:close")
-		close()
+	if(type == "close")
+		close(can_be_suspended = FALSE)
 		return

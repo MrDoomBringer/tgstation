@@ -314,21 +314,21 @@
 	)
 
 /obj/item/paper/ui_interact(mob/user, datum/tgui/ui,
-		datum/ui_state/default/paper_state/state = new)
+		datum/ui_state/default/paper_state/state)
+	// Update the state
+	ui = ui || SStgui.get_open_ui(user, src)
+	if(ui && state)
+		var/datum/ui_state/default/paper_state/current_state = ui.state
+		current_state.copy_from(state)
+	// Update the UI
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		// The x size is because we double the width for the editor
 		ui = new(user, src, "PaperSheet", name)
+		state = new
 		ui.set_state(state)
 		ui.set_autoupdate(FALSE)
 		viewing_ui[user] = ui
 		ui.open()
-	else
-		var/datum/ui_state/default/paper_state/last_state = ui.state
-		if(last_state)
-			last_state.copy_from(state)
-		else
-			ui.set_state(state)
 
 /obj/item/paper/ui_close(mob/user)
 	/// close the editing window and change the mode
