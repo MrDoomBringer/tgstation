@@ -338,6 +338,17 @@
 
 		Insert(initial(D.id), I)
 	return ..()
+/datum/asset/spritesheet/supplypods
+	name = "supplypods"
+
+/datum/asset/spritesheet/supplypods/register()
+	var/obj/structure/closet/supplypod/pod
+	var/shippingLane = GLOB.areas_by_type[/area/centcom/supplypod/fly_me_to_the_moon]
+	for (var/styler in POD_STYLES)
+		pod = new(shippingLane, styler)
+		var/icon/I = new(pod)
+		Insert(styler, I)
+	return ..()
 
 /datum/asset/spritesheet/vending
 	name = "vending"
