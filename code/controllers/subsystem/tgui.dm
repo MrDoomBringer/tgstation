@@ -48,6 +48,15 @@ SUBSYSTEM_DEF(tgui)
 		if(MC_TICK_CHECK)
 			return
 
+/**
+ * public
+ *
+ * Requests a usable tgui window from the pool.
+ * Returns null if pool was exhausted.
+ *
+ * required user mob
+ * return datum/tgui
+ */
 /datum/controller/subsystem/tgui/proc/request_pooled_window(mob/user)
 	log_tgui(user, "request_pooled_window()")
 	if(!user.client)
@@ -78,6 +87,13 @@ SUBSYSTEM_DEF(tgui)
 		return null
 	return window
 
+/**
+ * public
+ *
+ * Force closes all tgui windows.
+ *
+ * required user mob
+ */
 /datum/controller/subsystem/tgui/proc/force_close_all_windows(mob/user)
 	log_tgui(user, "force_close_all_windows")
 	if(user.client)
@@ -86,6 +102,14 @@ SUBSYSTEM_DEF(tgui)
 			var/window_id = TGUI_WINDOW_ID(i)
 			user << browse(null, "window=[window_id]")
 
+/**
+ * public
+ *
+ * Force closes the tgui window by window_id.
+ *
+ * required user mob
+ * required window_id string
+ */
 /datum/controller/subsystem/tgui/proc/force_close_window(mob/user, window_id)
 	log_tgui(user, "force_close_window")
 	// Close all tgui datums based on window_id.
@@ -130,7 +154,7 @@ SUBSYSTEM_DEF(tgui)
 	return ui
 
 /**
- * private
+ * public
  *
  * Get a open UI given a user and src_object.
  *
@@ -151,7 +175,7 @@ SUBSYSTEM_DEF(tgui)
 	return null
 
 /**
- * private
+ * public
  *
  * Update all UIs attached to src_object.
  *
@@ -173,7 +197,7 @@ SUBSYSTEM_DEF(tgui)
 	return count
 
 /**
- * private
+ * public
  *
  * Close all UIs attached to src_object.
  *
@@ -195,7 +219,7 @@ SUBSYSTEM_DEF(tgui)
 	return count
 
 /**
- * private
+ * public
  *
  * Close all UIs regardless of their attachment to src_object.
  *
@@ -212,7 +236,7 @@ SUBSYSTEM_DEF(tgui)
 	return count
 
 /**
- * private
+ * public
  *
  * Update all UIs belonging to a user.
  *
@@ -233,7 +257,7 @@ SUBSYSTEM_DEF(tgui)
 	return count
 
 /**
- * private
+ * public
  *
  * Close all UIs belonging to a user.
  *
