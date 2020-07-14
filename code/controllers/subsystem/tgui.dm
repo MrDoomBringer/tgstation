@@ -74,7 +74,7 @@ SUBSYSTEM_DEF(tgui)
 			window_found = TRUE
 			break
 	if(!window_found)
-		log_tgui(user, "WARNING: Pool exhausted")
+		log_tgui(user, "Error: Pool exhausted")
 		return null
 	return window
 

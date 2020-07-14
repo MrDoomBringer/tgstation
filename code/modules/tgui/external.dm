@@ -175,7 +175,7 @@
 	if(window_id)
 		window = usr.client.tgui_windows[window_id]
 		if(!window)
-			log_tgui(usr, "WARNING: Couldn't find the window datum, force closing.")
+			log_tgui(usr, "Error: Couldn't find the window datum, force closing.")
 			SStgui.force_close_window(usr, window_id)
 			return FALSE
 	// Decode payload

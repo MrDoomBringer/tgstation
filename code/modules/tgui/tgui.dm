@@ -17,6 +17,8 @@
 	var/datum/tgui_window/window
 	/// Key that is used for remembering the window geometry.
 	var/window_key
+	/// Deprecated: Window size.
+	var/window_size
 	/// The interface (template) to be used for this UI.
 	var/interface
 	/// Update the UI every MC tick.
@@ -29,10 +31,11 @@
 	var/status = UI_INTERACTIVE
 	/// Topic state used to determine status/interactability.
 	var/datum/ui_state/state = null
-	/// Asset data to be sent with every update.
+	/// Asset data to be sent with every update
 	var/list/asset_data
-	/// Timestamp of the last ping
-	var/received_ping_at
+	// Ping timestamp holders
+	var/ping_sent_at
+	var/ping_received_at
 
 /**
  * public
@@ -43,11 +46,13 @@
  * required src_object datum The object or datum which owns the UI.
  * required interface string The interface used to render the UI.
  * optional title string The title of the UI.
+ * optional ui_x int Deprecated: Window width.
+ * optional ui_y int Deprecated: Window height.
  *
  * return datum/tgui The requested UI.
  */
-/datum/tgui/New(mob/user, datum/src_object, interface, title)
-	log_tgui(user, "new [interface] fancy [user?.client?.prefs.tgui_fancy]")
+/datum/tgui/New(mob/user, datum/src_object, interface, title, ui_x, ui_y)
+	log_tgui(user, "new [interface] fancy [user.client.prefs.tgui_fancy]")
 	src.user = user
 	src.src_object = src_object
 	src.window_key = "[REF(src_object)]-main"
@@ -55,6 +60,9 @@
 	if(title)
 		src.title = title
 	src.state = src_object.ui_state()
+	// Deprecated
+	if(ui_x && ui_y)
+		src.window_size = list(ui_x, ui_y)
 
 /**
  * public
@@ -69,8 +77,10 @@
 	process_status()
 	if(status < UI_UPDATE)
 		return null
-	// Initialize with current time because process() checks this for timeouts
-	received_ping_at = world.time
+	// Initialize with current time because process() checks this
+	// early for timeouts
+	ping_sent_at = world.time
+	ping_received_at = world.time
 	window = SStgui.request_pooled_window(user)
 	if(!window)
 		return null
@@ -90,6 +100,8 @@
  * public
  *
  * Close the UI.
+ *
+ * optional can_be_suspended bool
  */
 /datum/tgui/proc/close(can_be_suspended = TRUE)
 	if(closing)
@@ -144,6 +156,14 @@
 		LAZYADD(asset_data["styles"], list(spritesheet.css_filename()))
 	asset.send(user)
 
+/**
+ * public
+ *
+ * Send a full update to the client (includes static data).
+ *
+ * optional custom_data list Custom data to send instead of ui_data.
+ * optional force bool Send an update even if UI is not interactive.
+ */
 /datum/tgui/proc/send_full_update(custom_data, force)
 	if(!user.client || !initialized || closing)
 		return
@@ -153,6 +173,14 @@
 		with_data = should_update_data,
 		with_static_data = TRUE))
 
+/**
+ * public
+ *
+ * Send a partial update to the client (excludes static data).
+ *
+ * optional custom_data list Custom data to send instead of ui_data.
+ * optional force bool Send an update even if UI is not interactive.
+ */
 /datum/tgui/proc/send_update(custom_data, force)
 	if(!user.client || !initialized || closing)
 		return
@@ -166,7 +194,7 @@
  *
  * Package the data to send to the UI, as JSON.
  *
- * return list JSON
+ * return list
  */
 /datum/tgui/proc/get_payload(custom_data, with_data, with_static_data)
 	var/list/json_data = list()
@@ -183,6 +211,7 @@
 		"window" = list(
 			"id" = window.id,
 			"key" = window_key,
+			"size" = window_size,
 		),
 		// NOTE: Intentional \ref usage; tgui datums can't/shouldn't
 		// be tagged, so this is an effective unwrap
@@ -200,6 +229,61 @@
 		json_data["shared"] = src_object.tgui_shared_states
 	return json_data
 
+/**
+ * private
+ *
+ * Run an update cycle for this UI. Called internally by SStgui
+ * every second or so.
+ */
+/datum/tgui/process(force = FALSE)
+	if(closing)
+		return
+	var/datum/host = src_object.ui_host(user)
+	// If the object or user died (or something else), abort.
+	if(!src_object || !host || !user)
+		close(can_be_suspended = FALSE)
+		return
+	// Validate previous ping
+	if(ping_received_at - ping_sent_at > TGUI_PING_TIMEOUT)
+		// Print lots of debug info since it's hard to debug
+		log_tgui(user, \
+			"Error: Zombie window detected, killing it with fire.\n" \
+			+ "window_id: [window && window.id]\n" \
+			+ "ping_sent_at: [ping_sent_at]\n" \
+			+ "ping_received_at: [ping_received_at]\n" \
+			+ "world.time: [world.time]")
+		close(can_be_suspended = FALSE)
+		return
+	// Send a new ping
+	ping_sent_at = world.time
+	window.send_message("ping")
+	// Update through a normal call to ui_interact
+	if(status != UI_DISABLED && (autoupdate || force))
+		src_object.ui_interact(user, src)
+		return
+	// Update status only
+	var/needs_update = process_status()
+	if(status <= UI_CLOSE)
+		close()
+		return
+	if(needs_update)
+		window.send_message("update", get_payload())
+
+/**
+ * private
+ *
+ * Updates the status, and returns TRUE if status has changed.
+ */
+/datum/tgui/proc/process_status()
+	var/prev_status = status
+	status = src_object.ui_status(user, state)
+	return prev_status != status
+
+/**
+ * private
+ *
+ * Callback for handling incoming tgui messages.
+ */
 /datum/tgui/proc/on_message(type, list/payload, list/href_list)
 	if(type && copytext(type, 1, 5) == "act/")
 		process_status()
@@ -216,40 +300,8 @@
 				close(can_be_suspended = FALSE)
 		if("pingReply")
 			initialized = TRUE
-			received_ping_at = world.time
+			ping_received_at = world.time
 		if("setSharedState")
 			LAZYINITLIST(src_object.tgui_shared_states)
 			src_object.tgui_shared_states[href_list["key"]] = href_list["value"]
 			SStgui.update_uis(src_object)
-
-/datum/tgui/process(force = FALSE)
-	if(closing)
-		return
-	var/datum/host = src_object.ui_host(user)
-	// If the object or user died (or something else), abort.
-	if(!src_object || !host || !user)
-		close(can_be_suspended = FALSE)
-		return
-	// Validate previous ping
-	if(world.time - received_ping_at > 5 SECONDS)
-		log_tgui(user, "ERROR: Zombie window detected, killing it with fire.")
-		close(can_be_suspended = FALSE)
-		return
-	// Send ping
-	window.send_message("ping")
-	// Update through a normal call to ui_interact
-	if(status != UI_DISABLED && (autoupdate || force))
-		src_object.ui_interact(user, src)
-		return
-	// Update status only
-	var/needs_update = process_status()
-	if(status <= UI_CLOSE)
-		close()
-		return
-	if(needs_update)
-		window.send_message("update", get_payload())
-
-/datum/tgui/proc/process_status()
-	var/prev_status = status
-	status = src_object.ui_status(user, state)
-	return prev_status != status

@@ -6,7 +6,6 @@
 /datum/tgui_window
 	var/id
 	var/client/client
-	var/ckey
 	var/pooled
 	var/pool_index
 	var/status = TGUI_WINDOW_CLOSED
@@ -15,15 +14,29 @@
 	var/fatally_errored = FALSE
 	var/message_queue
 
+/**
+ * public
+ *
+ * Create a new tgui window.
+ *
+ * required client /client
+ * required id string A unique window identifier.
+ */
 /datum/tgui_window/New(client/client, id, pooled = FALSE)
 	src.id = id
 	src.client = client
-	src.ckey = client.ckey
 	src.pooled = pooled
 	if(pooled)
 		client.tgui_windows[id] = src
 		src.pool_index = TGUI_WINDOW_INDEX(id)
 
+/**
+ * public
+ *
+ * Initializes the window with a fresh page. Puts window into the "loading"
+ * state. You can begin sending messages right after initializing. Messages
+ * will be put into the queue until the window finishes loading.
+ */
 /datum/tgui_window/proc/initialize()
 	log_tgui(client, "[id]/initialize")
 	if(!client)
@@ -51,9 +64,23 @@
 	// Instruct the client to signal UI when the window is closed.
 	winset(client, id, "on-close=\"uiclose [id]\"")
 
+/**
+ * public
+ *
+ * Checks if the window is ready to receive data.
+ *
+ * return bool
+ */
 /datum/tgui_window/proc/is_ready()
 	return status == TGUI_WINDOW_READY
 
+/**
+ * public
+ *
+ * Checks if the window can be sanely suspended.
+ *
+ * return bool
+ */
 /datum/tgui_window/proc/can_be_suspended()
 	return !fatally_errored \
 		&& pooled \
@@ -61,16 +88,37 @@
 		&& pool_index <= TGUI_WINDOW_SOFT_LIMIT \
 		&& status >= TGUI_WINDOW_READY
 
+/**
+ * public
+ *
+ * Acquire the window lock. Pool will not be able to provide this window
+ * to other UIs for the duration of the lock.
+ *
+ * Can be given an optional tgui datum, which will hook its on_message
+ * callback into the message stream.
+ *
+ * optional ui /datum/tgui
+ */
 /datum/tgui_window/proc/acquire_lock(datum/tgui/ui)
 	log_tgui(client, "[id]/acquire_lock")
 	locked = TRUE
 	locked_by = ui
 
+/**
+ * Release the window lock.
+ */
 /datum/tgui_window/proc/release_lock()
 	log_tgui(client, "[id]/release_lock")
 	locked = FALSE
 	locked_by = null
 
+/**
+ * public
+ *
+ * Close the UI.
+ *
+ * optional can_be_suspended bool
+ */
 /datum/tgui_window/proc/close(can_be_suspended = TRUE)
 	log_tgui(client, "[id]/close")
 	if(!client)
@@ -89,6 +137,15 @@
 	if(!fatally_errored)
 		client << browse(null, "window=[id]")
 
+/**
+ * public
+ *
+ * Sends a message to tgui window.
+ *
+ * required type string Message type
+ * required payload list Message payload
+ * optional force bool Send regardless of the ready status.
+ */
 /datum/tgui_window/proc/send_message(type, list/payload, force)
 	if(!client)
 		return
@@ -109,6 +166,11 @@
 		return
 	client << output(message, "[id].browser:update")
 
+/**
+ * private
+ *
+ * Sends queued messages if the queue wasn't empty.
+ */
 /datum/tgui_window/proc/flush_message_queue()
 	if(!client || !message_queue)
 		return
@@ -116,6 +178,11 @@
 		client << output(message, "[id].browser:update")
 	message_queue = null
 
+/**
+ * private
+ *
+ * Callback for handling incoming tgui messages.
+ */
 /datum/tgui_window/proc/on_message(type, list/payload, list/href_list)
 	switch(type)
 		if("ready")
