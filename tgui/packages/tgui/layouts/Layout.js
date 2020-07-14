@@ -6,6 +6,7 @@
 
 import { classes } from 'common/react';
 import { IS_IE8 } from '../byond';
+import { computeBoxProps, computeBoxClassName } from '../components/Box';
 
 /**
  * Brings Layout__content DOM element back to focus.
@@ -47,6 +48,7 @@ const LayoutContent = props => {
     className,
     scrollable,
     children,
+    ...rest
   } = props;
   return (
     <div
@@ -55,7 +57,9 @@ const LayoutContent = props => {
         'Layout__content',
         scrollable && 'Layout__content--scrollable',
         className,
-      ])}>
+        ...computeBoxClassName(rest),
+      ])}
+      {...computeBoxProps(rest)}>
       {children}
     </div>
   );

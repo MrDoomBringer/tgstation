@@ -8,6 +8,10 @@
 
 @use '../colors.scss' with (
   $primary: #ffffff,
+  $bg-lightness: -25%,
+  $fg-lightness: -10%,
+  // Commenting out color maps will adjust all colors based on the lightness
+  // settings above, but will add extra 10KB to the theme.
   $fg-map-keys: (),
   $bg-map-keys: (),
 );
@@ -15,7 +19,6 @@
   $color-fg: #000000,
   $color-bg: #ffffff,
   $color-bg-grad-spread: 0%,
-  $border-radius: 0px,
 );
 
 $font-size: 24px;
@@ -28,12 +31,17 @@ $font-size: 24px;
 
   // Components
   @include meta.load-css('../components/Tabs.scss');
+  @include meta.load-css('../components/Section.scss', $with: (
+    'color-background': rgba(0, 0, 0, 0.1),
+    'color-shadow': rgba(0, 0, 0, 0.2),
+  ));
   @include meta.load-css('../components/Button.scss', $with: (
     'color-default': #E8E4C9,
     'color-disabled': #363636,
     'color-selected': #9d0808,
     'color-caution': #be6209,
     'color-danger': #9a9d00,
+    'color-transparent-text': rgba(0, 0, 0, 0.5),
   ));
 
   // Layouts
@@ -105,7 +113,6 @@ $font-size: 24px;
     input:disabled {
       position: relative;
       display: inline-block;
-
       border: none;
       background: transparent;
       border-bottom: 1px solid #000;
@@ -120,7 +127,6 @@ $font-size: 24px;
     input {
       position: relative;
       display: inline-block;
-
       border: none;
       background: transparent;
       border-bottom: 1px solid #000;
@@ -162,5 +168,4 @@ $font-size: 24px;
       overflow: visible;
     }
   }
-
 }

@@ -296,7 +296,11 @@ export const useLocalState = (context, key, initialState) => {
   return [
     sharedState,
     nextState => {
-      store.dispatch(backendSetSharedState(key, nextState));
+      store.dispatch(backendSetSharedState(key, (
+        typeof nextState === 'function'
+          ? nextState(sharedState)
+          : nextState
+      )));
     },
   ];
 };
@@ -328,7 +332,11 @@ export const useSharedState = (context, key, initialState) => {
       sendMessage({
         type: 'setSharedState',
         key,
-        value: JSON.stringify(nextState) || '',
+        value: JSON.stringify(
+          typeof nextState === 'function'
+            ? nextState(sharedState)
+            : nextState
+        ) || '',
       });
     },
   ];
