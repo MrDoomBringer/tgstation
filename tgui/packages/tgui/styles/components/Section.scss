@@ -48,6 +48,7 @@ $color-separator: colors.$primary !default;
 
 .Section__content {
   padding: 8px 6px;
+  position: relative;
 }
 
 .Section--fill {

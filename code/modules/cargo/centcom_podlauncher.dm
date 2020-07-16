@@ -41,6 +41,12 @@
 	var/list/launchList = list() //Contains whatever is going to be put in the supplypod and fired. Taken from acceptableTurfs
 	var/obj/effect/supplypod_selector/selector = new() //An effect used for keeping track of what item is going to be launched when in "ordered" mode (launchChoice = 1)
 	var/obj/structure/closet/supplypod/centcompod/temp_pod //The temporary pod that is modified by this datum, then cloned. The buildObject() clone of this pod is what is launched
+	// Stuff needed to render the map
+	var/map_name
+	var/obj/screen/map_view/cam_screen
+	var/list/cam_plane_masters
+	var/obj/screen/background/cam_background
+	var/tabIndex = 0
 
 /datum/centcom_podlauncher/New(H)//H can either be a client or a mob due to byondcode(tm)
 	if (istype(H,/client))
@@ -52,13 +58,42 @@
 	bay =  locate(/area/centcom/supplypod/loading/one) in GLOB.sortedAreas //Locate the default bay (one) from the centcom map
 	temp_pod = new(locate(/area/centcom/supplypod/pod_storage) in GLOB.sortedAreas) //Create a new temp_pod in the podStorage area on centcom (so users are free to look at it and change other variables if needed)
 	orderedArea = createOrderedArea(bay) //Order all the turfs in the selected bay (top left to bottom right) to a single list. Used for the "ordered" mode (launchChoice = 1)
+	
+	map_name = "admin_supplypod_bay_[REF(src)]_map"
+	// Initialize map objects
+	cam_screen = new
+	cam_screen.name = "screen"
+	cam_screen.assigned_map = map_name
+	cam_screen.del_on_map_removal = FALSE
+	cam_screen.screen_loc = "[map_name]:1,1"
+	cam_plane_masters = list()
+	for(var/plane in subtypesof(/obj/screen/plane_master))
+		var/obj/screen/instance = new plane()
+		instance.assigned_map = map_name
+		instance.del_on_map_removal = FALSE
+		instance.screen_loc = "[map_name]:CENTER"
+		cam_plane_masters += instance
+	cam_background = new
+	cam_background.assigned_map = map_name
+	cam_background.del_on_map_removal = FALSE
 
 /datum/centcom_podlauncher/ui_state(mob/user)
 	return GLOB.admin_state
 
+/datum/centcom_podlauncher/ui_static_data()
+	var/list/data = list()
+	data["mapRef"] = map_name
+	return data
+
 /datum/centcom_podlauncher/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
+		// Register map objects
+		user.client.register_map_obj(cam_screen)
+		for(var/plane in cam_plane_masters)
+			user.client.register_map_obj(plane)
+		user.client.register_map_obj(cam_background)
+		// Open UI
 		ui = new(user, src, "CentcomPodLauncher")
 		ui.open()
 
@@ -110,6 +145,7 @@
 		////////////////////////////UTILITIES//////////////////
 		if("bay1")
 			bay =  locate(/area/centcom/supplypod/loading/one) in GLOB.sortedAreas //set the "bay" variable to the corresponding room in centcom
+			
 			refreshBay() //calls refreshBay() which "recounts" the bay to see what items we can launch (among other things).
 			. = TRUE
 		if("bay2")
@@ -145,8 +181,11 @@
 			. = TRUE
 		if("teleportCentcom") //Teleports the user to the centcom supply loading facility.
 			var/mob/M = holder.mob //We teleport whatever mob the client is attached to at the point of clicking
-			oldTurf = get_turf(M) //Used for the "teleportBack" action
+			var/turf/current_location = get_turf(M)
+			var/area/current_area = current_location.loc
 			var/area/A = locate(bay) in GLOB.sortedAreas
+			if (current_area != A)
+				oldTurf = current_location
 			var/list/turfs = list()
 			for(var/turf/T in A)
 				turfs.Add(T) //Fill a list with turfs in the area
@@ -425,6 +464,14 @@
 		////////////////////////////STYLE CHANGES//////////////////
 		//Style is a value that is used to keep track of what the pod is supposed to look like. It can be used with the POD_STYLES list (in cargo.dm defines)
 		//as a way to get the proper icon state, name, and description of the pod.
+		if("tabSwitch")
+			tabIndex = params["tabIndex"]
+			message_admins(tabIndex)
+			if (tabIndex==0)
+				setupViewPod()
+			else
+				setupViewBay()
+			. = TRUE
 		if("styleStandard")
 			temp_pod.setStyle(STYLE_STANDARD)
 			. = TRUE
@@ -477,8 +524,39 @@
 				refreshBay()
 			. = TRUE
 
-/datum/centcom_podlauncher/ui_close() //Uses the destroy() proc. When the user closes the UI, we clean up the temp_pod and supplypod_selector variables.
+
+/datum/centcom_podlauncher/ui_close(mob/user) //Uses the destroy() proc. When the user closes the UI, we clean up the temp_pod and supplypod_selector variables.
+
+	user.client.clear_map(map_name)
+	qdel(cam_screen)
+	QDEL_LIST(cam_plane_masters)
+	qdel(cam_background)
 	qdel(src)
+
+/datum/centcom_podlauncher/proc/setupViewPod()
+	var/list/visible_turfs = list(temp_pod)
+
+	var/list/bbox = get_bbox_of_atoms(visible_turfs)
+	var/size_x = bbox[3] - bbox[1] + 1
+	var/size_y = (bbox[4]+0.25) - bbox[2] + 1
+
+	cam_screen.vis_contents = visible_turfs
+	cam_background.icon_state = "clear"
+	cam_background.fill_rect(1, 1, size_x, size_y)
+
+/datum/centcom_podlauncher/proc/setupViewBay()
+	var/list/visible_turfs = list()
+
+	for(var/turf/T in bay)
+		visible_turfs += T
+
+	var/list/bbox = get_bbox_of_atoms(visible_turfs)
+	var/size_x = bbox[3] - bbox[1] + 1
+	var/size_y = bbox[4] - bbox[2] + 1
+
+	cam_screen.vis_contents = visible_turfs
+	cam_background.icon_state = "clear"
+	cam_background.fill_rect(1, 1, size_x, size_y)
 
 /datum/centcom_podlauncher/proc/updateCursor(var/launching, var/turf_picking) //Update the mouse of the user
 	if (!holder) //Can't update the mouse icon if the client doesnt exist!
@@ -550,6 +628,8 @@
 /datum/centcom_podlauncher/proc/refreshBay() //Called whenever the bay is switched, as well as wheneber a pod is launched
 	orderedArea = createOrderedArea(bay) //Create an ordered list full of turfs form the bay
 	preLaunch()	//Fill acceptable turfs from orderedArea, then fill launchList from acceptableTurfs (see proc for more info)
+	if(tabIndex == 1)
+		setupViewBay()
 
 /datum/centcom_podlauncher/proc/createOrderedArea(area/A) //This assumes the area passed in is a continuous square
 	if (isnull(A)) //If theres no supplypod bay mapped into centcom, throw an error

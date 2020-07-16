@@ -1,39 +1,359 @@
+import { classes } from 'common/react';
 import { multiline } from 'common/string';
-import { Fragment } from 'inferno';
-import { useBackend } from '../backend';
-import { Button, LabeledList, NoticeBox, Section } from '../components';
+import { useBackend, useLocalState } from '../backend';
+import { Flex, ByondUi, Divider, Section, Tabs,Knob, Box, Button, Fragment, ProgressBar, NumberInput, Icon, Input, LabeledList } from '../components';
 import { Window } from '../layouts';
 
-export const CentcomPodLauncher = () => {
+const skillgreen = {
+  color: '#FFE8F0'
+};
+const dropoff_yellow = {
+  color: '#FFDB58'
+};
+
+const dropoff_grey = {
+  color: 'grey'
+};
+
+export const CentcomPodLauncher = (props, context) => {
+  const { act, data } = useBackend(context);
   return (
     <Window
-      title="Config/Launch Supply Pod"
-      width={700}
-      height={700}
-      resizable>
-      <Window.Content scrollable>
-        <CentcomPodLauncherContent />
-      </Window.Content>
+    resizable
+    title=" Config/Launch Supply Pod"
+
+    width={690}
+    height={420}>
+      <CentcomPodLauncherContent />
     </Window>
   );
 };
 
-// This is more or less a direct port from old tgui, with some slight
-// text cleanup. But yes, it actually worked like this.
-export const CentcomPodLauncherContent = (props, context) => {
+const CentcomPodLauncherContent = (props, context) => {
+  const { act, data } = useBackend(context);
+  const [pageIndex, setPageIndex] = useLocalState(context, 'pageIndex', 0);
+  const OptionsPage = PAGES[pageIndex].component();
+  const marginer = 0.5
+  return (
+    <Window.Content>
+			<Flex height="100%">
+				<Flex.Item width="30%">
+					<Flex direction="column" height="100%" >
+						<Flex.Item  grow={1} m={marginer} >
+            <PresetsPage />
+						</Flex.Item>
+						<Flex.Item grow={0}  m={marginer}>
+							<ReverseMenu />
+						</Flex.Item>
+						<Flex.Item height="80px" m={marginer}>
+              <LaunchPage />
+						</Flex.Item>
+					</Flex>
+    		</Flex.Item>
+
+
+        <Flex.Item width="40%"  >
+					<Flex direction="column" height="100%">
+            <Flex.Item grow={1} m={marginer}>
+              <ViewTabHolder />
+            </Flex.Item>
+
+						<Flex.Item maxHeight="150px" m={marginer}>
+              <StylePage />
+                    
+						</Flex.Item>
+
+          </Flex>
+        </Flex.Item>
+        
+				<Flex.Item width="30%" >    
+					<Flex direction="column" height="100%">
+						<Flex.Item grow={1} m={marginer} >
+            <OptionsMenu />
+            
+						</Flex.Item>
+						<Flex.Item maxHeight="250px" m={marginer} >
+            
+            <OptionsPage />
+						</Flex.Item>
+					</Flex>
+				</Flex.Item>
+      </Flex>
+
+    </Window.Content>
+  );
+};
+
+
+const PAGES = [
+  {
+    title: 'Loading the Pod',
+    component: () => LoadingMethod,
+  },
+  {
+    title: 'Effects',
+    component: () => NormalEffects,
+  },
+  {
+    title: 'Harmful Effects',
+    component: () => HarmfulEffects,
+  },
+  {
+    title: 'Custom Timings',
+    component: () => Timing
+  },
+  {
+    title: 'Custom Sounds',
+    component: () => LoadingMethod,
+  }
+];
+
+const TABPAGES = [
+  {
+    title: 'View Pod',
+    component: () => TabPod,
+  },
+  {
+    title: 'View Bay',
+    component: () => TabBay,
+  }
+];
+
+const REVERSE_OPTIONS = [
+  {
+    title: 'Mobs'
+  },
+  {
+    title: 'Objects'
+  },
+  {
+    title: 'Anchored'
+  },
+  {
+    title: 'Floors'
+  },
+  {
+    title: 'Walls'
+  }
+];
+
+
+const DELAYS = [
+  {
+    title: 'Master',
+    component: () => LoadingMethod,
+  },
+  {
+    title: 'Launch Delay',
+    component: () => LoadingMethod,
+  },
+  {
+    title: 'Fall  Duration',
+    component: () => HarmfulEffects,
+  },
+  {
+    title: 'Open Delay',
+    component: () => NormalEffects,
+  },
+  {
+    title: 'Leave Delay',
+    component: () => LoadingMethod,
+  }
+];
+
+const PRESETS = [
+  {
+    title: 'Preset 1'
+  },
+  {
+    title: 'Preset 2'
+  },
+  {
+    title: 'Preset 3'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  },
+  {
+    title: 'Preset 4'
+  }
+];
+const OptionsMenu = (props, context) => {
+  const { act, data } = useBackend(context);
+  const [pageIndex, setPageIndex] = useLocalState(context, 'pageIndex', 0);
+  return (
+    <Section title="Options" fill>
+								<Tabs vertical>
+									{PAGES.map((page, i) => (
+										<Tabs.Tab
+											key={i}
+											selected={i === pageIndex}
+											onClick={() => setPageIndex(i)}>
+											{page.title}
+										</Tabs.Tab>
+									))}
+								</Tabs>
+							</Section>
+  );
+                  };
+
+const ViewTabHolder = (props, context) => {
+  const { act, data, config } = useBackend(context);
+  const [tabPageIndex, setTabPageIndex] = useLocalState(context, 'tabPageIndex', 1);
+  const { mapRef } = data;
+
+  const TabPageComponent = TABPAGES[tabPageIndex].component();
+  return (
+    <Section title="View" fill buttons={(
+            <Fragment>
+                  {(data.dropoff_turf && data.effectReverse===1) && (
+                    <Button
+                      inline
+                      color="transparent"
+                      tooltip="View Dropoff Location"
+                      tooltipPosition="left"
+                      icon="arrow-circle-down"
+                      selected={2 === tabPageIndex}
+                      onClick={() => {
+                        setTabPageIndex(2);
+                        act('tabSwitch', {tabIndex: 2});
+                        }}/>
+                    )}
+                  <Button
+                    inline
+                    color="transparent"
+                    tooltip="View Pod"
+                    tooltipPosition="left"
+                    icon="rocket"
+                    selected={0 === tabPageIndex}
+                    onClick={() => {
+                      setTabPageIndex(0);
+                      act('tabSwitch', {tabIndex: 0});
+                      }}/>
+                    
+                  <Button
+                    inline
+                    color="transparent"
+                    tooltip="View Source Bay"
+                    tooltipPosition="left"
+                    icon="th"
+                    selected={1 === tabPageIndex}
+                    onClick={() => {
+                      setTabPageIndex(1);
+                      act('tabSwitch', {tabIndex: 1});
+                      }}/>
+                    <span style={dropoff_grey}>|</span>
+                  <Button
+                    inline
+                    tooltipPosition="left"
+                    color="transparent"
+                    icon="sync-alt"
+                    tooltip="Refresh view window in case it breaks"
+                    onClick={() => {
+                      setTabPageIndex(1);
+                      act('tabSwitch', {tabIndex: 1});
+                      }}/>
+                </Fragment>
+                )}>
+                <Flex direction="column" height="100%"> 
+                  <Flex.Item m={0.5}>
+                    <TabPageComponent />
+                  </Flex.Item>
+                  <Flex.Item m={0.5} grow={1}>
+                    <Section fill>
+                    <ByondUi
+                    fillPositionedParent
+                    params={{
+                      zoom: 0,
+                      id: mapRef,
+                      parent: config.window.id,
+                      type: 'map',
+                    }} />
+                    </Section>
+                  
+                  </Flex.Item>
+                </Flex>
+             
+              </Section>
+  );
+};
+
+const TabBay = (props, context) => {
+  const { act, data, config } = useBackend(context);
+  
+  return (
+
+      <Fragment>
+      <Button
+        content="Teleport"
+        icon="street-view"
+        onClick={() => act('teleportCentcom')} />
+      <Button
+        content={data.oldArea ? data.oldArea : 'Go Back'}
+        disabled={!data.oldArea}
+        icon="undo-alt"
+        onClick={() => act('teleportBack')} />
+     </Fragment>
+
+  );
+};
+
+const TabPod = (props, context) => {
+  const { act, data, config } = useBackend(context);
+  const { mapRef } = data;
+  return (
+    
+    <Fragment>
+      <Button
+        content="Custom Name/Desc"
+        selected={data.effectName}
+        tooltip="Allows you to add a custom name and description."
+        onClick={() => act('effectName')} />
+   </Fragment>
+
+
+  );
+};
+
+
+const LoadingMethod = (props, context) => {
   const { act, data } = useBackend(context);
   return (
     <Fragment>
-      <NoticeBox>
-        To use this, simply spawn the atoms you want in one of the five
-        Centcom Supplypod Bays. Items in the bay will then be launched inside
-        your supplypod, one turf-full at a time! You can optionally use the
-        following buttons to configure how the supplypod acts.
-      </NoticeBox>
+
+      
       <Section
-        title="Centcom Pod Customization (To be used against Helen Weinstein)">
-        <LabeledList>
-          <LabeledList.Item label="Supply Bay">
+              fill
+        overflow-y="scroll">
+        <OptionLabel 
+        title="Turf Selection Method">
             <Button
               content="Bay #1"
               selected={data.bayNumber === 1}
@@ -60,459 +380,484 @@ export const CentcomPodLauncherContent = (props, context) => {
                 the station via drop pods.
               `}
               onClick={() => act('bay5')} />
-          </LabeledList.Item>
-          {!!data.effectReverse && (
-            <LabeledList.Item label="Reverse Drop">
-              <Button
-                content="Pick Dropoff Location"
-                selected={data.picking_dropoff_turf}
-                disabled={!data.effectReverse}
-                tooltip={multiline`
-                  [NOTE: ONLY WORKS WHEN REVERSE MODE IS ACTIVE]
-                  This will allow you to select a dropoff turf. After
-                  selecting a turf, any pod in 'Reverse Mode' will drop off
-                  it's newly gotten cargo on this turf. Can be used to
-                  transport things or people around the station in a neat,
-                  IC way. Try doing this with the 'Seethrough Pod' style
-                  enabled for extra fun!
-                `}
-                onClick={() => act('pickDropoffTurf')} />
-              <Button
-                content="Clear Dropoff Location"
-                disabled={!data.dropoff_turf}
-                tooltip={multiline`
-                  Clears the selected dropoff turf for reverse mode.
-                `}
-                onClick={() => act('clearDropoffTurf')} />
-              <p>
-                Reverse Drop-off Location: 
-                {data.dropoff_turf ? data.dropoff_turf : 'None'}
-              </p>
-            </LabeledList.Item>
-          )}
-          {!data.effectReverse && (
-            <LabeledList.Item label="Reverse Drop">
-              <p>
-                [Enable Reverse Mode for this feature]
-              </p>
-            </LabeledList.Item>
-          )} 
-          <LabeledList.Item label="Teleport to">
+          </OptionLabel>
+        <OptionLabel title="Turf Selection Method">
             <Button
-              content={data.bay}
-              onClick={() => act('teleportCentcom')} />
-            <Button
-              content={data.oldArea ? data.oldArea : 'Where you were'}
-              disabled={!data.oldArea}
-              onClick={() => act('teleportBack')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Item Mode">
-            <Button
-              content="Clone Items"
-              selected={data.launchClone}
-              tooltip={multiline`
-                Choosing this will create a duplicate of the item to be
-                launched in Centcom, allowing you to send one type of item
-                multiple times. Either way, the atoms are forceMoved into
-                the supplypod after it lands (but before it opens).
-              `}
-              onClick={() => act('launchClone')} />
-            <Button
-              content="Random Items"
-              selected={data.launchRandomItem}
-              tooltip={multiline`
-                Choosing this will pick a random item from the selected turf
-                instead of the entire turfs contents. Best combined with
-                single/random turf.
-              `}
-              onClick={() => act('launchRandomItem')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Launch style">
-            <Button
-              content="Ordered"
-              selected={data.launchChoice === 1}
-              tooltip={multiline`
-                Instead of launching everything in the bay at once, this
-                will "scan" things (one turf-full at a time) in order, left
-                to right and top to bottom. undoing will reset the "scanner"
-                to the top-leftmost position.
-              `}
-              onClick={() => act('launchOrdered')} />
-            <Button
-              content="Random Turf"
-              selected={data.launchChoice === 2}
-              tooltip={multiline`
-                Instead of launching everything in the bay at once, this
-                will launch one random turf of items at a time.
-              `}
-              onClick={() => act('launchRandomTurf')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Explosion">
-            <Button
-              content="Custom Size"
-              selected={data.explosionChoice === 1}
-              tooltip={multiline`
-                This will cause an explosion of whatever size you like
-                (including flame range) to occur as soon as the supplypod
-                lands. Dont worry, supply-pods are explosion-proof!
-              `}
-              onClick={() => act('explosionCustom')} />
-            <Button
-              content="Adminbus"
-              selected={data.explosionChoice === 2}
-              tooltip={multiline`
-                This will cause a maxcap explosion (dependent on server
-                config) to occur as soon as the supplypod lands. Dont worry,
-                supply-pods are explosion-proof!
-              `}
-              onClick={() => act('explosionBus')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Damage">
-            <Button
-              content="Custom Damage"
-              selected={data.damageChoice === 1}
-              tooltip={multiline`
-                Anyone caught under the pod when it lands will be dealt
-                this amount of brute damage. Sucks to be them!
-              `}
-              onClick={() => act('damageCustom')} />
-            <Button
-              content="Gib"
-              selected={data.damageChoice === 2}
-              tooltip={multiline`
-                This will attempt to gib any mob caught under the pod when
-                it lands, as well as dealing a nice 5000 brute damage. Ya
-                know, just to be sure!
-              `}
-              onClick={() => act('damageGib')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Effects">
-            <Button
-              content="Projectile Cloud"
-              selected={data.effectShrapnel}
-              tooltip={multiline`
-                This will create a cloud of shrapnel on landing, 
-                of any projectile you'd like!
-              `}
-              onClick={() => act('effectShrapnel')} />
-            <Button
-              content="Stun"
-              selected={data.effectStun}
-              tooltip={multiline`
-                Anyone who is on the turf when the supplypod is launched
-                will be stunned until the supplypod lands. They cant get
-                away that easy!
-              `}
-              onClick={() => act('effectStun')} />
-            <Button
-              content="Delimb"
-              selected={data.effectLimb}
-              tooltip={multiline`
-                This will cause anyone caught under the pod to lose a limb,
-                excluding their head.
-              `}
-              onClick={() => act('effectLimb')} />
-            <Button
-              content="Yeet Organs"
-              selected={data.effectOrgans}
-              tooltip={multiline`
-                This will cause anyone caught under the pod to lose all
-                their limbs and organs in a spectacular fashion.
-              `}
-              onClick={() => act('effectOrgans')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Movement">
-            <Button
-              content="Bluespace"
-              selected={data.effectBluespace}
-              tooltip={multiline`
-                Gives the supplypod an advanced Bluespace Recyling Device.
-                After opening, the supplypod will be warped directly to the
-                surface of a nearby NT-designated trash planet (/r/ss13).
-              `}
-              onClick={() => act('effectBluespace')} />
-            <Button
-              content="Stealth"
-              selected={data.effectStealth}
-              tooltip={multiline`
-                This hides the red target icon from appearing when you
-                launch the supplypod. Combos well with the "Invisible"
-                style. Sneak attack, go!
-              `}
-              onClick={() => act('effectStealth')} />
-            <Button
-              content="Quiet"
-              selected={data.effectQuiet}
-              tooltip={multiline`
-                This will keep the supplypod from making any sounds, except
-                for those specifically set by admins in the Sound section.
-              `}
-              onClick={() => act('effectQuiet')} />
-            <Button
-              content="Reverse Mode"
-              selected={data.effectReverse}
-              tooltip={multiline`
-                This pod will not send any items. Instead, after landing,
-                the supplypod will close (similar to a normal closet closing),
-                and then launch back to the right centcom bay to drop off any
-                new contents.
-              `}
-              onClick={() => act('effectReverse')} />
-            <Button
-              content="Missile Mode"
-              selected={data.effectMissile}
-              tooltip={multiline`
-                This pod will not send any items. Instead, it will immediately
-                delete after landing (Similar visually to setting openDelay
-                & departDelay to 0, but this looks nicer). Useful if you just
-                wanna fuck some shit up. Combos well with the Missile style.
-              `}
-              onClick={() => act('effectMissile')} />
-            <Button
-              content="Any Descent Angle"
-              selected={data.effectCircle}
-              tooltip={multiline`
-                This will make the supplypod come in from any angle. Im not
-                sure why this feature exists, but here it is.
-              `}
-              onClick={() => act('effectCircle')} />
-            <Button
-              content="Machine Gun Mode"
-              selected={data.effectBurst}
-              tooltip={multiline`
-                This will make each click launch 5 supplypods inaccuratly
-                around the target turf (a 3x3 area). Combos well with the
-                Missile Mode if you dont want shit lying everywhere after.
-              `}
-              onClick={() => act('effectBurst')} />
-            <Button
-              content="Specific Target"
-              selected={data.effectTarget}
-              tooltip={multiline`
-                This will make the supplypod target a specific atom, instead
-                of the mouses position. Smiting does this automatically!
-              `}
-              onClick={() => act('effectTarget')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Name/Desc">
-            <Button
-              content="Custom Name/Desc"
-              selected={data.effectName}
-              tooltip="Allows you to add a custom name and description."
-              onClick={() => act('effectName')} />
-            <Button
-              content="Alert Ghosts"
-              selected={data.effectAnnounce}
-              tooltip={multiline`
-                Alerts ghosts when a pod is launched. Useful if some dumb
-                shit is aboutta come outta the pod.
-              `}
-              onClick={() => act('effectAnnounce')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Sound">
-            <Button
-              content="Custom Falling Sound"
-              selected={data.fallingSound}
-              tooltip={multiline`
-                Choose a sound to play as the pod falls. Note that for this
-                to work right you should know the exact length of the sound,
-                in seconds.
-              `}
-              onClick={() => act('fallSound')} />
-            <Button
-              content="Custom Landing Sound"
-              selected={data.landingSound}
-              tooltip="Choose a sound to play when the pod lands."
-              onClick={() => act('landingSound')} />
-            <Button
-              content="Custom Opening Sound"
-              selected={data.openingSound}
-              tooltip="Choose a sound to play when the pod opens."
-              onClick={() => act('openingSound')} />
-            <Button
-              content="Custom Leaving Sound"
-              selected={data.leavingSound}
-              tooltip={multiline`
-                Choose a sound to play when the pod departs (whether that be
-                delection in the case of a bluespace pod, or leaving for
-                centcom for a reversing pod).
-              `}
-              onClick={() => act('leavingSound')} />
-            <Button
-              content="Admin Sound Volume"
-              selected={data.soundVolume}
-              tooltip={multiline`
-                Choose the volume for the sound to play at. Default values
-                are between 1 and 100, but hey, do whatever. Im a tooltip,
-                not a cop.
-              `}
-              onClick={() => act('soundVolume')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Timers">
-            <Button
-              content="Custom Falling Duration"
-              selected={data.fallDuration !== 4}
-              tooltip={multiline`
-                Set how long the animation for the pod falling lasts. Create
-                dramatic, slow falling pods!
-              `}
-              onClick={() => act('fallDuration')} />
-            <Button
-              content="Custom Landing Time"
-              selected={data.landingDelay !== 20}
-              tooltip={multiline`
-                Choose the amount of time it takes for the supplypod to hit
-                the station. By default this value is 0.5 seconds.
-              `}
-              onClick={() => act('landingDelay')} />
-            <Button
-              content="Custom Opening Time"
-              selected={data.openingDelay !== 30}
-              tooltip={multiline`
-                Choose the amount of time it takes for the supplypod to open
-                after landing. Useful for giving whatevers inside the pod a
-                nice dramatic entrance! By default this value is 3 seconds.
-              `}
-              onClick={() => act('openingDelay')} />
-            <Button
-              content="Custom Leaving Time"
-              selected={data.departureDelay !== 30}
-              tooltip={multiline`
-                Choose the amount of time it takes for the supplypod to leave
-                after landing. By default this value is 3 seconds.
-              `}
-              onClick={() => act('departureDelay')} />
-          </LabeledList.Item>
-          <LabeledList.Item label="Style">
-            <Button
-              content="Standard"
-              selected={data.styleChoice === 1}
-              tooltip={multiline`
-                Same color scheme as the normal station-used supplypods
-              `}
-              onClick={() => act('styleStandard')} />
-            <Button
-              content="Advanced"
-              selected={data.styleChoice === 2}
-              tooltip={multiline`
-                The same as the stations upgraded blue-and-white
-                Bluespace Supplypods
-              `}
-              onClick={() => act('styleBluespace')} />
-            <Button
-              content="Syndicate"
-              selected={data.styleChoice === 4}
-              tooltip={multiline`
-                A menacing black and blood-red. Great for sending meme-ops
-                in style!
-              `}
-              onClick={() => act('styleSyndie')} />
-            <Button
-              content="Deathsquad"
-              selected={data.styleChoice === 5}
-              tooltip={multiline`
-                A menacing black and dark blue. Great for sending deathsquads
-                in style!
-              `}
-              onClick={() => act('styleBlue')} />
-            <Button
-              content="Cult Pod"
-              selected={data.styleChoice === 6}
-              tooltip="A blood and rune covered cult pod!"
-              onClick={() => act('styleCult')} />
-            <Button
-              content="Missile"
-              selected={data.styleChoice === 7}
-              tooltip={multiline`
-                A large missile. Combos well with a missile mode, so the
-                missile doesnt stick around after landing.
-              `}
-              onClick={() => act('styleMissile')} />
-            <Button
-              content="Syndicate Missile"
-              selected={data.styleChoice === 8}
-              tooltip={multiline`
-                A large blood-red missile. Combos well with missile mode,
-                so the missile doesnt stick around after landing.
-              `}
-              onClick={() => act('styleSMissile')} />
-            <Button
-              content="Supply Crate"
-              selected={data.styleChoice === 9}
-              tooltip="A large, dark-green military supply crate."
-              onClick={() => act('styleBox')} />
-            <Button
-              content="HONK"
-              selected={data.styleChoice === 10}
-              tooltip="A colorful, clown inspired look."
-              onClick={() => act('styleHONK')} />
-            <Button
-              content="~Fruit"
-              selected={data.styleChoice === 11}
-              tooltip="For when an orange is angry"
-              onClick={() => act('styleFruit')} />
-            <Button
-              content="Invisible"
-              selected={data.styleChoice === 12}
-              tooltip={multiline`
-                Makes the supplypod invisible! Useful for when you want to
-                use this feature with a gateway or something. Combos well
-                with the "Stealth" and "Quiet Landing" effects.
-              `}
-              onClick={() => act('styleInvisible')} />
-            <Button
-              content="Gondola"
-              selected={data.styleChoice === 13}
-              tooltip={multiline`
-                This gondola can control when he wants to deliver his supplies
-                if he has a smart enough mind, so offer up his body to ghosts
-                for maximum enjoyment. (Make sure to turn off bluespace and
-                set an arbitrarily high open-time if you do!
-              `}
-              onClick={() => act('styleGondola')} />
-            <Button
-              content="Show Contents (See Through Pod)"
-              selected={data.styleChoice === 14}
-              tooltip={multiline`
-                By selecting this, the pod will instead look like whatevers
-                inside it (as if it were the contents falling by themselves,
-                without a pod). Useful for launching mechs at the station
-                and standing tall as they soar in from the heavens.
-              `}
-              onClick={() => act('styleSeeThrough')} />
-          </LabeledList.Item>
-        </LabeledList>
-      </Section>
-      <Section>
-        <LabeledList>
-          <LabeledList.Item
-            label={data.numObjects + ' turfs in ' + data.bay}
-            buttons={(
-              <Fragment>
-                <Button
-                  content="undo Pod Bay"
-                  tooltip={multiline`
-                    Manually undoes the possible things to launch in the
-                    pod bay.
-                  `}
-                  onClick={() => act('undo')} />
-                <Button
-                  content="Enter Launch Mode"
-                  selected={data.giveLauncher}
-                  tooltip="THE CODEX ASTARTES CALLS THIS MANEUVER: STEEL RAIN"
-                  onClick={() => act('giveLauncher')} />
-                <Button
-                  content="Clear Selected Bay"
-                  color="bad"
-                  tooltip={multiline`
-                    This will delete all objs and mobs from the selected bay.
-                  `}
-                  tooltipPosition="left"
-                  onClick={() => act('clearBay')} />
-              </Fragment>
-            )} />
-        </LabeledList>
+          content="Ordered"
+          selected={data.launchChoice === 1}
+          tooltip={multiline`
+            Instead of launching everything in the bay at once, this
+            will "scan" things (one turf-full at a time) in order, left
+            to right and top to bottom. undoing will reset the "scanner"
+            to the top-leftmost position.
+          `}
+          onClick={() => act('launchOrdered')} />
+        <Button
+          content="Random Turf"
+          selected={data.launchChoice === 2}
+          tooltip={multiline`
+            Instead of launching everything in the bay at once, this
+            will launch one random turf of items at a time.
+          `}
+          onClick={() => act('launchRandomTurf')} />
+           
+            </OptionLabel>
+        
+
+        <OptionLabel title="Item Loading Method">
+         
+          <Button
+          content="Clone"
+          selected={data.launchClone}
+          tooltip={multiline`
+            Choosing this will create a duplicate of the item to be
+            launched in Centcom, allowing you to send one type of item
+            multiple times. Either way, the atoms are forceMoved into
+            the supplypod after it lands (but before it opens).
+          `}
+          onClick={() => act('launchClone')} />
+        <Button
+          content="Random"
+          selected={data.launchRandomItem}
+          tooltip={multiline`
+            Choosing this will pick a random item from the selected turf
+            instead of the entire turfs contents. Best combined with
+            single/random turf.
+          `}
+          onClick={() => act('launchRandomItem')} />
+         
+        </OptionLabel>
+        
       </Section>
     </Fragment>
   );
 };
+
+const HarmfulEffects = (props, context) => {
+  const { act, data } = useBackend(context);
+  return (
+    <Fragment>
+      <Section fill>
+        <OptionLabel title="Explosion on Landing" >
+        <Button
+          content="Custom Size"
+          selected={data.explosionChoice === 1}
+          tooltip={multiline`
+            Don't worry; pods are explosion-proof!
+          `}
+          onClick={() => act('explosionCustom')} />
+        <Button
+          content="Adminbus"
+          selected={data.explosionChoice === 2}
+          tooltip={multiline`
+            Push buttons. What are they gonna do,
+            ban you?
+          `}
+          onClick={() => act('explosionBus')} />
+      </OptionLabel>
+        <OptionLabel title="Damage on Landing" >
+        <Button
+          content="Custom Damage"
+          selected={data.damageChoice === 1}
+          tooltip={multiline`
+            Deals brute to anyone under the pod when it lands.
+            Sucks to be them!
+          `}
+          onClick={() => act('damageCustom')} />
+        <Button
+          content="Gib"
+          selected={data.damageChoice === 2}
+          tooltip={multiline`
+            Also deals 5000 brute damage, just to be sure.
+          `}
+          tooltipPosition="bottom-left"
+          onClick={() => act('damageGib')} />
+      </OptionLabel>
+        <OptionLabel title="Misc. Dangerous" >
+        <Button
+          content="Projectile Cloud"
+          selected={data.effectShrapnel}
+          tooltip={multiline`
+            This will create a cloud of shrapnel on landing, 
+            of any projectile you'd like!
+          `}
+          tooltipPosition="bottom-left"
+          onClick={() => act('effectShrapnel')} />
+        <Button
+          content="Stun"
+          selected={data.effectStun}
+          tooltip={multiline`
+            Launching a pod will stun mobs on the target turf 
+            until the pod lands, ensuring a hit.
+          `}
+          tooltipPosition="bottom-left"
+          onClick={() => act('effectStun')} />
+          <Button
+          content="Delimb"
+          selected={data.effectLimb}
+          tooltip={multiline`
+            Carbons caught under the pod will lose a limb,
+            excluding their head.
+          `}
+          
+          onClick={() => act('effectLimb')} />
+        <Button
+          content="Yeet Organs"
+          selected={data.effectOrgans}
+          tooltip={multiline`
+            ;Help my organs don't feel good
+          `}
+          tooltipPosition="bottom-left"
+          onClick={() => act('effectOrgans')} />
+      </OptionLabel>
+      </Section>
+    </Fragment>
+  );
+};
+
+const NormalEffects = (props, context) => {
+  const { act, data } = useBackend(context);
+  return (
+    <Fragment>
+      <Section fill>
+        <OptionLabel title = "Pod Effects" >
+        <Button
+          content="Pod Stays"
+          selected={data.effectBluespace}
+          tooltip={multiline`
+            Pod stays after landing.
+          `}
+          
+          onClick={() => act('effectBluespace')} />
+        <Button
+          content="Stealth"
+          selected={data.effectStealth}
+          tooltip={multiline`
+            No target when launching. Combos well with invisible pods.
+            Sneak attack, go!
+          `}
+          tooltipPosition="bottom-left"
+          onClick={() => act('effectStealth')} />
+        <Button
+          content="Quiet"
+          selected={data.effectQuiet}
+          tooltip={multiline`
+            Pod won't make any sounds, except for custom admin ones!
+          `}
+          
+          onClick={() => act('effectQuiet')} />
+        <Button
+          content="Missile Mode"
+          selected={data.effectMissile}
+          tooltip={multiline`
+            Doesn't send items. Deletes after landing. Combos well 
+            with explosion effect and missile style!
+          `}
+          tooltipPosition="bottom-left"
+          onClick={() => act('effectMissile')} />
+        
+         
+      </OptionLabel>
+    
+        <OptionLabel title="Launch Effects">
+        <Button
+          content="Burst Launch"
+          selected={data.effectBurst}
+          tooltip={multiline`
+            Launch 5 pods at once. Combos well with
+            Missile Mode!
+          `}
+          onClick={() => act('effectBurst')} />  
+        <Button
+          content="Specific Target"
+          selected={data.effectTarget}
+          tooltip={multiline`
+            Pod will launch on a specified atom.
+            Works well with the Stun effect.
+          `}
+          onClick={() => act('effectTarget')} /> 
+          <Button
+          content="Any Descent Angle"
+          selected={data.effectCircle}
+          tooltip={multiline`
+            Pod will come in from any angle. Ask goof
+            why this feature exists, not me.
+          `}
+          onClick={() => act('effectCircle')} />
+      <Button
+              content="Alert Ghosts"
+              selected={data.effectAnnounce}
+              tooltip={multiline`
+                Leave on to entertain bored ghosts.
+              `}
+              onClick={() => act('effectAnnounce')} />
+              </OptionLabel>
+      </Section>
+
+    </Fragment>
+  );
+};
+
+const ReverseMenu = (props, context) => {
+  const { act, data } = useBackend(context);
+  return ( 
+    <Section 
+    fill 
+    height="100%"
+    title="Reverse Mode"
+    buttons={(
+      <Button 
+      icon={data.effectReverse === 1 ? "toggle-on" : "toggle-off"}
+      selected={data.effectReverse}
+      tooltip={multiline`
+        Doesn't send items. Pod closes and drops 
+        off any new items to dropoff turf 
+        (or bay if none specified).
+      `}
+      onClick={() => act('effectReverse')} />
+    )}>
+      {(data.effectReverse === 1 ) && (
+      <Flex direction="column" height="100%">
+        <Flex.Item>
+          <Button
+            content="Dropoff Turf"
+            selected={data.picking_dropoff_turf}
+            disabled={!data.effectReverse}
+            tooltip={multiline`
+              Where reverse pods drop off any newly-acquired cargo.
+              Use the seethrough style for extra fun.
+            `}
+            tooltipPosition="bottom-right"
+            onClick={() => act('pickDropoffTurf')} />
+          <Button
+            inline
+            icon="trash"
+            disabled={!data.dropoff_turf}
+            tooltip={multiline`
+              Clears the custom dropoff location. Reverse pods will
+              instead dropoff at the selected bay.
+            `}
+            tooltipPosition="bottom-right"
+            onClick={() => act('clearDropoffTurf')} />
+        </Flex.Item>
+        <Divider horizontal />
+        <Flex.Item>
+          {REVERSE_OPTIONS.map((option, i) => (
+              <Button
+                inline
+                icon="toggle-off"
+                disabled={!data.effectReverse}
+                content={option.title}
+                onClick={() => act('clearDropoffTurf')} />
+          ))}
+        </Flex.Item>
+      </Flex>)}
+    </Section>
+  );
+};
+
+const PresetsPage = (props, context) => {
+  const { act, data } = useBackend(context);
+  const [presetIndex, setPreset] = useLocalState(context, 'presetIndex', 0);
+  return ( 
+    <Section 
+      fill 
+      title="Presets" 
+      
+      buttons={(
+        <Fragment>
+          <Button
+            inline
+            color="transparent"
+            icon="plus"
+            />
+            <Button
+              inline
+              color="transparent"
+              content=""
+              icon="download"
+              />
+              
+            <Button
+              inline
+              color="transparent"
+              content=""
+              icon="upload"
+              />
+            <Button
+            inline
+            color="transparent"
+            icon="trash"
+            tooltip="bruh just do it"
+            />
+        </Fragment>)}>
+      <Section  
+      fill
+      maxHeight="100px"
+            overflowY="scroll"
+            overflowX="hidden">
+
+      
+      <Tabs vertical>
+        {PRESETS.map((page, i) => (
+          <Tabs.Tab
+            key={i}
+            
+            selected={i === presetIndex}
+            onClick={() => setPreset(i)}
+            content={page.title}
+            >
+          
+          </Tabs.Tab>
+        ))}
+      </Tabs>
+      </Section>
+    </Section>
+
+  );
+};
+const LaunchPage = (props, context) => {
+  const { act, data } = useBackend(context);
+  const [presetIndex, setPreset] = useLocalState(context, 'presetIndex', 0);
+  return ( 
+    <Section fill>
+      <Button
+      
+       
+        height="100%"
+        width="100%"
+        
+        style={{'text-align': 'center'}}
+
+        selected={data.giveLauncher}
+        tooltip="THE CODEX ASTARTES CALLS THIS MANEUVER: STEEL RAIN"
+        onClick={() => act('giveLauncher')} >
+          <h1>
+            <br/>
+          LAUNCH
+          </h1>
+            
+          
+          </Button>
+
+    </Section>
+
+  );
+};
+const StylePage = (props, context) => {
+  const { act, data } = useBackend(context);
+  const [
+    text,
+    setText,
+  ] = useLocalState(context, 'text', "Sample text");
+  return ( 
+    <Section title="Pod Style" fill width="100%">
+        <Input
+            placeholder="Custom Name"
+            
+            onInput={(e, value) => setText(value)} />
+        <Input
+            placeholder="Custom Desc"
+            
+            onInput={(e, value) => setText(value)} />
+
+    </Section>
+  );
+};
+const Timing = (props, context) => {
+  const { act, data } = useBackend(context);
+  return ( 
+    <Section title="Edit Timing" fill width="100%">
+        <LabeledList>
+{DELAYS.map((page, i) => (
+
+    <LabeledList.Item label={page.title}>
+
+    
+ 
+      <Knob
+        
+       
+        step={0.5}
+        
+        stepPixelSize={5}
+        value={5}
+        minValue={0}
+        maxValue={10}
+        onChange={(e, value) => setNumber(value)} />
+     
+
+          </LabeledList.Item>
+
+))}
+
+</LabeledList>
+
+
+    </Section>
+  );
+};
+
+
+const DelayKnob = (props, context) => {
+  const { act, data } = useBackend(context);
+  const {
+    title
+  } = props;
+  return ( 
+    <Section
+      inline
+      mt={1}
+      height="8vw"
+      width="8vw"
+      style={{ "text-align": "center" }}
+      >
+      <span>
+        {title}
+      </span>
+      <br />
+      <Knob
+        inline
+        size={1}
+        step={1}
+
+        stepPixelSize={2}
+        value={data.landingDelay}
+        minValue={-100}
+        maxValue={100}
+        onDrag={(e, value) => setNumber(value)} />
+      <br />
+      <span>
+        {5}
+      </span>
+    </Section>
+  );
+};
+
+
+const OptionLabel = props => {
+  const {
+    title,
+    children,
+  } = props;
+  return ( 
+    <Fragment>
+      <span style={dropoff_grey}>
+        <b>{title}</b>
+      </span>
+      <br />
+      {children}
+      <br />
+      <br />
+      </Fragment>
+    
+  );
+};
+
+const loadingMethods = (props, context) => {
+  const { act, data } = useBackend(context);
+  return ( <Box>Hi</Box>
+  );
+};
+
+ 
