@@ -160,7 +160,52 @@ const DELAYS = [
     component: () => LoadingMethod,
   }
 ];
+const STYLES = [
+  {
+    title: 'Standard',
+  },
+  {
+    title: 'Advanced',
+  },
+  {
+    title: 'Nanotrasen',
+  },
+  {
+    title: 'Syndicate',
+  },
+  {
+    title: 'Deathsquad',
+  },
+  {
+    title: 'Cultist',
+  },
+  {
+    title: 'Missile',
+  },
+  {
+    title: 'Red Missile',
+  },
+  {
+    title: 'Supply Box',
+  },
+  {
+    title: 'Clown Pod',
+  },
+  {
+    title: 'Fruit',
+  },
+  {
+    title: 'Invisible',
+  },
+  {
+    title: 'Gondola',
+  },
+  {
+    title: 'Seethrough',
+  }
 
+  
+];
 const PRESETS = [
   {
     title: 'Preset 1'
@@ -752,14 +797,38 @@ const StylePage = (props, context) => {
   ] = useLocalState(context, 'text', "Sample text");
   return ( 
     <Section title="Pod Style" fill width="100%">
-        <Input
-            placeholder="Custom Name"
-            
-            onInput={(e, value) => setText(value)} />
-        <Input
-            placeholder="Custom Desc"
-            
-            onInput={(e, value) => setText(value)} />
+      <Section height="80px" maxWidth = "300px" overflowX="scroll" overflowY="hidden">
+      <Flex>
+        
+
+        
+      {STYLES.map((page, i) => (
+        <Flex.Item>
+        <Button width="50px" height="50px"
+        
+        
+        style={{
+          'vertical-align': 'middle',
+          
+          'margin-right':'5px',
+         
+          'border-radius':'5px',
+          
+        }} >
+        <Box 
+        className={classes(['supplypods64x64', 'pod_asset'+(i+1)])}
+        style={{
+          
+          'transform': 'rotate(45deg) translate(-20%,-5%)'}} />
+        </Button>
+
+</Flex.Item>
+    ))}
+
+      </Flex>
+      </Section>
+      
+    
 
     </Section>
   );
@@ -853,11 +922,3 @@ const OptionLabel = props => {
     
   );
 };
-
-const loadingMethods = (props, context) => {
-  const { act, data } = useBackend(context);
-  return ( <Box>Hi</Box>
-  );
-};
-
- 

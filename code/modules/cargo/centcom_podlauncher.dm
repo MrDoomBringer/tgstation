@@ -85,6 +85,11 @@
 	data["mapRef"] = map_name
 	return data
 
+/datum/centcom_podlauncher/ui_assets(mob/user)
+	return list(
+		get_asset_datum(/datum/asset/spritesheet/supplypods),
+	)
+
 /datum/centcom_podlauncher/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
